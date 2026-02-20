@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8660C1882F48F3F0003E8EFD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C1872F48F3F0003E8EFD /* Alamofire */; };
+		8660C18A2F48F3F0003E8EFD /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C1892F48F3F0003E8EFD /* AlamofireDynamic */; };
+		8660C18D2F48F455003E8EFD /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C18C2F48F455003E8EFD /* Kingfisher */; };
+		8660C1902F48F4AF003E8EFD /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C18F2F48F4AF003E8EFD /* Lottie */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		8660C15E2F48F2DC003E8EFD /* EchoShelf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EchoShelf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +43,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8660C18D2F48F455003E8EFD /* Kingfisher in Frameworks */,
+				8660C1882F48F3F0003E8EFD /* Alamofire in Frameworks */,
+				8660C18A2F48F3F0003E8EFD /* AlamofireDynamic in Frameworks */,
+				8660C1902F48F4AF003E8EFD /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +89,10 @@
 			);
 			name = EchoShelf;
 			packageProductDependencies = (
+				8660C1872F48F3F0003E8EFD /* Alamofire */,
+				8660C1892F48F3F0003E8EFD /* AlamofireDynamic */,
+				8660C18C2F48F455003E8EFD /* Kingfisher */,
+				8660C18F2F48F4AF003E8EFD /* Lottie */,
 			);
 			productName = EchoShelf;
 			productReference = 8660C15E2F48F2DC003E8EFD /* EchoShelf.app */;
@@ -107,6 +122,11 @@
 			);
 			mainGroup = 8660C1552F48F2DC003E8EFD;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8660C1862F48F3F0003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */,
+				8660C18B2F48F455003E8EFD /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				8660C18E2F48F4AF003E8EFD /* XCRemoteSwiftPackageReference "lottie-spm" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8660C15F2F48F2DC003E8EFD /* Products */;
 			projectDirPath = "";
@@ -160,6 +180,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kolchi.EchoShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -191,6 +215,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kolchi.EchoShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -341,6 +369,56 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8660C1862F48F3F0003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.11.1;
+			};
+		};
+		8660C18B2F48F455003E8EFD /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.7.0;
+			};
+		};
+		8660C18E2F48F4AF003E8EFD /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8660C1872F48F3F0003E8EFD /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8660C1862F48F3F0003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		8660C1892F48F3F0003E8EFD /* AlamofireDynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8660C1862F48F3F0003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = AlamofireDynamic;
+		};
+		8660C18C2F48F455003E8EFD /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8660C18B2F48F455003E8EFD /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		8660C18F2F48F4AF003E8EFD /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8660C18E2F48F4AF003E8EFD /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8660C1562F48F2DC003E8EFD /* Project object */;
 }
