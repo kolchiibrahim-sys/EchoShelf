@@ -3,25 +3,24 @@
 //  EchoShelf
 //
 //  Created by Ibrahim Kolchi on 21.02.26.
-//
 import UIKit
 
 final class AppCoordinator: Coordinator {
 
     var navigationController: UINavigationController
-    private var tabBarCoordinator: TabBarCoordinator?
+    private var authCoordinator: AuthCoordinator?
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
 
     func start() {
-        showMainFlow()
+        showAuthFlow()
     }
 
-    private func showMainFlow() {
-        let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
-        self.tabBarCoordinator = tabBarCoordinator
-        tabBarCoordinator.start()
+    private func showAuthFlow() {
+        let authCoordinator = AuthCoordinator(navigationController: navigationController)
+        self.authCoordinator = authCoordinator
+        authCoordinator.start()
     }
 }
