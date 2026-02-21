@@ -6,22 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		8660C1882F48F3F0003E8EFD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C1872F48F3F0003E8EFD /* Alamofire */; };
-		8660C18A2F48F3F0003E8EFD /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C1892F48F3F0003E8EFD /* AlamofireDynamic */; };
-		8660C18D2F48F455003E8EFD /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C18C2F48F455003E8EFD /* Kingfisher */; };
-		8660C1902F48F4AF003E8EFD /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C18F2F48F4AF003E8EFD /* Lottie */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXFileReference section */
 		8660C15E2F48F2DC003E8EFD /* EchoShelf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EchoShelf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		8660C1702F48F2DD003E8EFD /* Exceptions for "EchoShelf" folder in "EchoShelf" target */ = {
+		8660C1A32F492A93003E8EFD /* Exceptions for "EchoShelf" folder in "EchoShelf" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resources/Info.plist,
 			);
 			target = 8660C15D2F48F2DC003E8EFD /* EchoShelf */;
 		};
@@ -31,7 +24,7 @@
 		8660C1602F48F2DC003E8EFD /* EchoShelf */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				8660C1702F48F2DD003E8EFD /* Exceptions for "EchoShelf" folder in "EchoShelf" target */,
+				8660C1A32F492A93003E8EFD /* Exceptions for "EchoShelf" folder in "EchoShelf" target */,
 			);
 			path = EchoShelf;
 			sourceTree = "<group>";
@@ -43,10 +36,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8660C18D2F48F455003E8EFD /* Kingfisher in Frameworks */,
-				8660C1882F48F3F0003E8EFD /* Alamofire in Frameworks */,
-				8660C18A2F48F3F0003E8EFD /* AlamofireDynamic in Frameworks */,
-				8660C1902F48F4AF003E8EFD /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,10 +78,6 @@
 			);
 			name = EchoShelf;
 			packageProductDependencies = (
-				8660C1872F48F3F0003E8EFD /* Alamofire */,
-				8660C1892F48F3F0003E8EFD /* AlamofireDynamic */,
-				8660C18C2F48F455003E8EFD /* Kingfisher */,
-				8660C18F2F48F4AF003E8EFD /* Lottie */,
 			);
 			productName = EchoShelf;
 			productReference = 8660C15E2F48F2DC003E8EFD /* EchoShelf.app */;
@@ -123,9 +108,6 @@
 			mainGroup = 8660C1552F48F2DC003E8EFD;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				8660C1862F48F3F0003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */,
-				8660C18B2F48F455003E8EFD /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				8660C18E2F48F4AF003E8EFD /* XCRemoteSwiftPackageReference "lottie-spm" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8660C15F2F48F2DC003E8EFD /* Products */;
@@ -166,10 +148,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = EchoShelf/Info.plist;
+				INFOPLIST_FILE = EchoShelf/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -201,10 +183,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = EchoShelf/Info.plist;
+				INFOPLIST_FILE = EchoShelf/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -369,56 +351,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		8660C1862F48F3F0003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.11.1;
-			};
-		};
-		8660C18B2F48F455003E8EFD /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.7.0;
-			};
-		};
-		8660C18E2F48F4AF003E8EFD /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.6.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		8660C1872F48F3F0003E8EFD /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8660C1862F48F3F0003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
-		8660C1892F48F3F0003E8EFD /* AlamofireDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8660C1862F48F3F0003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = AlamofireDynamic;
-		};
-		8660C18C2F48F455003E8EFD /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8660C18B2F48F455003E8EFD /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
-		8660C18F2F48F4AF003E8EFD /* Lottie */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8660C18E2F48F4AF003E8EFD /* XCRemoteSwiftPackageReference "lottie-spm" */;
-			productName = Lottie;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8660C1562F48F2DC003E8EFD /* Project object */;
 }
