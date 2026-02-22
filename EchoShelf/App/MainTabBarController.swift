@@ -15,35 +15,16 @@ final class MainTabBarController: UITabBarController {
 
     private func setupTabs() {
 
-        let homeVC = UINavigationController(rootViewController: HomeViewController())
-        let searchVC = UINavigationController(rootViewController: SearchViewController())
-        let libraryVC = UINavigationController(rootViewController: LibraryViewController())
-        let profileVC = UINavigationController(rootViewController: ProfileViewController())
+        let home = UINavigationController(rootViewController: HomeViewController())
+        let search = UINavigationController(rootViewController: SearchViewController())
+        let library = UINavigationController(rootViewController: LibraryViewController())
+        let profile = UINavigationController(rootViewController: ProfileViewController())
 
-        homeVC.tabBarItem = UITabBarItem(
-            title: "Home",
-            image: UIImage(systemName: "house"),
-            tag: 0
-        )
+        home.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
+        search.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        library.tabBarItem = UITabBarItem(title: "Library", image: UIImage(systemName: "books.vertical.fill"), tag: 2)
+        profile.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3)
 
-        searchVC.tabBarItem = UITabBarItem(
-            title: "Search",
-            image: UIImage(systemName: "magnifyingglass"),
-            tag: 1
-        )
-
-        libraryVC.tabBarItem = UITabBarItem(
-            title: "Library",
-            image: UIImage(systemName: "books.vertical"),
-            tag: 2
-        )
-
-        profileVC.tabBarItem = UITabBarItem(
-            title: "Profile",
-            image: UIImage(systemName: "person"),
-            tag: 3
-        )
-
-        viewControllers = [homeVC, searchVC, libraryVC, profileVC]
+        viewControllers = [home, search, library, profile]
     }
 }

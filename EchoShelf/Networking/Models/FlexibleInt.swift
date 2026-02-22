@@ -12,19 +12,17 @@ struct FlexibleInt: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
 
-        if let int = try? container.decode(Int.self) {
-            value = int
-        } else if let string = try? container.decode(String.self),
-                  let int = Int(string) {
-            value = int
-        } else {
-            throw DecodingError.typeMismatch(
-                Int.self,
-                DecodingError.Context(
-                    codingPath: decoder.codingPath,
-                    debugDescription: "Cannot decode Int"
-                )
-            )
+        if let intValue = try? container.decode(Int.self) {
+            value = intValue
+            return
         }
+
+        if let stringValue = try? container.decode(String.self),
+           let intValue = Int(stringValue) {
+            value = intValue
+            return
+        }
+
+        value = 0
     }
 }

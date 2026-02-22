@@ -7,8 +7,14 @@
 import Foundation
 
 protocol AudiobookServiceProtocol {
+
     func fetchAudiobooks(
         page: Int,
+        completion: @escaping (Result<[Audiobook], APIError>) -> Void
+    )
+
+    func searchAudiobooks(
+        query: String,
         completion: @escaping (Result<[Audiobook], APIError>) -> Void
     )
 }
