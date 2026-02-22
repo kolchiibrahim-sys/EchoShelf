@@ -4,43 +4,44 @@
 //
 //  Created by Ibrahim Kolchi on 22.02.26.
 //
-
 import Foundation
 import Alamofire
 
-struct AudiobookEndpoint: Endpoint {
+enum AudiobookEndpoint: Endpoint {
 
-    var baseURL: String { "https://api.storytel.net" }
+    case search(query: String)
+    case getAudiobooks(page: Int)
 
-    var path: String
-    var method: HTTPMethod
-    var parameters: Parameters?
-
-}
-extension AudiobookEndpoint {
-
-    static func audiobooks(page: Int) -> AudiobookEndpoint {
-        return AudiobookEndpoint(
-            path: "/search",
-            method: .get,
-            parameters: [
-                "page": page,
-                "pageSize": 20
-            ]
-        )
+    var baseURL: String {
+        "https://librivox.org/api/feed"
     }
-}
-extension AudiobookEndpoint {
 
-    static func search(query: String) -> AudiobookEndpoint {
-        return AudiobookEndpoint(
-            path: "/search",
-            method: .get,
-            parameters: [
-                "query": query,
-                "page": 1,
-                "pageSize": 20
+    var path: String {
+        switch self {
+
+        case .search(let query):
+            return "/audiobooks/title/^\(query)"
+
+        case .getAudiobooks:
+            return "/audiobooks"
+        }
+    }
+
+    var method: HTTPMethod {
+        .get
+    }
+
+    var parameters: Parameters? {
+        switch self {
+
+        case .search:
+            return ["format": "json"]
+
+        case .getAudiobooks(let page):
+            return [
+                "format": "json",
+                "page": page
             ]
-        )
+        }
     }
 }

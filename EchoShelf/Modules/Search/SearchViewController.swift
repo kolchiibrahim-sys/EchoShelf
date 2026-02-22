@@ -26,9 +26,14 @@ final class SearchViewController: UIViewController {
 
         searchBar.placeholder = "Search audiobooks"
         searchBar.delegate = self
+        searchBar.returnKeyType = .search
+        searchBar.enablesReturnKeyAutomatically = false
 
-        tableView.register(AudiobookCell.self, forCellReuseIdentifier: AudiobookCell.identifier)
+        tableView.register(AudiobookCell.self,
+                           forCellReuseIdentifier: AudiobookCell.identifier)
         tableView.dataSource = self
+        tableView.delegate = self
+        tableView.keyboardDismissMode = .onDrag
 
         view.addSubview(searchBar)
         view.addSubview(tableView)
@@ -50,14 +55,17 @@ final class SearchViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.onDataUpdated = { [weak self] in
-            self?.tableView.reloadData()
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
         }
     }
 }
 
 extension SearchViewController: UITableViewDataSource {
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
         viewModel.books.count
     }
 
@@ -76,9 +84,21 @@ extension SearchViewController: UITableViewDataSource {
     }
 }
 
+extension SearchViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView,
+                   didSelectRowAt indexPath: IndexPath) {
+
+        let book = viewModel.books[indexPath.row]
+        let vc = BookDetailViewController(book: book)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
 extension SearchViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("SEARCH BUTTON CLICKED:", searchBar.text ?? "")
         viewModel.search(query: searchBar.text ?? "")
         searchBar.resignFirstResponder()
     }
