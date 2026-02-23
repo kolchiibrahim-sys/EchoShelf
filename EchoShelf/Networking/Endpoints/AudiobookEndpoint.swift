@@ -4,8 +4,6 @@
 //
 //  Created by Ibrahim Kolchi on 24.02.26.
 //
-
-
 import Foundation
 import Alamofire
 
@@ -16,19 +14,14 @@ enum AudiobookEndpoint: Endpoint {
     case detail(id: Int)
 
     var baseURL: String {
-        "https://librivox.org/api/feed"
+        "https://librivox.org/api/feed/audiobooks"
     }
 
-    var path: String {
-        "/audiobooks"
-    }
+    var path: String { "" }
 
-    var method: HTTPMethod {
-        .get
-    }
+    var method: HTTPMethod { .get }
 
     var parameters: Parameters? {
-
         switch self {
 
         case .getAudiobooks(let page):
@@ -40,7 +33,7 @@ enum AudiobookEndpoint: Endpoint {
         case .search(let query):
             return [
                 "format": "json",
-                "title^": query   // ⭐️ ƏSAS FIX BURDA
+                "title": query
             ]
 
         case .detail(let id):

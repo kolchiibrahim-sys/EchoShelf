@@ -19,19 +19,41 @@ final class HomeViewModel {
     }
 
     func fetchBooks() {
+
         service.fetchAudiobooks(page: 1) { [weak self] result in
             guard let self else { return }
 
             switch result {
+
             case .success(let books):
-                self.books = books
-                DispatchQueue.main.async {
+
+                print("Librivox books loaded:", books.count)
+
+                var booksWithCovers = books
+                let group = DispatchGroup()
+
+                for index in booksWithCovers.indices {
+                    group.enter()
+
+                    let title = booksWithCovers[index].title
+                    print("Searching cover for:", title)
+
+                    GoogleBooksService.shared.fetchCover(title: title) { url in
+                        print("cover found:", url ?? "nil")
+                        booksWithCovers[index].googleCoverURL = url
+                        group.leave()
+                    }
+                }
+
+                group.notify(queue: .main) {
+                    self.books = booksWithCovers
                     self.onDataUpdated?()
                 }
 
-            case .failure:
+            case .failure(let error):
                 DispatchQueue.main.async {
                     self.onError?("Failed to load books")
+                    print("error:", error)
                 }
             }
         }
