@@ -5,7 +5,6 @@
 //  Created by Ibrahim Kolchi on 24.02.26.
 //
 import UIKit
-import Kingfisher
 
 final class PlayerViewController: UIViewController {
 
@@ -13,7 +12,9 @@ final class PlayerViewController: UIViewController {
 
     private let gradientLayer = CAGradientLayer()
 
-    private let coverImage = UIImageView()
+    private let coverView = UIView()
+    private let coverIcon = UIImageView()
+
     private let titleLabel = UILabel()
     private let authorLabel = UILabel()
     private let progressSlider = UISlider()
@@ -47,9 +48,14 @@ final class PlayerViewController: UIViewController {
 
     private func setupUI() {
 
-        coverImage.layer.cornerRadius = 24
-        coverImage.clipsToBounds = true
-        coverImage.translatesAutoresizingMaskIntoConstraints = false
+        coverView.backgroundColor = UIColor.white.withAlphaComponent(0.08)
+        coverView.layer.cornerRadius = 24
+        coverView.translatesAutoresizingMaskIntoConstraints = false
+
+        coverIcon.image = UIImage(systemName: "building.columns.fill")
+        coverIcon.tintColor = .white
+        coverIcon.translatesAutoresizingMaskIntoConstraints = false
+        coverView.addSubview(coverIcon)
 
         titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
         titleLabel.textColor = .white
@@ -86,7 +92,7 @@ final class PlayerViewController: UIViewController {
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
 
         view.addSubview(closeButton)
-        view.addSubview(coverImage)
+        view.addSubview(coverView)
         view.addSubview(titleLabel)
         view.addSubview(authorLabel)
         view.addSubview(progressSlider)
@@ -99,12 +105,17 @@ final class PlayerViewController: UIViewController {
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
 
-            coverImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 120),
-            coverImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            coverImage.widthAnchor.constraint(equalToConstant: 260),
-            coverImage.heightAnchor.constraint(equalToConstant: 340),
+            coverView.topAnchor.constraint(equalTo: view.topAnchor, constant: 120),
+            coverView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            coverView.widthAnchor.constraint(equalToConstant: 260),
+            coverView.heightAnchor.constraint(equalToConstant: 340),
 
-            titleLabel.topAnchor.constraint(equalTo: coverImage.bottomAnchor, constant: 30),
+            coverIcon.centerXAnchor.constraint(equalTo: coverView.centerXAnchor),
+            coverIcon.centerYAnchor.constraint(equalTo: coverView.centerYAnchor),
+            coverIcon.heightAnchor.constraint(equalToConstant: 50),
+            coverIcon.widthAnchor.constraint(equalToConstant: 50),
+
+            titleLabel.topAnchor.constraint(equalTo: coverView.bottomAnchor, constant: 30),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
 
@@ -132,13 +143,15 @@ final class PlayerViewController: UIViewController {
         guard let book else { return }
 
         titleLabel.text = book.title
-        authorLabel.text = book.authorName
+
+        if let author = book.authors?.first {
+            authorLabel.text = "\(author.firstName ?? "") \(author.lastName ?? "")"
+        } else {
+            authorLabel.text = "Unknown Author"
+        }
+
         currentTimeLabel.text = "0:47"
         durationLabel.text = "12:30"
-
-        if let url = URL(string: book.coverURL ?? "") {
-            coverImage.kf.setImage(with: url)
-        }
     }
 
     @objc private func closeTapped() {

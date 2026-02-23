@@ -9,10 +9,7 @@ import Foundation
 final class HomeViewModel {
 
     private let service: AudiobookServiceProtocol
-    private(set) var audiobooks: [Audiobook] = []
-
-    private var currentPage = 1
-    private var isLoading = false
+    private(set) var books: [Audiobook] = []
 
     var onDataUpdated: (() -> Void)?
     var onError: ((String) -> Void)?
@@ -21,36 +18,22 @@ final class HomeViewModel {
         self.service = service
     }
 
-    func fetchAudiobooks() {
-
-        guard !isLoading else { return }
-        isLoading = true
-
-        service.fetchAudiobooks(page: currentPage) { [weak self] result in
-            guard let self = self else { return }
-
-            self.isLoading = false
+    func fetchBooks() {
+        service.fetchAudiobooks(page: 1) { [weak self] result in
+            guard let self else { return }
 
             switch result {
             case .success(let books):
-                self.audiobooks.append(contentsOf: books)
-                self.currentPage += 1
+                self.books = books
                 DispatchQueue.main.async {
                     self.onDataUpdated?()
                 }
 
-            case .failure(let error):
-                print("ViewModel error:", error)
+            case .failure:
                 DispatchQueue.main.async {
-                    self.onError?("Failed to load audiobooks")
+                    self.onError?("Failed to load books")
                 }
             }
         }
-    }
-
-    func refresh() {
-        currentPage = 1
-        audiobooks.removeAll()
-        fetchAudiobooks()
     }
 }

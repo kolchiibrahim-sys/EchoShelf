@@ -6,25 +6,34 @@
 //
 import Foundation
 
+struct AudiobooksResponse: Decodable {
+    let books: [Audiobook]
+}
+
 struct Audiobook: Decodable {
-    
-    let id: FlexibleInt
+    let id: String
     let title: String
+    let description: String?
+    let urlLibrivox: String?
+    let urlRss: String?
     let authors: [Author]?
-    let url_librivox: String?
-    let url_zip_file: String?
-    let url_iarchive: String?
-    let url_rss: String?
-    let url_cover_art: String?
-    
-    var authorName: String {
-        authors?.first?.name ?? "Unknown Author"
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case description
+        case urlLibrivox = "url_librivox"
+        case urlRss = "url_rss"
+        case authors
     }
-    var coverURL: String? {
-        if let cover = url_cover_art, !cover.isEmpty {
-            return cover
-        }
-        
-        return "https://archive.org/services/img/\(id.value)"
+}
+
+struct Author: Decodable {
+    let firstName: String?
+    let lastName: String?
+
+    enum CodingKeys: String, CodingKey {
+        case firstName = "first_name"
+        case lastName = "last_name"
     }
 }

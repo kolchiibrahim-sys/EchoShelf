@@ -17,4 +17,9 @@ protocol AudiobookServiceProtocol {
         query: String,
         completion: @escaping (Result<[Audiobook], APIError>) -> Void
     )
+
+    func fetchAudiobookDetail(
+        id: Int,
+        completion: @escaping (Result<Audiobook, APIError>) -> Void
+    )
 }

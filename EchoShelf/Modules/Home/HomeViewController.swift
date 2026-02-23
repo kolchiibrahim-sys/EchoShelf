@@ -10,23 +10,72 @@ final class HomeViewController: UIViewController {
 
     private let viewModel = HomeViewModel()
 
+    private let tableView: UITableView = {
+        let tv = UITableView()
+        tv.backgroundColor = UIColor(named: "AppBackground")
+        tv.separatorStyle = .none
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.rowHeight = UITableView.automaticDimension
+        tv.estimatedRowHeight = 100
+        return tv
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        setupUI()
+        bindViewModel()
+        viewModel.fetchBooks()   // ⭐️ ƏN VACİB SƏTİR
+    }
+
+    private func setupUI() {
+        view.backgroundColor = UIColor(named: "AppBackground")
+
         title = "Home"
 
-        bindViewModel()
-        viewModel.fetchAudiobooks()
+        tableView.register(AudiobookCell.self,
+                           forCellReuseIdentifier: AudiobookCell.identifier)
+
+        tableView.dataSource = self
+        tableView.delegate = self
+
+        view.addSubview(tableView)
+
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     private func bindViewModel() {
-
         viewModel.onDataUpdated = { [weak self] in
-            print("Loaded books count:", self?.viewModel.audiobooks.count ?? 0)
+            self?.tableView.reloadData()
         }
+    }
+}
 
-        viewModel.onError = { error in
-            print(error)
-        }
+extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        viewModel.books.count
+    }
+
+    func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: AudiobookCell.identifier,
+            for: indexPath
+        ) as! AudiobookCell
+
+        cell.configure(with: viewModel.books[indexPath.row])
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let book = viewModel.books[indexPath.row]
+        let vc = BookDetailViewController(book: book)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

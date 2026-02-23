@@ -5,7 +5,6 @@
 //  Created by Ibrahim Kolchi on 22.02.26.
 //
 import UIKit
-import Kingfisher
 
 final class BookDetailViewController: UIViewController {
 
@@ -18,26 +17,23 @@ final class BookDetailViewController: UIViewController {
 
     required init?(coder: NSCoder) { fatalError() }
 
-    // MARK: Scroll System
     private let scrollView = UIScrollView()
     private let contentView = UIView()
 
-    // MARK: Background
     private let backgroundView: UIView = {
         let v = UIView()
         v.backgroundColor = UIColor(named: "AppBackground")
         return v
     }()
 
-    // MARK: Top Buttons
     private let backButton = DetailButton(systemName: "chevron.left")
     private let favButton  = DetailButton(systemName: "heart")
 
-    // MARK: UI
-    private let coverImage = UIImageView()
+    private let coverView = UIView()
+    private let coverIcon = UIImageView()
+
     private let titleLabel = UILabel()
     private let authorLabel = UILabel()
-
     private let statsLabel = UILabel()
     private let listenButton = GradientButton()
 
@@ -45,7 +41,6 @@ final class BookDetailViewController: UIViewController {
     private let descriptionLabel = DetailBodyLabel()
     private let chaptersTitle = DetailSectionTitle(text: "Preview Chapters")
 
-    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
@@ -60,13 +55,11 @@ final class BookDetailViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
-    // MARK: Layout
     private func setupLayout() {
 
         view.addSubview(backgroundView)
         backgroundView.pinEdges(to: view)
 
-        // Scroll setup
         view.addSubview(scrollView)
         scrollView.pinEdges(to: view)
         scrollView.contentInsetAdjustmentBehavior = .never
@@ -82,14 +75,12 @@ final class BookDetailViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
 
-        // Top buttons
         view.addSubview(backButton)
         view.addSubview(favButton)
 
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-
             favButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             favButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
@@ -101,12 +92,18 @@ final class BookDetailViewController: UIViewController {
 
     private func setupContent() {
 
-        [coverImage,titleLabel,authorLabel,statsLabel,
+        [coverView,titleLabel,authorLabel,statsLabel,
          listenButton,descriptionTitle,descriptionLabel,chaptersTitle]
             .forEach { contentView.addSubview($0) }
 
-        coverImage.layer.cornerRadius = 26
-        coverImage.clipsToBounds = true
+        coverView.backgroundColor = UIColor.white.withAlphaComponent(0.08)
+        coverView.layer.cornerRadius = 26
+        coverView.translatesAutoresizingMaskIntoConstraints = false
+
+        coverIcon.image = UIImage(systemName: "building.columns.fill")
+        coverIcon.tintColor = .white
+        coverIcon.translatesAutoresizingMaskIntoConstraints = false
+        coverView.addSubview(coverIcon)
 
         titleLabel.font = .systemFont(ofSize: 26, weight: .bold)
         titleLabel.textColor = .white
@@ -121,20 +118,25 @@ final class BookDetailViewController: UIViewController {
         statsLabel.textAlignment = .center
 
         listenButton.setTitle("▶ Listen Now", for: .normal)
-        listenButton.addTarget(self, action: #selector(listenTapped), for: UIControl.Event.touchUpInside)
-        // Constraints
-        [coverImage,titleLabel,authorLabel,statsLabel,
-         listenButton,descriptionTitle,descriptionLabel,chaptersTitle]
+        listenButton.addTarget(self, action: #selector(listenTapped), for: .touchUpInside)
+
+        [titleLabel,authorLabel,statsLabel,listenButton,
+         descriptionTitle,descriptionLabel,chaptersTitle]
             .forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
         NSLayoutConstraint.activate([
 
-            coverImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 70),
-            coverImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            coverImage.widthAnchor.constraint(equalToConstant: 240),
-            coverImage.heightAnchor.constraint(equalToConstant: 320),
+            coverView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 70),
+            coverView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            coverView.widthAnchor.constraint(equalToConstant: 240),
+            coverView.heightAnchor.constraint(equalToConstant: 320),
 
-            titleLabel.topAnchor.constraint(equalTo: coverImage.bottomAnchor, constant: 26),
+            coverIcon.centerXAnchor.constraint(equalTo: coverView.centerXAnchor),
+            coverIcon.centerYAnchor.constraint(equalTo: coverView.centerYAnchor),
+            coverIcon.heightAnchor.constraint(equalToConstant: 50),
+            coverIcon.widthAnchor.constraint(equalToConstant: 50),
+
+            titleLabel.topAnchor.constraint(equalTo: coverView.bottomAnchor, constant: 26),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
 
@@ -163,21 +165,20 @@ final class BookDetailViewController: UIViewController {
         ])
     }
 
-    // MARK: Data
     private func configureData() {
         titleLabel.text = book.title
-        authorLabel.text = book.authorName
-        statsLabel.text = "⭐️ 4.8   •   12h 30m   •   English"
 
-        if let url = URL(string: book.coverURL ?? "") {
-            coverImage.kf.setImage(with: url)
+        if let author = book.authors?.first {
+            authorLabel.text = "\(author.firstName ?? "") \(author.lastName ?? "")"
+        } else {
+            authorLabel.text = "Unknown Author"
         }
 
-        descriptionLabel.text =
-        "Between life and death there is a library. Every book provides a chance to try another life you could have lived."
+        statsLabel.text = "⭐️ 4.8   •   Public Domain   •   LibriVox"
+
+        descriptionLabel.text = book.description ?? "No description available."
     }
 
-    // MARK: Actions
     @objc private func listenTapped() {
         NotificationCenter.default.post(name: .playerStarted, object: nil)
     }

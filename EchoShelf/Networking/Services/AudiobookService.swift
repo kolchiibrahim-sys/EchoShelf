@@ -8,13 +8,15 @@ import Foundation
 
 final class AudiobookService: AudiobookServiceProtocol {
 
+    private let network = NetworkManager.shared
+
     func fetchAudiobooks(
         page: Int,
         completion: @escaping (Result<[Audiobook], APIError>) -> Void
     ) {
-        let endpoint = LibriVoxEndpoint.getAudiobooks(page: page)
+        let endpoint = AudiobookEndpoint.getAudiobooks(page: page)
 
-        NetworkManager.shared.request(endpoint) { (result: Result<AudiobooksResponse, APIError>) in
+        network.request(endpoint) { (result: Result<AudiobooksResponse, APIError>) in
             switch result {
             case .success(let response):
                 completion(.success(response.books))
@@ -30,10 +32,30 @@ final class AudiobookService: AudiobookServiceProtocol {
     ) {
         let endpoint = AudiobookEndpoint.search(query: query)
 
-        NetworkManager.shared.request(endpoint) { (result: Result<AudiobooksResponse, APIError>) in
+        network.request(endpoint) { (result: Result<AudiobooksResponse, APIError>) in
             switch result {
             case .success(let response):
                 completion(.success(response.books))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    func fetchAudiobookDetail(
+        id: Int,
+        completion: @escaping (Result<Audiobook, APIError>) -> Void
+    ) {
+        let endpoint = AudiobookEndpoint.detail(id: id)
+
+        network.request(endpoint) { (result: Result<AudiobooksResponse, APIError>) in
+            switch result {
+            case .success(let response):
+                guard let book = response.books.first else {
+                    completion(.failure(.invalidData))
+                    return
+                }
+                completion(.success(book))
             case .failure(let error):
                 completion(.failure(error))
             }
