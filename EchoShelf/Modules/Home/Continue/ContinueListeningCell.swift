@@ -24,6 +24,10 @@ final class ContinueListeningCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) { fatalError() }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     private func setupUI() {
 
         backgroundColor = UIColor.white.withAlphaComponent(0.05)
@@ -31,6 +35,7 @@ final class ContinueListeningCell: UICollectionViewCell {
 
         coverImage.layer.cornerRadius = 12
         coverImage.clipsToBounds = true
+        coverImage.contentMode = .scaleAspectFill
         coverImage.translatesAutoresizingMaskIntoConstraints = false
 
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
@@ -72,6 +77,12 @@ final class ContinueListeningCell: UICollectionViewCell {
         )
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        coverImage.image = nil
+        progressView.progress = 0
+    }
+
     func configure() {
 
         guard let book = PlayerManager.shared.currentBook else {
@@ -80,18 +91,13 @@ final class ContinueListeningCell: UICollectionViewCell {
         }
 
         isHidden = false
-
         titleLabel.text = book.title
+        authorLabel.text = book.authorName
 
-        if let author = book.authors?.first {
-            authorLabel.text = "\(author.firstName ?? "") \(author.lastName ?? "")"
-        } else {
-            authorLabel.text = "Unknown Author"
-        }
-
-        if let urlString = book.googleCoverURL,
-           let url = URL(string: urlString) {
+        if let url = book.coverURL {
             coverImage.kf.setImage(with: url)
+        } else {
+            coverImage.image = UIImage(systemName: "book.fill")
         }
 
         updateProgress()

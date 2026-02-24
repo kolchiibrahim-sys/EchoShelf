@@ -110,8 +110,7 @@ final class RecommendedBookCell: UICollectionViewCell {
         authorLabel.text = book.authorName
         badgeLabel.text = "\(Int.random(in: 88...98))% Match"
 
-        if let urlString = book.googleCoverURL,
-           let url = URL(string: urlString) {
+        if let url = book.coverURL {
             coverImageView.kf.setImage(with: url)
         }
     }

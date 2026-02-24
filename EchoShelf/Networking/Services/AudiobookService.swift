@@ -67,8 +67,8 @@ final class AudiobookService: AudiobookServiceProtocol {
                     return
                 }
 
-                self.network.fetchGoogleCover(for: book) { url in
-                    book.googleCoverURL = url
+                self.network.fetchGoogleCover(for: book) { urlString in
+                    book.coverURL = urlString.flatMap { URL(string: $0) }
                     completion(.success(book))
                 }
 
@@ -92,8 +92,8 @@ private extension AudiobookService {
         for index in books.indices {
             group.enter()
 
-            network.fetchGoogleCover(for: books[index]) { url in
-                booksWithCovers[index].googleCoverURL = url
+            network.fetchGoogleCover(for: books[index]) { urlString in
+                booksWithCovers[index].coverURL = urlString.flatMap { URL(string: $0) }
                 group.leave()
             }
         }

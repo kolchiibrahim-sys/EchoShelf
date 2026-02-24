@@ -98,9 +98,9 @@ final class TopResultCell: UICollectionViewCell {
         titleLabel.text = book.title
         authorLabel.text = book.authors?.first?.firstName ?? "Unknown Author"
 
-        if let urlString = book.googleCoverURL,
-           let url = URL(string: urlString) {
+        if let url = book.coverURL {
             coverImage.kf.setImage(with: url)
         }
+        }
     }
-}
+

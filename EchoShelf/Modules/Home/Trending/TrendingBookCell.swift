@@ -70,11 +70,10 @@ final class TrendingBookCell: UICollectionViewCell {
         titleLabel.text = book.title
         authorLabel.text = book.authorName
 
-        if let urlString = book.googleCoverURL,
-           let url = URL(string: urlString) {
+        if let url = book.coverURL {
             coverImageView.kf.setImage(with: url)
-        } else {
-            coverImageView.image = UIImage(systemName: "book.fill")
+        }
+   
         }
     }
-}
+

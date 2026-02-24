@@ -25,6 +25,11 @@ final class SearchResultCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) { fatalError() }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        coverImage.image = nil
+    }
+
     private func setupUI() {
 
         container.backgroundColor = UIColor.white.withAlphaComponent(0.05)
@@ -87,11 +92,14 @@ final class SearchResultCell: UICollectionViewCell {
 
         if let sections = book.numSections?.value {
             durationLabel.text = "\(sections) chapters"
+        } else {
+            durationLabel.text = nil
         }
 
-        if let urlString = book.googleCoverURL,
-           let url = URL(string: urlString) {
+        if let url = book.coverURL {
             coverImage.kf.setImage(with: url)
+        } else {
+            coverImage.image = UIImage(systemName: "book.fill")
         }
     }
 }

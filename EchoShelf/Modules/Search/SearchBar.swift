@@ -11,6 +11,8 @@ final class SearchBarView: UIView {
     var onSearch: ((String) -> Void)?
     var onTextChange: ((String) -> Void)?
 
+    private var debounceTimer: Timer?
+
     private let searchIcon: UIImageView = {
         let iv = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         iv.tintColor = UIColor.white.withAlphaComponent(0.6)
@@ -80,19 +82,27 @@ private extension SearchBarView {
     @objc func clearTapped() {
         textField.text = ""
         clearButton.alpha = 0
+        debounceTimer?.invalidate()
         onTextChange?("")
+        onSearch?("")
     }
 
     @objc func textChanged() {
         let text = textField.text ?? ""
         clearButton.alpha = text.isEmpty ? 0 : 1
         onTextChange?(text)
+
+        debounceTimer?.invalidate()
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            guard let self else { return }
+            self.onSearch?(text)
+        }
     }
 }
 
 extension SearchBarView: UITextFieldDelegate {
-
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        debounceTimer?.invalidate()
         onSearch?(textField.text ?? "")
         textField.resignFirstResponder()
         return true

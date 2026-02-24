@@ -1,9 +1,3 @@
-//
-//  BookDetailViewController.swift
-//  EchoShelf
-//
-//  Created by Ibrahim Kolchi on 22.02.26.
-//
 import UIKit
 import Kingfisher
 
@@ -87,7 +81,6 @@ final class BookDetailViewController: UIViewController {
         ])
 
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
-
         setupContent()
     }
 
@@ -127,7 +120,6 @@ final class BookDetailViewController: UIViewController {
             .forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
         NSLayoutConstraint.activate([
-
             coverView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 70),
             coverView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             coverView.widthAnchor.constraint(equalToConstant: 240),
@@ -162,33 +154,25 @@ final class BookDetailViewController: UIViewController {
 
             chaptersTitle.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 40),
             chaptersTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-
             chaptersTitle.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -140)
         ])
     }
 
     private func configureData() {
         titleLabel.text = book.title
-
-        if let author = book.authors?.first {
-            authorLabel.text = "\(author.firstName ?? "") \(author.lastName ?? "")"
-        } else {
-            authorLabel.text = "Unknown Author"
-        }
-
+        authorLabel.text = book.authorName
         statsLabel.text = "Public Domain • LibriVox"
         descriptionLabel.text = book.description ?? "No description available."
 
-        if let urlString = book.googleCoverURL,
-           let url = URL(string: urlString) {
+        if let url = book.coverURL {
             coverImageView.kf.setImage(with: url)
+        } else {
+            coverImageView.image = UIImage(systemName: "book.fill")
         }
     }
 
     @objc private func listenTapped() {
-
         PlayerManager.shared.play(book: book)
-
         let playerVC = PlayerViewController()
         playerVC.modalPresentationStyle = .fullScreen
         present(playerVC, animated: true)

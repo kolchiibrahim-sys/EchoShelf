@@ -19,7 +19,9 @@ struct Audiobook: Decodable {
     let urlRss: String?
     let numSections: FlexibleInt?
     let authors: [Author]?
-    var googleCoverURL: String?
+
+    // 🔥 ƏN VACİB SƏTR — STORED PROPERTY
+    var coverURL: URL?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -42,22 +44,13 @@ struct Author: Decodable {
     }
 }
 
+// MARK: Helpers
 extension Audiobook {
 
     var authorName: String {
         guard let author = authors?.first else { return "Unknown Author" }
-
         let full = "\(author.firstName ?? "") \(author.lastName ?? "")"
             .trimmingCharacters(in: .whitespaces)
-
         return full.isEmpty ? "Unknown Author" : full
-    }
-
-    var coverURL: URL? {
-        let query = "\(title) \(authorName)"
-            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-
-        let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(query)&maxResults=1"
-        return URL(string: urlString)
     }
 }

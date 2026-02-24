@@ -41,6 +41,13 @@ final class SearchViewController: UIViewController {
 
 private extension SearchViewController {
 
+    func setupBindings() {
+        viewModel.onDataUpdated = { [weak self] in
+            self?.updateEmptyState()
+            self?.collectionView.reloadData()
+        }
+    }
+
     func setupEmptyState() {
         view.addSubview(emptyLabel)
         emptyLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -52,14 +59,7 @@ private extension SearchViewController {
     }
 
     func updateEmptyState() {
-        emptyLabel.isHidden = !(isSearching && viewModel.books.isEmpty)
-    }
-
-    func setupBindings() {
-        viewModel.onDataUpdated = { [weak self] in
-            self?.updateEmptyState()
-            self?.collectionView.reloadData()
-        }
+        emptyLabel.isHidden = !(isSearching && viewModel.books.isEmpty && !viewModel.isLoading)
     }
 
     func setupSearchBar() {
@@ -101,24 +101,33 @@ private extension SearchViewController {
     }
 
     func setupSearchActions() {
+
         searchBarView.onSearch = { [weak self] query in
             guard let self else { return }
+            self.performSearch(query)
+        }
 
-            if query.isEmpty {
+        searchBarView.onTextChange = { [weak self] text in
+            guard let self else { return }
+
+            if text.isEmpty {
                 self.isSearching = false
-            } else {
-                self.isSearching = true
-                self.viewModel.search(query: query)
+                self.collectionView.setCollectionViewLayout(self.createLayout(), animated: false)
+                self.collectionView.reloadData()
             }
-
-            self.updateEmptyState()
-            self.collectionView.setCollectionViewLayout(self.createLayout(), animated: false)
-            self.collectionView.reloadData()
         }
     }
 
+    func performSearch(_ query: String) {
+        isSearching = !query.isEmpty
+        viewModel.search(query: query)
+        collectionView.setCollectionViewLayout(createLayout(), animated: false)
+        updateEmptyState()
+        collectionView.reloadData()
+    }
+
     func titleForSection(_ section: Int) -> String? {
-        if !isSearching { return nil }
+        guard isSearching else { return nil }
         switch section {
         case 0: return "Top Result"
         case 1: return "Other Results"
@@ -205,7 +214,14 @@ extension SearchViewController: UICollectionViewDataSource {
 extension SearchViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard isSearching else { return }
+
+        if !isSearching {
+            if indexPath.section == 1 {
+                let query = recentSearches[indexPath.item]
+                searchBarView.onSearch?(query)
+            }
+            return
+        }
 
         if indexPath.section == 0, let book = viewModel.topResult {
             navigationController?.pushViewController(BookDetailViewController(book: book), animated: true)

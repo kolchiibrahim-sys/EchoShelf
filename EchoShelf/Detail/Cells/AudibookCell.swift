@@ -56,7 +56,6 @@ final class AudiobookCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError() }
 
     private func setupUI() {
-
         contentView.addSubview(coverImageView)
         contentView.addSubview(textStack)
 
@@ -75,18 +74,17 @@ final class AudiobookCell: UITableViewCell {
         ])
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        coverImageView.image = nil
+    }
+
     func configure(with book: Audiobook) {
 
         titleLabel.text = book.title
+        authorLabel.text = book.authorName
 
-        if let author = book.authors?.first {
-            authorLabel.text = "\(author.firstName ?? "") \(author.lastName ?? "")"
-        } else {
-            authorLabel.text = "Unknown Author"
-        }
-
-        if let cover = book.googleCoverURL,
-           let url = URL(string: cover) {
+        if let url = book.coverURL {
             coverImageView.kf.setImage(with: url)
         } else {
             coverImageView.image = UIImage(systemName: "book.fill")

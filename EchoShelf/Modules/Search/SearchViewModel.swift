@@ -9,8 +9,11 @@ import Foundation
 final class SearchViewModel {
 
     private let service: AudiobookServiceProtocol
+
     private(set) var books: [Audiobook] = []
     private(set) var recentSearches: [String] = []
+
+    private(set) var isLoading = false
 
     var onDataUpdated: (() -> Void)?
     var onError: ((String) -> Void)?
@@ -20,38 +23,44 @@ final class SearchViewModel {
         loadRecents()
     }
 
+    // MARK: SEARCH
+
     func search(query: String) {
 
-        guard !query.trimmingCharacters(in: .whitespaces).isEmpty else {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !trimmed.isEmpty else {
             books = []
-            onDataUpdated?()
+            DispatchQueue.main.async { self.onDataUpdated?() }
             return
         }
 
-        addRecent(query)
+        addRecent(trimmed)
 
-        service.searchAudiobooks(query: query) { [weak self] result in
+        isLoading = true
+        DispatchQueue.main.async { self.onDataUpdated?() }
+
+        service.searchAudiobooks(query: trimmed) { [weak self] result in
             guard let self else { return }
 
-            switch result {
+            DispatchQueue.main.async {
 
-            case .success(let books):
-                self.books = books
-                DispatchQueue.main.async {
-                    self.onDataUpdated?()
-                }
+                self.isLoading = false
 
-            case .failure:
-                DispatchQueue.main.async {
+                switch result {
+                case .success(let books):
+                    self.books = books
+
+                case .failure:
                     self.books = []
                     self.onError?("Search failed")
-                    self.onDataUpdated?()
                 }
+
+                self.onDataUpdated?()
             }
         }
     }
 }
-
 private extension SearchViewModel {
 
     var recentsKey: String { "recent_searches" }
@@ -66,10 +75,7 @@ private extension SearchViewModel {
 
     func addRecent(_ query: String) {
 
-        recentSearches.removeAll {
-            $0.lowercased() == query.lowercased()
-        }
-
+        recentSearches.removeAll { $0.lowercased() == query.lowercased() }
         recentSearches.insert(query, at: 0)
 
         if recentSearches.count > 5 {
@@ -77,10 +83,8 @@ private extension SearchViewModel {
         }
 
         saveRecents()
-        onDataUpdated?()
     }
 }
-
 extension SearchViewModel {
 
     var topResult: Audiobook? {
