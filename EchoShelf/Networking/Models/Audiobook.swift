@@ -43,8 +43,21 @@ struct Author: Decodable {
 }
 
 extension Audiobook {
+
     var authorName: String {
         guard let author = authors?.first else { return "Unknown Author" }
-        return "\(author.firstName ?? "") \(author.lastName ?? "")"
+
+        let full = "\(author.firstName ?? "") \(author.lastName ?? "")"
+            .trimmingCharacters(in: .whitespaces)
+
+        return full.isEmpty ? "Unknown Author" : full
+    }
+
+    var coverURL: URL? {
+        let query = "\(title) \(authorName)"
+            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+
+        let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(query)&maxResults=1"
+        return URL(string: urlString)
     }
 }

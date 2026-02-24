@@ -7,222 +7,288 @@ import UIKit
 
 final class SearchViewController: UIViewController {
 
+    private var collectionView: UICollectionView!
+    private let searchBarView = SearchBarView()
     private let viewModel = SearchViewModel()
 
-    // MARK: Background
-    private let backgroundView: UIView = {
-        let v = UIView()
-        v.backgroundColor = UIColor(named: "AppBackground")
-        v.translatesAutoresizingMaskIntoConstraints = false
-        return v
+    private var isSearching = false
+    private let filters = ["Audiobooks","Authors","Genres","Series"]
+
+    private let emptyLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No results found"
+        label.textColor = UIColor.white.withAlphaComponent(0.6)
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.isHidden = true
+        return label
     }()
 
-    private let titleLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.text = "Search"
-        lbl.textColor = .white
-        lbl.font = .systemFont(ofSize: 32, weight: .bold)
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        return lbl
-    }()
-
-    private let searchField: UITextField = {
-        let tf = UITextField()
-        tf.backgroundColor = UIColor(white: 1, alpha: 0.08)
-        tf.textColor = .white
-        tf.layer.cornerRadius = 18
-        tf.returnKeyType = .search
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.heightAnchor.constraint(equalToConstant: 56).isActive = true
-        
-        let icon = UIImageView(image: UIImage(systemName: "magnifyingglass"))
-        icon.tintColor = UIColor(white: 1, alpha: 0.6)
-        icon.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
-
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 56))
-        icon.center = container.center
-        container.addSubview(icon)
-
-        tf.leftView = container
-        tf.leftViewMode = .always
-
-        tf.attributedPlaceholder = NSAttributedString(
-            string: "Books, authors, narrators",
-            attributes: [.foregroundColor: UIColor(white: 1, alpha: 0.5)]
-        )
-
-        return tf
-    }()
-
-    private let tableView: UITableView = {
-        let tv = UITableView()
-        tv.backgroundColor = .clear
-        tv.separatorStyle = .none
-        tv.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 120, right: 0)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        return tv
-    }()
+    private var recentSearches: [String] {
+        viewModel.recentSearches
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        bindViewModel()
-    }
-
-    private func setupUI() {
-
-        tableView.register(AudiobookCell.self, forCellReuseIdentifier: AudiobookCell.identifier)
-        tableView.register(RecentSearchCell.self, forCellReuseIdentifier: RecentSearchCell.identifier)
-
-        tableView.dataSource = self
-        tableView.delegate = self
-
-        view.addSubview(backgroundView)
-        view.addSubview(titleLabel)
-        view.addSubview(searchField)
-        view.addSubview(tableView)
-
-        NSLayoutConstraint.activate([
-            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-
-            searchField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 18),
-            searchField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            searchField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-
-            tableView.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 10),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-
-        searchField.addTarget(self, action: #selector(searchPressed), for: .editingDidEndOnExit)
-    }
-
-    private func bindViewModel() {
-        viewModel.onDataUpdated = { [weak self] in
-            self?.tableView.reloadData()
-        }
-    }
-
-    @objc private func searchPressed() {
-        viewModel.search(query: searchField.text ?? "")
-        view.endEditing(true)
-    }
-
-    @objc private func clearAllTapped() {
-        viewModel.clearAllRecents()
+        view.backgroundColor = UIColor(named: "AppBackground")
+        setupSearchBar()
+        setupCollectionView()
+        setupBindings()
+        setupSearchActions()
+        setupEmptyState()
     }
 }
-extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2 // Recent + Results
-    }
+private extension SearchViewController {
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        section == 0 ? viewModel.recentSearches.count : viewModel.books.count
-    }
-
-    // MARK: Header view (Recent + Clear All)
-    func tableView(_ tableView: UITableView,
-                   viewForHeaderInSection section: Int) -> UIView? {
-
-        if section == 0 && viewModel.recentSearches.isEmpty { return nil }
-        if section == 1 && viewModel.books.isEmpty { return nil }
-
-        let container = UIView()
-
-        let label = UILabel()
-        label.textColor = UIColor(white: 1, alpha: 0.7)
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
-
-        if section == 0 {
-            label.text = "Recent Searches"
-        } else {
-            label.text = "Results"
-        }
-
-        container.addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
+    func setupEmptyState() {
+        view.addSubview(emptyLabel)
+        emptyLabel.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            label.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+    }
 
-        // Clear All button yalnız Recent üçün
-        if section == 0 {
-            let clearButton = UIButton(type: .system)
-            clearButton.setTitle("Clear All", for: .normal)
-            clearButton.addTarget(self, action: #selector(clearAllTapped), for: .touchUpInside)
-            container.addSubview(clearButton)
-            clearButton.translatesAutoresizingMaskIntoConstraints = false
+    func updateEmptyState() {
+        emptyLabel.isHidden = !(isSearching && viewModel.books.isEmpty)
+    }
 
-            NSLayoutConstraint.activate([
-                clearButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
-                clearButton.centerYAnchor.constraint(equalTo: label.centerYAnchor)
-            ])
+    func setupBindings() {
+        viewModel.onDataUpdated = { [weak self] in
+            self?.updateEmptyState()
+            self?.collectionView.reloadData()
         }
-
-        return container
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 && viewModel.recentSearches.isEmpty { return 0 }
-        if section == 1 && viewModel.books.isEmpty { return 0 }
-        return 40
+    func setupSearchBar() {
+        view.addSubview(searchBarView)
+        searchBarView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            searchBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchBarView.heightAnchor.constraint(equalToConstant: 70)
+        ])
     }
 
-    // MARK: Cells
-    func tableView(_ tableView: UITableView,
-                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func setupCollectionView() {
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
 
-        // RECENT SEARCH CELL
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(
-                withIdentifier: RecentSearchCell.identifier,
-                for: indexPath
-            ) as! RecentSearchCell
+        collectionView.register(FilterChipCell.self, forCellWithReuseIdentifier: "FilterChipCell")
+        collectionView.register(RecentSearchCell.self, forCellWithReuseIdentifier: RecentSearchCell.identifier)
+        collectionView.register(TopResultCell.self, forCellWithReuseIdentifier: TopResultCell.identifier)
+        collectionView.register(OtherVersionCell.self, forCellWithReuseIdentifier: OtherVersionCell.identifier)
+        collectionView.register(RelatedAuthorCell.self, forCellWithReuseIdentifier: RelatedAuthorCell.identifier)
+        collectionView.register(SearchSectionHeaderView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: SearchSectionHeaderView.identifier)
 
-            let query = viewModel.recentSearches[indexPath.row]
-            cell.configure(with: query)
+        view.addSubview(collectionView)
 
-            cell.onDeleteTapped = { [weak self] in
-                self?.viewModel.deleteRecent(at: indexPath.row)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: searchBarView.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+
+    func setupSearchActions() {
+        searchBarView.onSearch = { [weak self] query in
+            guard let self else { return }
+
+            if query.isEmpty {
+                self.isSearching = false
+            } else {
+                self.isSearching = true
+                self.viewModel.search(query: query)
             }
 
+            self.updateEmptyState()
+            self.collectionView.setCollectionViewLayout(self.createLayout(), animated: false)
+            self.collectionView.reloadData()
+        }
+    }
+
+    func titleForSection(_ section: Int) -> String? {
+        if !isSearching { return nil }
+        switch section {
+        case 0: return "Top Result"
+        case 1: return "Other Results"
+        default: return "Authors"
+        }
+    }
+}
+
+extension SearchViewController: UICollectionViewDataSource {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        isSearching ? 3 : 2
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+
+        if !isSearching {
+            return section == 0 ? filters.count : recentSearches.count
+        }
+
+        switch section {
+        case 0: return viewModel.topResult == nil ? 0 : 1
+        case 1: return viewModel.otherVersions.count
+        default: return viewModel.relatedAuthors.count
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        if !isSearching {
+            if indexPath.section == 0 {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterChipCell", for: indexPath) as! FilterChipCell
+                cell.configure(filters[indexPath.item])
+                return cell
+            }
+
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentSearchCell.identifier, for: indexPath) as! RecentSearchCell
+            cell.configure(with: recentSearches[indexPath.item])
             return cell
         }
 
-        // RESULT CELL
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: AudiobookCell.identifier,
-            for: indexPath
-        ) as! AudiobookCell
+        switch indexPath.section {
 
-        cell.backgroundColor = .clear
-        cell.configure(with: viewModel.books[indexPath.row])
-        return cell
+        case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopResultCell.identifier, for: indexPath) as! TopResultCell
+            if let book = viewModel.topResult { cell.configure(with: book) }
+            return cell
+
+        case 1:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OtherVersionCell.identifier, for: indexPath) as! OtherVersionCell
+            cell.configure(with: viewModel.otherVersions[indexPath.item])
+            return cell
+
+        default:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RelatedAuthorCell.identifier, for: indexPath) as! RelatedAuthorCell
+            cell.configure(with: viewModel.relatedAuthors[indexPath.item])
+            return cell
+        }
     }
 
-    // Tap recent → search again
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
 
-        if indexPath.section == 0 {
-            let text = viewModel.recentSearches[indexPath.row]
-            searchField.text = text
-            viewModel.search(query: text)
-            return
+        guard isSearching,
+              kind == UICollectionView.elementKindSectionHeader,
+              let title = titleForSection(indexPath.section) else {
+            return UICollectionReusableView()
         }
 
-        let book = viewModel.books[indexPath.row]
-        let vc = BookDetailViewController(book: book)
-        navigationController?.pushViewController(vc, animated: true)
+        let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: SearchSectionHeaderView.identifier,
+            for: indexPath
+        ) as! SearchSectionHeaderView
+
+        header.configure(title)
+        return header
+    }
+}
+
+extension SearchViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard isSearching else { return }
+
+        if indexPath.section == 0, let book = viewModel.topResult {
+            navigationController?.pushViewController(BookDetailViewController(book: book), animated: true)
+        }
+
+        if indexPath.section == 1 {
+            let book = viewModel.otherVersions[indexPath.item]
+            navigationController?.pushViewController(BookDetailViewController(book: book), animated: true)
+        }
+    }
+}
+
+private extension SearchViewController {
+
+    func makeHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+        NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: .init(widthDimension: .fractionalWidth(1),
+                              heightDimension: .absolute(40)),
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+    }
+
+    func createLayout() -> UICollectionViewLayout {
+        UICollectionViewCompositionalLayout { sectionIndex, _ in
+            if self.isSearching {
+                switch sectionIndex {
+                case 0:
+                    let s = self.topResultSection(); s.boundarySupplementaryItems = [self.makeHeader()]; return s
+                case 1:
+                    let s = self.otherVersionsSection(); s.boundarySupplementaryItems = [self.makeHeader()]; return s
+                default:
+                    let s = self.relatedAuthorsSection(); s.boundarySupplementaryItems = [self.makeHeader()]; return s
+                }
+            } else {
+                return sectionIndex == 0 ? self.filtersSection() : self.recentSection()
+            }
+        }
+    }
+
+    func filtersSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .estimated(80), heightDimension: .absolute(36)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .estimated(80), heightDimension: .absolute(36)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 12
+        section.contentInsets = .init(top: 10, leading: 20, bottom: 20, trailing: 20)
+        return section
+    }
+
+    func recentSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 12
+        section.contentInsets = .init(top: 10, leading: 20, bottom: 30, trailing: 20)
+        return section
+    }
+
+    func topResultSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(170)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .init(top: 10, leading: 20, bottom: 20, trailing: 20)
+        return section
+    }
+
+    func otherVersionsSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(80)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 14
+        section.contentInsets = .init(top: 10, leading: 20, bottom: 20, trailing: 20)
+        return section
+    }
+
+    func relatedAuthorsSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(90), heightDimension: .absolute(120)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(90), heightDimension: .absolute(120)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 16
+        section.contentInsets = .init(top: 10, leading: 20, bottom: 40, trailing: 20)
+        return section
     }
 }

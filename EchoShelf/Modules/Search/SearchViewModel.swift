@@ -20,10 +20,13 @@ final class SearchViewModel {
         loadRecents()
     }
 
-    // MARK: Search
     func search(query: String) {
 
-        guard !query.isEmpty else { return }
+        guard !query.trimmingCharacters(in: .whitespaces).isEmpty else {
+            books = []
+            onDataUpdated?()
+            return
+        }
 
         addRecent(query)
 
@@ -31,6 +34,7 @@ final class SearchViewModel {
             guard let self else { return }
 
             switch result {
+
             case .success(let books):
                 self.books = books
                 DispatchQueue.main.async {
@@ -39,26 +43,33 @@ final class SearchViewModel {
 
             case .failure:
                 DispatchQueue.main.async {
+                    self.books = []
                     self.onError?("Search failed")
+                    self.onDataUpdated?()
                 }
             }
         }
     }
 }
-extension SearchViewModel {
 
-    private var recentsKey: String { "recent_searches" }
+private extension SearchViewModel {
 
-    private func loadRecents() {
+    var recentsKey: String { "recent_searches" }
+
+    func loadRecents() {
         recentSearches = UserDefaults.standard.stringArray(forKey: recentsKey) ?? []
     }
 
-    private func saveRecents() {
+    func saveRecents() {
         UserDefaults.standard.set(recentSearches, forKey: recentsKey)
     }
 
-    private func addRecent(_ query: String) {
-        recentSearches.removeAll { $0.lowercased() == query.lowercased() }
+    func addRecent(_ query: String) {
+
+        recentSearches.removeAll {
+            $0.lowercased() == query.lowercased()
+        }
+
         recentSearches.insert(query, at: 0)
 
         if recentSearches.count > 5 {
@@ -66,17 +77,36 @@ extension SearchViewModel {
         }
 
         saveRecents()
-    }
-
-    func deleteRecent(at index: Int) {
-        recentSearches.remove(at: index)
-        saveRecents()
         onDataUpdated?()
     }
+}
 
-    func clearAllRecents() {
-        recentSearches.removeAll()
-        saveRecents()
-        onDataUpdated?()
+extension SearchViewModel {
+
+    var topResult: Audiobook? {
+        books.first
+    }
+
+    var otherVersions: [Audiobook] {
+        guard books.count > 1 else { return [] }
+        return Array(books.dropFirst().prefix(5))
+    }
+
+    var relatedAuthors: [Author] {
+
+        let authors = books.compactMap { $0.authors?.first }
+
+        var unique: [Author] = []
+
+        for author in authors {
+            if !unique.contains(where: {
+                $0.firstName == author.firstName &&
+                $0.lastName == author.lastName
+            }) {
+                unique.append(author)
+            }
+        }
+
+        return Array(unique.prefix(6))
     }
 }

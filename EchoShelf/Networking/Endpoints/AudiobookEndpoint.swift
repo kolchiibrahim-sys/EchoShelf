@@ -14,7 +14,7 @@ enum AudiobookEndpoint: Endpoint {
     case detail(id: Int)
 
     var baseURL: String {
-        "https://librivox.org/api/feed/audiobooks"
+        "https://librivox.org/api/feed/audiobooks/"
     }
 
     var path: String { "" }
@@ -27,13 +27,16 @@ enum AudiobookEndpoint: Endpoint {
         case .getAudiobooks(let page):
             return [
                 "format": "json",
-                "page": page
+                "limit": 20,
+                "offset": page * 20
             ]
 
         case .search(let query):
             return [
                 "format": "json",
-                "title": query
+                "title": "^\(query)",   
+                "limit": 20,
+                "offset": 0
             ]
 
         case .detail(let id):
