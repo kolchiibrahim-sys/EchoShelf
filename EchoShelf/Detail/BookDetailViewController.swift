@@ -5,6 +5,7 @@
 //  Created by Ibrahim Kolchi on 22.02.26.
 //
 import UIKit
+import Kingfisher
 
 final class BookDetailViewController: UIViewController {
 
@@ -30,7 +31,7 @@ final class BookDetailViewController: UIViewController {
     private let favButton  = DetailButton(systemName: "heart")
 
     private let coverView = UIView()
-    private let coverIcon = UIImageView()
+    private let coverImageView = UIImageView()
 
     private let titleLabel = UILabel()
     private let authorLabel = UILabel()
@@ -100,10 +101,11 @@ final class BookDetailViewController: UIViewController {
         coverView.layer.cornerRadius = 26
         coverView.translatesAutoresizingMaskIntoConstraints = false
 
-        coverIcon.image = UIImage(systemName: "building.columns.fill")
-        coverIcon.tintColor = .white
-        coverIcon.translatesAutoresizingMaskIntoConstraints = false
-        coverView.addSubview(coverIcon)
+        coverImageView.contentMode = .scaleAspectFill
+        coverImageView.clipsToBounds = true
+        coverImageView.layer.cornerRadius = 26
+        coverImageView.translatesAutoresizingMaskIntoConstraints = false
+        coverView.addSubview(coverImageView)
 
         titleLabel.font = .systemFont(ofSize: 26, weight: .bold)
         titleLabel.textColor = .white
@@ -131,10 +133,10 @@ final class BookDetailViewController: UIViewController {
             coverView.widthAnchor.constraint(equalToConstant: 240),
             coverView.heightAnchor.constraint(equalToConstant: 320),
 
-            coverIcon.centerXAnchor.constraint(equalTo: coverView.centerXAnchor),
-            coverIcon.centerYAnchor.constraint(equalTo: coverView.centerYAnchor),
-            coverIcon.heightAnchor.constraint(equalToConstant: 50),
-            coverIcon.widthAnchor.constraint(equalToConstant: 50),
+            coverImageView.topAnchor.constraint(equalTo: coverView.topAnchor),
+            coverImageView.bottomAnchor.constraint(equalTo: coverView.bottomAnchor),
+            coverImageView.leadingAnchor.constraint(equalTo: coverView.leadingAnchor),
+            coverImageView.trailingAnchor.constraint(equalTo: coverView.trailingAnchor),
 
             titleLabel.topAnchor.constraint(equalTo: coverView.bottomAnchor, constant: 26),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
@@ -174,13 +176,22 @@ final class BookDetailViewController: UIViewController {
             authorLabel.text = "Unknown Author"
         }
 
-        statsLabel.text = "⭐️ 4.8   •   Public Domain   •   LibriVox"
-
+        statsLabel.text = "Public Domain • LibriVox"
         descriptionLabel.text = book.description ?? "No description available."
+
+        if let urlString = book.googleCoverURL,
+           let url = URL(string: urlString) {
+            coverImageView.kf.setImage(with: url)
+        }
     }
 
     @objc private func listenTapped() {
-        NotificationCenter.default.post(name: .playerStarted, object: nil)
+
+        PlayerManager.shared.play(book: book)
+
+        let playerVC = PlayerViewController()
+        playerVC.modalPresentationStyle = .fullScreen
+        present(playerVC, animated: true)
     }
 
     @objc private func backTapped() {
