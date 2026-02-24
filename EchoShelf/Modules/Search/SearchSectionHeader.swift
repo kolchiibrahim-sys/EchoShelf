@@ -27,6 +27,19 @@ final class SearchSectionHeaderView: UICollectionReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        titleLabel.text = nil
+    }
+
+    private func setupUI() {
+
+        backgroundColor = .clear
 
         addSubview(titleLabel)
         addSubview(divider)
@@ -34,7 +47,7 @@ final class SearchSectionHeaderView: UICollectionReusableView {
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 6),
 
             divider.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             divider.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
@@ -42,8 +55,6 @@ final class SearchSectionHeaderView: UICollectionReusableView {
             divider.heightAnchor.constraint(equalToConstant: 1)
         ])
     }
-
-    required init?(coder: NSCoder) { fatalError() }
 
     func configure(_ title: String) {
         titleLabel.text = title

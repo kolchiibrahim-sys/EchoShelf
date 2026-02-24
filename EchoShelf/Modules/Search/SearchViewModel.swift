@@ -12,7 +12,6 @@ final class SearchViewModel {
 
     private(set) var books: [Audiobook] = []
     private(set) var recentSearches: [String] = []
-
     private(set) var isLoading = false
 
     var onDataUpdated: (() -> Void)?
@@ -29,6 +28,7 @@ final class SearchViewModel {
 
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
+        // boş query → nəticələri sil
         guard !trimmed.isEmpty else {
             books = []
             DispatchQueue.main.async { self.onDataUpdated?() }
@@ -48,6 +48,7 @@ final class SearchViewModel {
                 self.isLoading = false
 
                 switch result {
+
                 case .success(let books):
                     self.books = books
 
@@ -60,7 +61,23 @@ final class SearchViewModel {
             }
         }
     }
+
+    // MARK: Recent Searches Public Actions
+
+    func deleteRecent(at index: Int) {
+        guard index < recentSearches.count else { return }
+        recentSearches.remove(at: index)
+        saveRecents()
+        onDataUpdated?()
+    }
+
+    func clearRecents() {
+        recentSearches.removeAll()
+        saveRecents()
+        onDataUpdated?()
+    }
 }
+
 private extension SearchViewModel {
 
     var recentsKey: String { "recent_searches" }
@@ -85,6 +102,7 @@ private extension SearchViewModel {
         saveRecents()
     }
 }
+
 extension SearchViewModel {
 
     var topResult: Audiobook? {
@@ -99,7 +117,6 @@ extension SearchViewModel {
     var relatedAuthors: [Author] {
 
         let authors = books.compactMap { $0.authors?.first }
-
         var unique: [Author] = []
 
         for author in authors {

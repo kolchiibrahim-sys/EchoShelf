@@ -36,6 +36,7 @@ final class SearchBarView: UIView {
         tf.layer.cornerRadius = 20
         tf.textColor = .white
         tf.returnKeyType = .search
+        tf.clearButtonMode = .never
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -52,6 +53,7 @@ final class SearchBarView: UIView {
 private extension SearchBarView {
 
     func setupUI() {
+
         addSubview(textField)
         textField.addSubview(searchIcon)
         textField.addSubview(clearButton)
@@ -80,20 +82,25 @@ private extension SearchBarView {
     }
 
     @objc func clearTapped() {
+        debounceTimer?.invalidate()
         textField.text = ""
         clearButton.alpha = 0
-        debounceTimer?.invalidate()
         onTextChange?("")
         onSearch?("")
+        textField.resignFirstResponder()
     }
 
     @objc func textChanged() {
+
         let text = textField.text ?? ""
         clearButton.alpha = text.isEmpty ? 0 : 1
         onTextChange?(text)
 
         debounceTimer?.invalidate()
-        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+
+        guard text.count >= 2 else { return }
+
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.45, repeats: false) { [weak self] _ in
             guard let self else { return }
             self.onSearch?(text)
         }
@@ -101,6 +108,7 @@ private extension SearchBarView {
 }
 
 extension SearchBarView: UITextFieldDelegate {
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         debounceTimer?.invalidate()
         onSearch?(textField.text ?? "")

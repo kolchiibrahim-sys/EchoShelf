@@ -19,8 +19,6 @@ struct Audiobook: Decodable {
     let urlRss: String?
     let numSections: FlexibleInt?
     let authors: [Author]?
-
-    // 🔥 ƏN VACİB SƏTR — STORED PROPERTY
     var coverURL: URL?
 
     enum CodingKeys: String, CodingKey {
@@ -44,7 +42,6 @@ struct Author: Decodable {
     }
 }
 
-// MARK: Helpers
 extension Audiobook {
 
     var authorName: String {

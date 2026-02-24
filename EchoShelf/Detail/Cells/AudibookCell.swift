@@ -85,9 +85,10 @@ final class AudiobookCell: UITableViewCell {
         authorLabel.text = book.authorName
 
         if let url = book.coverURL {
-            coverImageView.kf.setImage(with: url)
+            imageView?.kf.setImage(with: url)
         } else {
-            coverImageView.image = UIImage(systemName: "book.fill")
+            imageView!.image = UIImage(systemName: "book.fill")
+        
         }
     }
 }

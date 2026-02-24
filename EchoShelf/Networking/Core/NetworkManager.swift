@@ -39,29 +39,30 @@ final class NetworkManager {
 
 // MARK: GOOGLE BOOKS COVER FETCH
 extension NetworkManager {
-
-    func fetchGoogleCover(for book: Audiobook, completion: @escaping (String?) -> Void) {
-
-        guard let url = book.coverURL else {
-            completion(nil)
-            return
-        }
-
-        AF.request(url).responseJSON { response in
-
+    
+    func fetchGoogleCover(for book: Audiobook, completion: @escaping (URL?) -> Void) {
+        
+        let query = "\(book.title) \(book.authorName)"
+            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        
+        let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(query)&maxResults=1"
+        
+        AF.request(urlString).responseJSON { response in
+            
             guard
                 let data = response.data,
                 let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                 let items = json["items"] as? [[String: Any]],
-                let volume = items.first?["volumeInfo"] as? [String: Any],
-                let images = volume["imageLinks"] as? [String: Any],
-                let thumbnail = images["thumbnail"] as? String
+                let volumeInfo = items.first?["volumeInfo"] as? [String: Any],
+                let imageLinks = volumeInfo["imageLinks"] as? [String: Any],
+                let thumbnail = imageLinks["thumbnail"] as? String,
+                let httpsThumb = URL(string: thumbnail.replacingOccurrences(of: "http://", with: "https://"))
             else {
                 completion(nil)
                 return
             }
-
-            completion(thumbnail)
+            
+            completion(httpsThumb)
         }
     }
 }

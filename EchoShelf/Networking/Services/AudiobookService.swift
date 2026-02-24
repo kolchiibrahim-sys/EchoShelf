@@ -10,7 +10,6 @@ final class AudiobookService: AudiobookServiceProtocol {
 
     private let network = NetworkManager.shared
 
-    // MARK: FETCH LIST
     func fetchAudiobooks(
         page: Int,
         completion: @escaping (Result<[Audiobook], APIError>) -> Void
@@ -30,7 +29,6 @@ final class AudiobookService: AudiobookServiceProtocol {
         }
     }
 
-    // MARK: SEARCH
     func searchAudiobooks(
         query: String,
         completion: @escaping (Result<[Audiobook], APIError>) -> Void
@@ -50,7 +48,6 @@ final class AudiobookService: AudiobookServiceProtocol {
         }
     }
 
-    // MARK: DETAIL
     func fetchAudiobookDetail(
         id: Int,
         completion: @escaping (Result<Audiobook, APIError>) -> Void
@@ -67,8 +64,8 @@ final class AudiobookService: AudiobookServiceProtocol {
                     return
                 }
 
-                self.network.fetchGoogleCover(for: book) { urlString in
-                    book.coverURL = urlString.flatMap { URL(string: $0) }
+                self.network.fetchGoogleCover(for: book) { url in
+                    book.coverURL = url
                     completion(.success(book))
                 }
 
@@ -79,21 +76,21 @@ final class AudiobookService: AudiobookServiceProtocol {
     }
 }
 
-// MARK: COVER ATTACH HELPER
 private extension AudiobookService {
 
     func attachCovers(
         to books: [Audiobook],
         completion: @escaping (Result<[Audiobook], APIError>) -> Void
     ) {
+
         var booksWithCovers = books
         let group = DispatchGroup()
 
-        for index in books.indices {
+        for index in booksWithCovers.indices {
             group.enter()
 
-            network.fetchGoogleCover(for: books[index]) { urlString in
-                booksWithCovers[index].coverURL = urlString.flatMap { URL(string: $0) }
+            network.fetchGoogleCover(for: booksWithCovers[index]) { url in
+                booksWithCovers[index].coverURL = url
                 group.leave()
             }
         }
