@@ -6,13 +6,20 @@
 //
 import UIKit
 
-class SignInViewController: UIViewController {
+final class SignInViewController: UIViewController {
 
     var onLoginSuccess: (() -> Void)?
     var onCreateAccount: (() -> Void)?
     var onForgotPassword: (() -> Void)?
 
-    
+    private let viewModel: SignInViewModel
+
+    init(viewModel: SignInViewModel = SignInViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
 
     private let logoContainerView: UIView = {
         let view = UIView()
@@ -72,7 +79,6 @@ class SignInViewController: UIViewController {
         tf.autocapitalizationType = .none
         tf.leftViewMode = .always
         tf.translatesAutoresizingMaskIntoConstraints = false
-
         let icon = UIImageView(image: UIImage(systemName: "envelope"))
         icon.tintColor = UIColor.white.withAlphaComponent(0.5)
         icon.frame = CGRect(x: 0, y: 0, width: 44, height: 24)
@@ -94,22 +100,17 @@ class SignInViewController: UIViewController {
         tf.leftViewMode = .always
         tf.rightViewMode = .always
         tf.translatesAutoresizingMaskIntoConstraints = false
-
-        // Left icon
         let lockIcon = UIImageView(image: UIImage(systemName: "lock"))
         lockIcon.tintColor = UIColor.white.withAlphaComponent(0.5)
         lockIcon.frame = CGRect(x: 0, y: 0, width: 44, height: 24)
         lockIcon.contentMode = .center
         tf.leftView = lockIcon
-
-        // Right eye icon
         let eyeButton = UIButton(type: .system)
         eyeButton.setImage(UIImage(systemName: "eye"), for: .normal)
         eyeButton.tintColor = UIColor.white.withAlphaComponent(0.5)
         eyeButton.frame = CGRect(x: 0, y: 0, width: 44, height: 24)
         eyeButton.addTarget(nil, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         tf.rightView = eyeButton
-
         return tf
     }()
 
@@ -131,6 +132,14 @@ class SignInViewController: UIViewController {
         btn.layer.cornerRadius = 28
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
+    }()
+
+    private let activityIndicator: UIActivityIndicatorView = {
+        let ai = UIActivityIndicatorView(style: .medium)
+        ai.color = .white
+        ai.hidesWhenStopped = true
+        ai.translatesAutoresizingMaskIntoConstraints = false
+        return ai
     }()
 
     private let orLabel: UILabel = {
@@ -159,7 +168,7 @@ class SignInViewController: UIViewController {
 
     private let appleButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Continue with Apple", for: .normal)
+        btn.setTitle("  Continue with Apple", for: .normal)
         btn.setImage(UIImage(systemName: "apple.logo"), for: .normal)
         btn.tintColor = .white
         btn.setTitleColor(.white, for: .normal)
@@ -172,14 +181,12 @@ class SignInViewController: UIViewController {
 
     private let googleButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Continue with Google", for: .normal)
+        btn.setTitle("  Continue with Google", for: .normal)
         btn.setTitleColor(.black, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         btn.backgroundColor = .white
         btn.layer.cornerRadius = 28
         btn.translatesAutoresizingMaskIntoConstraints = false
-
-       
         let gLabel = UILabel()
         gLabel.text = "G"
         gLabel.font = .systemFont(ofSize: 18, weight: .bold)
@@ -190,7 +197,6 @@ class SignInViewController: UIViewController {
             gLabel.leadingAnchor.constraint(equalTo: btn.leadingAnchor, constant: 24),
             gLabel.centerYAnchor.constraint(equalTo: btn.centerYAnchor)
         ])
-
         return btn
     }()
 
@@ -231,20 +237,38 @@ class SignInViewController: UIViewController {
         return lbl
     }()
 
-    // MARK: - Lifecycle
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
+        bindViewModel()
     }
 
-    // MARK: - Setup
+    private func bindViewModel() {
+        viewModel.onLoadingChanged = { [weak self] isLoading in
+            DispatchQueue.main.async {
+                isLoading ? self?.activityIndicator.startAnimating() : self?.activityIndicator.stopAnimating()
+                self?.signInButton.isEnabled = !isLoading
+                self?.signInButton.alpha = isLoading ? 0.6 : 1.0
+            }
+        }
+
+        viewModel.onLoginSuccess = { [weak self] in
+            DispatchQueue.main.async { self?.onLoginSuccess?() }
+        }
+
+        viewModel.onError = { [weak self] message in
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self?.present(alert, animated: true)
+            }
+        }
+    }
 
     private func setupUI() {
         view.backgroundColor = UIColor(red: 0.09, green: 0.10, blue: 0.16, alpha: 1.0)
 
-        // Add subviews
         view.addSubview(logoContainerView)
         logoContainerView.addSubview(logoImageView)
         view.addSubview(appNameLabel)
@@ -254,6 +278,7 @@ class SignInViewController: UIViewController {
         view.addSubview(passwordTextField)
         view.addSubview(forgotPasswordButton)
         view.addSubview(signInButton)
+        signInButton.addSubview(activityIndicator)
         view.addSubview(leftDivider)
         view.addSubview(orLabel)
         view.addSubview(rightDivider)
@@ -263,8 +288,6 @@ class SignInViewController: UIViewController {
         view.addSubview(termsLabel)
 
         NSLayoutConstraint.activate([
-           
-
             // Logo container
             logoContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 4),
             logoContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -50),
@@ -277,11 +300,11 @@ class SignInViewController: UIViewController {
             logoImageView.widthAnchor.constraint(equalToConstant: 22),
             logoImageView.heightAnchor.constraint(equalToConstant: 22),
 
-            // App name label
+            // App name
             appNameLabel.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor),
             appNameLabel.leadingAnchor.constraint(equalTo: logoContainerView.trailingAnchor, constant: 8),
 
-            // Welcome label
+            // Welcome
             welcomeLabel.topAnchor.constraint(equalTo: logoContainerView.bottomAnchor, constant: 32),
             welcomeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
 
@@ -306,21 +329,27 @@ class SignInViewController: UIViewController {
             forgotPasswordButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 10),
             forgotPasswordButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
 
-            // Sign In button
+            // Sign in button
             signInButton.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 20),
             signInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             signInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             signInButton.heightAnchor.constraint(equalToConstant: 58),
 
-            // Dividers & OR
+            // Activity indicator
+            activityIndicator.centerXAnchor.constraint(equalTo: signInButton.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: signInButton.centerYAnchor),
+
+            // Left divider
             leftDivider.centerYAnchor.constraint(equalTo: orLabel.centerYAnchor),
             leftDivider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             leftDivider.trailingAnchor.constraint(equalTo: orLabel.leadingAnchor, constant: -12),
             leftDivider.heightAnchor.constraint(equalToConstant: 1),
 
+            // OR label
             orLabel.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 24),
             orLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
+            // Right divider
             rightDivider.centerYAnchor.constraint(equalTo: orLabel.centerYAnchor),
             rightDivider.leadingAnchor.constraint(equalTo: orLabel.trailingAnchor, constant: 12),
             rightDivider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
@@ -338,7 +367,7 @@ class SignInViewController: UIViewController {
             googleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             googleButton.heightAnchor.constraint(equalToConstant: 58),
 
-            // Create Account button
+            // Create account button
             createAccountButton.topAnchor.constraint(equalTo: googleButton.bottomAnchor, constant: 14),
             createAccountButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             createAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
@@ -358,26 +387,12 @@ class SignInViewController: UIViewController {
         appleButton.addTarget(self, action: #selector(appleSignInTapped), for: .touchUpInside)
         googleButton.addTarget(self, action: #selector(googleSignInTapped), for: .touchUpInside)
         createAccountButton.addTarget(self, action: #selector(createAccountTapped), for: .touchUpInside)
-
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
     }
 
-    @objc private func backTapped() {
-        navigationController?.popViewController(animated: true)
-    }
-
     @objc private func signInTapped() {
-        guard let email = emailTextField.text, !email.isEmpty,
-              let password = passwordTextField.text, !password.isEmpty else {
-   
-            let alert = UIAlertController(title: "Missing Fields", message: "Please fill in all fields.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-            return
-        }
-        
-        onLoginSuccess?()
+        viewModel.login(email: emailTextField.text, password: passwordTextField.text)
     }
 
     @objc private func forgotPasswordTapped() {
@@ -385,11 +400,19 @@ class SignInViewController: UIViewController {
     }
 
     @objc private func appleSignInTapped() {
-        print("Apple sign in tapped")
+        AuthService.shared.signInWithApple { [weak self] result in
+            if case .success = result {
+                DispatchQueue.main.async { self?.onLoginSuccess?() }
+            }
+        }
     }
 
     @objc private func googleSignInTapped() {
-        print("Google sign in tapped")
+        AuthService.shared.signInWithGoogle { [weak self] result in
+            if case .success = result {
+                DispatchQueue.main.async { self?.onLoginSuccess?() }
+            }
+        }
     }
 
     @objc private func createAccountTapped() {

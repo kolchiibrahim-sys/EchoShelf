@@ -10,6 +10,15 @@ final class ForgotPasswordViewController: UIViewController {
 
     var onBackToSignIn: (() -> Void)?
 
+    private let viewModel: ForgotPasswordViewModel
+
+    init(viewModel: ForgotPasswordViewModel = ForgotPasswordViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
     private let logoContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(red: 0.42, green: 0.38, blue: 0.93, alpha: 1.0)
@@ -104,10 +113,16 @@ final class ForgotPasswordViewController: UIViewController {
         return btn
     }()
 
+    private let activityIndicator: UIActivityIndicatorView = {
+        let ai = UIActivityIndicatorView(style: .medium)
+        ai.color = .white
+        ai.hidesWhenStopped = true
+        ai.translatesAutoresizingMaskIntoConstraints = false
+        return ai
+    }()
+
     private let backToSignInLabel: UILabel = {
         let lbl = UILabel()
-        lbl.numberOfLines = 1
-        lbl.textAlignment = .center
         let fullText = "Remember your password? Sign In"
         let attributed = NSMutableAttributedString(
             string: fullText,
@@ -121,6 +136,7 @@ final class ForgotPasswordViewController: UIViewController {
             attributed.addAttribute(.foregroundColor, value: purple, range: NSRange(range, in: fullText))
         }
         lbl.attributedText = attributed
+        lbl.textAlignment = .center
         lbl.isUserInteractionEnabled = true
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -187,6 +203,29 @@ final class ForgotPasswordViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupActions()
+        bindViewModel()
+    }
+
+    private func bindViewModel() {
+        viewModel.onLoadingChanged = { [weak self] isLoading in
+            DispatchQueue.main.async {
+                isLoading ? self?.activityIndicator.startAnimating() : self?.activityIndicator.stopAnimating()
+                self?.sendButton.isEnabled = !isLoading
+                self?.sendButton.alpha = isLoading ? 0.6 : 1.0
+            }
+        }
+
+        viewModel.onResetSuccess = { [weak self] in
+            DispatchQueue.main.async { self?.showSuccessState() }
+        }
+
+        viewModel.onError = { [weak self] message in
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self?.present(alert, animated: true)
+            }
+        }
     }
 
     private func setupUI() {
@@ -201,8 +240,8 @@ final class ForgotPasswordViewController: UIViewController {
         view.addSubview(subtitleLabel)
         view.addSubview(emailTextField)
         view.addSubview(sendButton)
+        sendButton.addSubview(activityIndicator)
         view.addSubview(backToSignInLabel)
-
         view.addSubview(successView)
         successView.addSubview(successIconContainer)
         successIconContainer.addSubview(successIconImageView)
@@ -223,7 +262,7 @@ final class ForgotPasswordViewController: UIViewController {
             logoImageView.widthAnchor.constraint(equalToConstant: 22),
             logoImageView.heightAnchor.constraint(equalToConstant: 22),
 
-            // App name label
+            // App name
             appNameLabel.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor),
             appNameLabel.leadingAnchor.constraint(equalTo: logoContainerView.trailingAnchor, constant: 8),
 
@@ -239,16 +278,16 @@ final class ForgotPasswordViewController: UIViewController {
             lockIconImageView.widthAnchor.constraint(equalToConstant: 36),
             lockIconImageView.heightAnchor.constraint(equalToConstant: 36),
 
-            // Title label
+            // Title
             titleLabel.topAnchor.constraint(equalTo: iconContainerView.bottomAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
 
-            // Subtitle label
+            // Subtitle
             subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             subtitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
 
-            // Email text field
+            // Email field
             emailTextField.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 32),
             emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
@@ -260,11 +299,15 @@ final class ForgotPasswordViewController: UIViewController {
             sendButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             sendButton.heightAnchor.constraint(equalToConstant: 58),
 
+            // Activity indicator
+            activityIndicator.centerXAnchor.constraint(equalTo: sendButton.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: sendButton.centerYAnchor),
+
             // Back to sign in label
             backToSignInLabel.topAnchor.constraint(equalTo: sendButton.bottomAnchor, constant: 28),
             backToSignInLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            // Success view (full screen overlay)
+            // Success view
             successView.topAnchor.constraint(equalTo: view.topAnchor),
             successView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             successView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -310,22 +353,7 @@ final class ForgotPasswordViewController: UIViewController {
     }
 
     @objc private func sendTapped() {
-        guard let email = emailTextField.text, !email.isEmpty else {
-            let alert = UIAlertController(title: "Missing Email", message: "Please enter your email address.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-            return
-        }
-        AuthService.shared.resetPassword(email: email) { [weak self] result in
-            switch result {
-            case .success:
-                self?.showSuccessState()
-            case .failure(let error):
-                let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                self?.present(alert, animated: true)
-            }
-        }
+        viewModel.resetPassword(email: emailTextField.text)
     }
 
     @objc private func backToSignInTapped() {

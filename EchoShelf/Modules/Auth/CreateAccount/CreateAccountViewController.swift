@@ -11,7 +11,14 @@ final class CreateAccountViewController: UIViewController {
     var onCreateSuccess: (() -> Void)?
     var onSignIn: (() -> Void)?
 
-    // MARK: - UI Elements
+    private let viewModel: CreateAccountViewModel
+
+    init(viewModel: CreateAccountViewModel = CreateAccountViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
 
     private let logoContainerView: UIView = {
         let view = UIView()
@@ -137,6 +144,14 @@ final class CreateAccountViewController: UIViewController {
         return btn
     }()
 
+    private let activityIndicator: UIActivityIndicatorView = {
+        let ai = UIActivityIndicatorView(style: .medium)
+        ai.color = .white
+        ai.hidesWhenStopped = true
+        ai.translatesAutoresizingMaskIntoConstraints = false
+        return ai
+    }()
+
     private let leftDivider: UIView = {
         let v = UIView()
         v.backgroundColor = UIColor.white.withAlphaComponent(0.15)
@@ -197,8 +212,6 @@ final class CreateAccountViewController: UIViewController {
 
     private let signInLabel: UILabel = {
         let lbl = UILabel()
-        lbl.numberOfLines = 1
-        lbl.textAlignment = .center
         let fullText = "Already have an account? Sign In"
         let attributed = NSMutableAttributedString(
             string: fullText,
@@ -212,20 +225,40 @@ final class CreateAccountViewController: UIViewController {
             attributed.addAttribute(.foregroundColor, value: purple, range: NSRange(range, in: fullText))
         }
         lbl.attributedText = attributed
+        lbl.textAlignment = .center
         lbl.isUserInteractionEnabled = true
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
 
-    // MARK: - Lifecycle
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
+        bindViewModel()
     }
 
-    // MARK: - Setup
+    private func bindViewModel() {
+        viewModel.onLoadingChanged = { [weak self] isLoading in
+            DispatchQueue.main.async {
+                isLoading ? self?.activityIndicator.startAnimating() : self?.activityIndicator.stopAnimating()
+                self?.createAccountButton.isEnabled = !isLoading
+                self?.createAccountButton.alpha = isLoading ? 0.6 : 1.0
+            }
+        }
+
+        viewModel.onCreateSuccess = { [weak self] in
+            DispatchQueue.main.async { self?.onCreateSuccess?() }
+        }
+
+        viewModel.onError = { [weak self] message in
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self?.present(alert, animated: true)
+            }
+        }
+    }
 
     private func setupUI() {
         view.backgroundColor = UIColor(red: 0.09, green: 0.10, blue: 0.16, alpha: 1.0)
@@ -239,6 +272,7 @@ final class CreateAccountViewController: UIViewController {
         view.addSubview(emailTextField)
         view.addSubview(passwordTextField)
         view.addSubview(createAccountButton)
+        createAccountButton.addSubview(activityIndicator)
         view.addSubview(leftDivider)
         view.addSubview(orLabel)
         view.addSubview(rightDivider)
@@ -259,15 +293,15 @@ final class CreateAccountViewController: UIViewController {
             logoImageView.widthAnchor.constraint(equalToConstant: 22),
             logoImageView.heightAnchor.constraint(equalToConstant: 22),
 
-            // App name label
+            // App name
             appNameLabel.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor),
             appNameLabel.leadingAnchor.constraint(equalTo: logoContainerView.trailingAnchor, constant: 8),
 
-            // Title label
+            // Title
             titleLabel.topAnchor.constraint(equalTo: logoContainerView.bottomAnchor, constant: 32),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
 
-            // Subtitle label
+            // Subtitle
             subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             subtitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
@@ -295,6 +329,10 @@ final class CreateAccountViewController: UIViewController {
             createAccountButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             createAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             createAccountButton.heightAnchor.constraint(equalToConstant: 58),
+
+            // Activity indicator
+            activityIndicator.centerXAnchor.constraint(equalTo: createAccountButton.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: createAccountButton.centerYAnchor),
 
             // Left divider
             leftDivider.centerYAnchor.constraint(equalTo: orLabel.centerYAnchor),
@@ -335,46 +373,33 @@ final class CreateAccountViewController: UIViewController {
         createAccountButton.addTarget(self, action: #selector(createAccountTapped), for: .touchUpInside)
         appleButton.addTarget(self, action: #selector(appleSignInTapped), for: .touchUpInside)
         googleButton.addTarget(self, action: #selector(googleSignInTapped), for: .touchUpInside)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(signInTapped))
-        signInLabel.addGestureRecognizer(tap)
+        let signInTap = UITapGestureRecognizer(target: self, action: #selector(signInTapped))
+        signInLabel.addGestureRecognizer(signInTap)
         let dismissTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(dismissTap)
     }
 
-    // MARK: - Actions
-
     @objc private func createAccountTapped() {
-        guard
-            let name = fullNameTextField.text, !name.isEmpty,
-            let email = emailTextField.text, !email.isEmpty,
-            let password = passwordTextField.text, !password.isEmpty
-        else {
-            let alert = UIAlertController(title: "Missing Fields", message: "Please fill in all fields.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-            return
-        }
-        AuthService.shared.signUp(name: name, email: email, password: password) { [weak self] result in
-            switch result {
-            case .success:
-                self?.onCreateSuccess?()
-            case .failure(let error):
-                let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                self?.present(alert, animated: true)
-            }
-        }
+        viewModel.createAccount(
+            name: fullNameTextField.text,
+            email: emailTextField.text,
+            password: passwordTextField.text
+        )
     }
 
     @objc private func appleSignInTapped() {
         AuthService.shared.signInWithApple { [weak self] result in
-            if case .success = result { self?.onCreateSuccess?() }
+            if case .success = result {
+                DispatchQueue.main.async { self?.onCreateSuccess?() }
+            }
         }
     }
 
     @objc private func googleSignInTapped() {
         AuthService.shared.signInWithGoogle { [weak self] result in
-            if case .success = result { self?.onCreateSuccess?() }
+            if case .success = result {
+                DispatchQueue.main.async { self?.onCreateSuccess?() }
+            }
         }
     }
 
