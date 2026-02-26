@@ -21,7 +21,6 @@ final class LoginViewModel {
         }
 
         onLoadingChanged?(true)
-
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
             self?.onLoadingChanged?(false)
             self?.onLoginSuccess?()

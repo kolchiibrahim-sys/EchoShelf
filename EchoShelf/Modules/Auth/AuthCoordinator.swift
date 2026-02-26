@@ -40,15 +40,17 @@ final class AuthCoordinator: Coordinator {
     }
 
     private func showCreateAccount() {
-        // TODO: Replace with your RegisterViewController
-        let vc = UIViewController()
-        vc.view.backgroundColor = UIColor(red: 0.09, green: 0.10, blue: 0.16, alpha: 1.0)
-        vc.title = "Create Account"
+        let vc = CreateAccountViewController()
+        vc.onCreateSuccess = { [weak self] in
+            self?.showMainApp()
+        }
+        vc.onSignIn = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+        }
         navigationController.pushViewController(vc, animated: true)
     }
 
     private func showForgotPassword() {
-        // TODO: Replace with your ForgotPasswordViewController
         let vc = UIViewController()
         vc.view.backgroundColor = UIColor(red: 0.09, green: 0.10, blue: 0.16, alpha: 1.0)
         vc.title = "Forgot Password"
