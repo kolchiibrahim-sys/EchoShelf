@@ -12,21 +12,25 @@ final class SignInViewModel {
     var onLoginSuccess: (() -> Void)?
     var onError: ((String) -> Void)?
 
-    private let authService: AuthService
+    private let authManager: AuthManager
 
-    init(authService: AuthService = .shared) {
-        self.authService = authService
+    init(authManager: AuthManager = .shared) {
+        self.authManager = authManager
     }
 
     func login(email: String?, password: String?) {
-        guard let email = email, !email.isEmpty,
-              let password = password, !password.isEmpty else {
-            onError?("Email and password are required.")
+        guard let email = email, !email.isEmpty else {
+            onError?("Email is required.")
             return
         }
 
         guard isValidEmail(email) else {
             onError?("Please enter a valid email address.")
+            return
+        }
+
+        guard let password = password, !password.isEmpty else {
+            onError?("Password is required.")
             return
         }
 
@@ -36,7 +40,7 @@ final class SignInViewModel {
         }
 
         onLoadingChanged?(true)
-        authService.signIn(email: email, password: password) { [weak self] result in
+        authManager.login(email: email, password: password) { [weak self] result in
             self?.onLoadingChanged?(false)
             switch result {
             case .success:

@@ -12,10 +12,10 @@ final class ForgotPasswordViewModel {
     var onResetSuccess: (() -> Void)?
     var onError: ((String) -> Void)?
 
-    private let authService: AuthService
+    private let authManager: AuthManager
 
-    init(authService: AuthService = .shared) {
-        self.authService = authService
+    init(authManager: AuthManager = .shared) {
+        self.authManager = authManager
     }
 
     func resetPassword(email: String?) {
@@ -30,7 +30,7 @@ final class ForgotPasswordViewModel {
         }
 
         onLoadingChanged?(true)
-        authService.resetPassword(email: email) { [weak self] result in
+        authManager.resetPassword(email: email) { [weak self] result in
             self?.onLoadingChanged?(false)
             switch result {
             case .success:

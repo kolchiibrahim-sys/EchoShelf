@@ -12,10 +12,10 @@ final class CreateAccountViewModel {
     var onCreateSuccess: (() -> Void)?
     var onError: ((String) -> Void)?
 
-    private let authService: AuthService
+    private let authManager: AuthManager
 
-    init(authService: AuthService = .shared) {
-        self.authService = authService
+    init(authManager: AuthManager = .shared) {
+        self.authManager = authManager
     }
 
     func createAccount(name: String?, email: String?, password: String?) {
@@ -45,7 +45,7 @@ final class CreateAccountViewModel {
         }
 
         onLoadingChanged?(true)
-        authService.signUp(name: name, email: email, password: password) { [weak self] result in
+        authManager.register(name: name, email: email, password: password) { [weak self] result in
             self?.onLoadingChanged?(false)
             switch result {
             case .success:
