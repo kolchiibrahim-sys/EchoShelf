@@ -22,6 +22,12 @@ final class AuthService {
         }
     }
 
+    func resetPassword(email: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            completion(.success(()))
+        }
+    }
+
     func signInWithApple(completion: @escaping (Result<Void, Error>) -> Void) {
         completion(.success(()))
     }

@@ -51,9 +51,10 @@ final class AuthCoordinator: Coordinator {
     }
 
     private func showForgotPassword() {
-        let vc = UIViewController()
-        vc.view.backgroundColor = UIColor(red: 0.09, green: 0.10, blue: 0.16, alpha: 1.0)
-        vc.title = "Forgot Password"
+        let vc = ForgotPasswordViewController()
+        vc.onBackToSignIn = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+        }
         navigationController.pushViewController(vc, animated: true)
     }
 }
