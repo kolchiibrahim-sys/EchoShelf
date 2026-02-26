@@ -79,11 +79,36 @@ private extension HomeViewController {
     func titleForSection(_ section: HomeSection) -> String? {
         switch section {
         case .continueListening: return "Continue Listening"
-        case .genres: return "Genres"
-        case .trending: return "Trending Today"
-        case .recommended: return "Recommended For You"
-        default: return nil
+        case .genres:            return "Genres"
+        case .trending:          return "Trending Today"
+        case .recommended:       return "Recommended For You"
+        default:                 return nil
         }
+    }
+
+    func showViewAllForSection(_ section: HomeSection) -> Bool {
+        switch section {
+        case .trending, .recommended: return true
+        default: return false
+        }
+    }
+
+    func handleViewAll(for section: HomeSection) {
+        switch section {
+        case .trending:
+            // TODO: Trending ekranına keç
+            print("View all trending tapped")
+        case .recommended:
+            // TODO: Recommended ekranına keç
+            print("View all recommended tapped")
+        default:
+            break
+        }
+    }
+
+    func handleGenreTap(_ genre: String) {
+        // TODO: Genre filtrlənmiş axtarış ekranına keç
+        print("Genre tapped:", genre)
     }
 }
 
@@ -95,13 +120,12 @@ extension HomeViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-
         switch HomeSection(rawValue: section)! {
-        case .header: return 1
+        case .header:            return 1
         case .continueListening: return 1
-        case .genres: return genres.count
-        case .trending: return trendingBooks.count
-        case .recommended: return recommendedBooks.count
+        case .genres:            return genres.count
+        case .trending:          return trendingBooks.count
+        case .recommended:       return recommendedBooks.count
         }
     }
 
@@ -171,27 +195,43 @@ extension HomeViewController: UICollectionViewDataSource {
             for: indexPath
         ) as! HomeSectionHeaderView
 
-        header.configure(title)
+        header.configure(title, showViewAll: showViewAllForSection(section))
+
+        header.onViewAll = { [weak self] in
+            self?.handleViewAll(for: section)
+        }
+
         return header
     }
 }
 
 extension HomeViewController: UICollectionViewDelegate {
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
 
         let section = HomeSection(rawValue: indexPath.section)!
 
-        if section == .trending || section == .recommended {
-
-            let book = section == .trending
-            ? trendingBooks[indexPath.item]
-            : recommendedBooks[indexPath.item]
-
+        switch section {
+        case .trending:
+            let book = trendingBooks[indexPath.item]
             navigationController?.pushViewController(
                 BookDetailViewController(book: book),
                 animated: true
             )
+
+        case .recommended:
+            let book = recommendedBooks[indexPath.item]
+            navigationController?.pushViewController(
+                BookDetailViewController(book: book),
+                animated: true
+            )
+
+        case .genres:
+            handleGenreTap(genres[indexPath.item])
+
+        default:
+            break
         }
     }
 }
@@ -201,11 +241,11 @@ private extension HomeViewController {
     func createLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { sectionIndex, _ in
             switch HomeSection(rawValue: sectionIndex)! {
-            case .header: return self.headerSection()
+            case .header:            return self.headerSection()
             case .continueListening: return self.continueSection()
-            case .genres: return self.genresSection()
-            case .trending: return self.trendingSection()
-            case .recommended: return self.recommendedSection()
+            case .genres:            return self.genresSection()
+            case .trending:          return self.trendingSection()
+            case .recommended:       return self.recommendedSection()
             }
         }
     }

@@ -10,6 +10,8 @@ final class HomeSectionHeaderView: UICollectionReusableView {
 
     static let identifier = "HomeSectionHeaderView"
 
+    var onViewAll: (() -> Void)?
+
     private let titleLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 22, weight: .bold)
@@ -34,17 +36,24 @@ final class HomeSectionHeaderView: UICollectionReusableView {
         addSubview(actionButton)
 
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            actionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            actionButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             actionButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor)
         ])
+
+        actionButton.addTarget(self, action: #selector(viewAllTapped), for: .touchUpInside)
     }
 
     required init?(coder: NSCoder) { fatalError() }
 
-    func configure(_ title: String) {
+    func configure(_ title: String, showViewAll: Bool = true) {
         titleLabel.text = title
+        actionButton.isHidden = !showViewAll
+    }
+
+    @objc private func viewAllTapped() {
+        onViewAll?()
     }
 }
