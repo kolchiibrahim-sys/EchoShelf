@@ -17,6 +17,7 @@ struct Audiobook: Decodable {
     let description: String?
     let urlLibrivox: String?
     let urlRss: String?
+    let urlZipFile: String?
     let numSections: FlexibleInt?
     let authors: [Author]?
     var coverURL: URL?
@@ -26,7 +27,8 @@ struct Audiobook: Decodable {
         case title
         case description
         case urlLibrivox = "url_librivox"
-        case urlRss = "url_rss"
+        case urlRss      = "url_rss"
+        case urlZipFile  = "url_zip_file"
         case numSections = "num_sections"
         case authors
     }
@@ -49,5 +51,23 @@ extension Audiobook {
         let full = "\(author.firstName ?? "") \(author.lastName ?? "")"
             .trimmingCharacters(in: .whitespaces)
         return full.isEmpty ? "Unknown Author" : full
+    }
+
+    var archiveIdentifier: String? {
+        guard let zip = urlZipFile,
+              let url = URL(string: zip),
+              url.host == "archive.org" else { return nil }
+        let components = url.pathComponents
+        guard components.count >= 3 else { return nil }
+        let candidate = components[2]
+        let blacklist = ["compress", "download", "stream"]
+        guard !blacklist.contains(candidate.lowercased()) else { return nil }
+
+        return candidate
+    }
+
+    var archiveCoverURL: URL? {
+        guard let id = archiveIdentifier else { return nil }
+        return URL(string: "https://archive.org/services/img/\(id)")
     }
 }

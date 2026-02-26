@@ -21,8 +21,8 @@ final class AudiobookService: AudiobookServiceProtocol {
 
             switch result {
             case .success(let response):
+                print("First book identifier:", response.books.first?.archiveIdentifier ?? "NIL")
                 self.attachCovers(to: response.books, completion: completion)
-
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -41,7 +41,6 @@ final class AudiobookService: AudiobookServiceProtocol {
             switch result {
             case .success(let response):
                 self.attachCovers(to: response.books, completion: completion)
-
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -63,12 +62,10 @@ final class AudiobookService: AudiobookServiceProtocol {
                     completion(.failure(.invalidData))
                     return
                 }
-
-                self.network.fetchGoogleCover(for: book) { url in
+                self.network.fetchArchiveCover(for: book) { url in
                     book.coverURL = url
                     completion(.success(book))
                 }
-
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -82,14 +79,12 @@ private extension AudiobookService {
         to books: [Audiobook],
         completion: @escaping (Result<[Audiobook], APIError>) -> Void
     ) {
-
         var booksWithCovers = books
         let group = DispatchGroup()
 
         for index in booksWithCovers.indices {
             group.enter()
-
-            network.fetchGoogleCover(for: booksWithCovers[index]) { url in
+            network.fetchArchiveCover(for: booksWithCovers[index]) { url in
                 booksWithCovers[index].coverURL = url
                 group.leave()
             }

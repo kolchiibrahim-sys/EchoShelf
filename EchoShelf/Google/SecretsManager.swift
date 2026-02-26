@@ -11,19 +11,11 @@ final class SecretsManager {
     static let shared = SecretsManager()
     private init() {}
 
-    private var secrets: NSDictionary? {
-        guard let path = Bundle.main.path(forResource: "Secrets", ofType: "plist") else {
-            print("Secrets.plist not found")
-            return nil
+    private lazy var secrets: [String: Any] = {
+        guard let url = Bundle.main.url(forResource: "Secrets", withExtension: "plist"),
+              let dict = NSDictionary(contentsOf: url) as? [String: Any] else {
+            return [:]
         }
-
-        return NSDictionary(contentsOfFile: path)
-    }
-
-    var googleAPIKey: String {
-        guard let key = secrets?["API_KEY"] as? String else {
-            fatalError("API_KEY not found in Secrets.plist")
-        }
-        return key
-    }
+        return dict
+    }()
 }
