@@ -2,7 +2,7 @@
 //  DetailButton.swift
 //  EchoShelf
 //
-//  Created by Ibrahim Kolchi on 24.02.26.
+//  Created by Ibrahim Kolchi on 26.02.26.
 //
 import UIKit
 

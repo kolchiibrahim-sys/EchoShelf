@@ -8,11 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		8660C1BB2F493018003E8EFD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C1BA2F493018003E8EFD /* Alamofire */; };
+		8675BC4D2F50C89C00D2A8A3 /* DetailButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8675BC4C2F50C89C00D2A8A3 /* DetailButton.swift */; };
+		8675BC4F2F50C8BB00D2A8A3 /* DetailLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8675BC4E2F50C8BB00D2A8A3 /* DetailLabels.swift */; };
 		86C006452F4B2B2000123293 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 86C006442F4B2B2000123293 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8660C15E2F48F2DC003E8EFD /* EchoShelf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EchoShelf.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8675BC4C2F50C89C00D2A8A3 /* DetailButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailButton.swift; sourceTree = "<group>"; };
+		8675BC4E2F50C8BB00D2A8A3 /* DetailLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailLabels.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -52,6 +56,8 @@
 		8660C1552F48F2DC003E8EFD = {
 			isa = PBXGroup;
 			children = (
+				8675BC4E2F50C8BB00D2A8A3 /* DetailLabels.swift */,
+				8675BC4C2F50C89C00D2A8A3 /* DetailButton.swift */,
 				8660C1602F48F2DC003E8EFD /* EchoShelf */,
 				8660C1BE2F493050003E8EFD /* Frameworks */,
 				8660C15F2F48F2DC003E8EFD /* Products */,
@@ -153,6 +159,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8675BC4D2F50C89C00D2A8A3 /* DetailButton.swift in Sources */,
+				8675BC4F2F50C8BB00D2A8A3 /* DetailLabels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
