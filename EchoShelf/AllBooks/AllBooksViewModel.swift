@@ -59,7 +59,7 @@ final class AllBooksViewModel {
                     self.onDataUpdated?()
 
                 case .failure:
-                    self.onError?("Kitablar yüklənmədi. Yenidən cəhd edin.")
+                    self.onError?("Books Dont Reload, Try Aganin")
                 }
             }
         }

@@ -5,7 +5,6 @@
 //  Created by Ibrahim Kolchi on 21.02.26.
 //
 import UIKit
-
 final class TabBarCoordinator: Coordinator {
 
     var navigationController: UINavigationController
@@ -14,7 +13,6 @@ final class TabBarCoordinator: Coordinator {
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-
     func start() {
         navigationController.setViewControllers([tabBarController], animated: false)
     }
