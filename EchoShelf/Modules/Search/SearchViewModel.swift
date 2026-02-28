@@ -22,13 +22,11 @@ final class SearchViewModel {
         loadRecents()
     }
 
-    // MARK: SEARCH
 
     func search(query: String) {
 
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        // boş query → nəticələri sil
         guard !trimmed.isEmpty else {
             books = []
             DispatchQueue.main.async { self.onDataUpdated?() }
@@ -61,8 +59,6 @@ final class SearchViewModel {
             }
         }
     }
-
-    // MARK: Recent Searches Public Actions
 
     func deleteRecent(at index: Int) {
         guard index < recentSearches.count else { return }
