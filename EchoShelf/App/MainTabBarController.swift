@@ -21,25 +21,24 @@ final class MainTabBarController: UITabBarController {
         v.isHidden = true
         return v
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupTabs()
         setupMiniPlayerContainer()
         observePlayerEvents()
     }
 
     private func setupTabs() {
-
         let homeNav = UINavigationController()
         homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
         homeCoordinator = HomeCoordinator(navigationController: homeNav)
         homeCoordinator?.start()
 
-        
         let search = UINavigationController(rootViewController: SearchViewController())
         search.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
 
-        
         let library = UINavigationController(rootViewController: LibraryViewController())
         library.tabBarItem = UITabBarItem(title: "Library", image: UIImage(systemName: "books.vertical.fill"), tag: 2)
 

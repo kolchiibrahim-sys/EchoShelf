@@ -402,7 +402,13 @@ final class SignInViewController: UIViewController {
     @objc private func appleSignInTapped() {
         AuthService.shared.signInWithApple { [weak self] result in
             if case .success = result {
-                DispatchQueue.main.async { self?.onLoginSuccess?() }
+                DispatchQueue.main.async {
+//                    self?.onLoginSuccess?()
+                    let scenes = UIApplication.shared.connectedScenes
+                    if let delegate = scenes.first?.delegate as? SceneDelegate {
+                        delegate.makeTabbarControllerRoot()
+                    }
+                }
             }
         }
     }
@@ -410,7 +416,9 @@ final class SignInViewController: UIViewController {
     @objc private func googleSignInTapped() {
         AuthService.shared.signInWithGoogle { [weak self] result in
             if case .success = result {
-                DispatchQueue.main.async { self?.onLoginSuccess?() }
+                DispatchQueue.main.async {
+                    self?.onLoginSuccess?()
+                }
             }
         }
     }

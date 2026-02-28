@@ -77,6 +77,7 @@ final class CreateAccountViewController: UIViewController {
         tf.autocapitalizationType = .words
         tf.leftViewMode = .always
         tf.translatesAutoresizingMaskIntoConstraints = false
+       
         let icon = UIImageView(image: UIImage(systemName: "person"))
         icon.tintColor = UIColor.white.withAlphaComponent(0.5)
         icon.frame = CGRect(x: 0, y: 0, width: 44, height: 24)
@@ -98,6 +99,7 @@ final class CreateAccountViewController: UIViewController {
         tf.autocapitalizationType = .none
         tf.leftViewMode = .always
         tf.translatesAutoresizingMaskIntoConstraints = false
+        
         let icon = UIImageView(image: UIImage(systemName: "envelope"))
         icon.tintColor = UIColor.white.withAlphaComponent(0.5)
         icon.frame = CGRect(x: 0, y: 0, width: 44, height: 24)
@@ -119,11 +121,13 @@ final class CreateAccountViewController: UIViewController {
         tf.leftViewMode = .always
         tf.rightViewMode = .always
         tf.translatesAutoresizingMaskIntoConstraints = false
+       
         let lockIcon = UIImageView(image: UIImage(systemName: "lock"))
         lockIcon.tintColor = UIColor.white.withAlphaComponent(0.5)
         lockIcon.frame = CGRect(x: 0, y: 0, width: 44, height: 24)
         lockIcon.contentMode = .center
         tf.leftView = lockIcon
+        
         let eyeButton = UIButton(type: .system)
         eyeButton.setImage(UIImage(systemName: "eye"), for: .normal)
         eyeButton.tintColor = UIColor.white.withAlphaComponent(0.5)
@@ -197,6 +201,7 @@ final class CreateAccountViewController: UIViewController {
         btn.backgroundColor = .white
         btn.layer.cornerRadius = 28
         btn.translatesAutoresizingMaskIntoConstraints = false
+        
         let gLabel = UILabel()
         gLabel.text = "G"
         gLabel.font = .systemFont(ofSize: 18, weight: .bold)
@@ -233,6 +238,7 @@ final class CreateAccountViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupUI()
         setupActions()
         bindViewModel()

@@ -6,7 +6,6 @@
 import UIKit
 
 final class AppCoordinator: Coordinator {
-
     var navigationController: UINavigationController
     private var authCoordinator: AuthCoordinator?
 
@@ -15,12 +14,7 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
-        showAuthFlow()
-    }
-
-    private func showAuthFlow() {
-        let authCoordinator = AuthCoordinator(navigationController: navigationController)
-        self.authCoordinator = authCoordinator
-        authCoordinator.start()
+        authCoordinator = AuthCoordinator(navigationController: navigationController)
+        authCoordinator?.start()
     }
 }

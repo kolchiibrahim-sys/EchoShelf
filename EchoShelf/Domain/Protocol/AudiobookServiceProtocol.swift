@@ -7,7 +7,6 @@
 import Foundation
 
 protocol AudiobookServiceProtocol {
-
     func fetchAudiobooks(
         page: Int,
         completion: @escaping (Result<[Audiobook], APIError>) -> Void

@@ -4,9 +4,7 @@
 //
 //  Created by Ibrahim Kolchi on 21.02.26.
 //
-
 import UIKit
-
 enum HomeSection: Int, CaseIterable {
     case header
     case continueListening

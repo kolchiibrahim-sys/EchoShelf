@@ -58,7 +58,7 @@ final class AllBooksViewModel {
                     self.onDataUpdated?()
 
                 case .failure:
-                    self.onError?("Books Dont Reload, Try Aganin")
+                    self.onError?("Books Dont Reload, Try again")
                 }
             }
         }

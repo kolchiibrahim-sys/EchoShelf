@@ -15,8 +15,8 @@ final class AuthCoordinator: Coordinator {
     }
 
     func start() {
-        let viewModel = SignInViewModel()
-        let vc = SignInViewController(viewModel: viewModel)
+//        let viewModel = SignInViewModel()
+        let vc = SignInViewController(viewModel: .init())
 
         vc.onLoginSuccess = { [weak self] in
             self?.showMainApp()

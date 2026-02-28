@@ -34,7 +34,6 @@ final class NetworkManager {
 }
 
 extension NetworkManager {
-
     func fetchArchiveCover(for book: Audiobook, completion: @escaping (URL?) -> Void) {
         guard let identifier = book.archiveIdentifier else {
             completion(book.archiveCoverURL)

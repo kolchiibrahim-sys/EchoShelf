@@ -22,12 +22,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         appCoordinator = AppCoordinator(navigationController: navigationController)
         appCoordinator?.start()
 
-        let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = navigationController
-        self.window = window
-        window.makeKeyAndVisible()
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
     }
 
+    func makeTabbarControllerRoot() {
+        window?.rootViewController = MainTabBarController()
+        window?.makeKeyAndVisible()
+    }
+    
     func sceneDidDisconnect(_ scene: UIScene) {}
     func sceneDidBecomeActive(_ scene: UIScene) {}
     func sceneWillResignActive(_ scene: UIScene) {}

@@ -7,10 +7,6 @@
 import UIKit
 
 final class AllBooksViewController: UIViewController {
-
-    weak var coordinator: HomeCoordinator?
-    private let viewModel: AllBooksViewModel
-
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         cv.backgroundColor = .clear
@@ -34,6 +30,9 @@ final class AllBooksViewController: UIViewController {
         return ai
     }()
 
+    weak var coordinator: HomeCoordinator?
+    private let viewModel: AllBooksViewModel
+    
     init(viewModel: AllBooksViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -43,8 +42,7 @@ final class AllBooksViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "AppBackground")
-        title = viewModel.type.title
+        
         setupNavigationBar()
         setupUI()
         bindViewModel()
@@ -60,6 +58,9 @@ final class AllBooksViewController: UIViewController {
     }
 
     private func setupUI() {
+        view.backgroundColor = UIColor(named: "AppBackground")
+        title = viewModel.type.title
+        
         view.addSubview(collectionView)
         view.addSubview(activityIndicator)
 
