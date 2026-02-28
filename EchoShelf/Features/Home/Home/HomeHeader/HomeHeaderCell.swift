@@ -1,16 +1,9 @@
-//
-//  HomeHeaderCell.swift
-//  EchoShelf
-//
-//  Created by Ibrahim Kolchi on 24.02.26.
-//
 import UIKit
 
 final class HomeHeaderCell: UICollectionViewCell {
 
     static let identifier = "HomeHeaderCell"
 
-    // MARK: UI
     private let greetingLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "GOOD MORNING,"
@@ -54,7 +47,6 @@ final class HomeHeaderCell: UICollectionViewCell {
         return iv
     }()
 
-    // MARK: Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -62,7 +54,6 @@ final class HomeHeaderCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) { fatalError() }
 
-    // MARK: Setup
     private func setupUI() {
 
         contentView.addSubview(avatarView)

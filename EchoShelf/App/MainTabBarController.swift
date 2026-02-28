@@ -14,10 +14,8 @@ import UIKit
 
 final class MainTabBarController: UITabBarController {
 
-    // MARK: - Coordinators
     private var homeCoordinator: HomeCoordinator?
 
-    // MARK: - Mini Player
     private let miniPlayerContainer: UIView = {
         let v = UIView()
         v.backgroundColor = UIColor(named: "AppBackground")
@@ -30,7 +28,6 @@ final class MainTabBarController: UITabBarController {
         return v
     }()
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabs()
@@ -38,31 +35,28 @@ final class MainTabBarController: UITabBarController {
         observePlayerEvents()
     }
 
-    // MARK: - Tabs
     private func setupTabs() {
 
-        // Home - Coordinator ilə
         let homeNav = UINavigationController()
         homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
         homeCoordinator = HomeCoordinator(navigationController: homeNav)
         homeCoordinator?.start()
 
-        // Search
+        
         let search = UINavigationController(rootViewController: SearchViewController())
         search.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
 
-        // Library
+        
         let library = UINavigationController(rootViewController: LibraryViewController())
         library.tabBarItem = UITabBarItem(title: "Library", image: UIImage(systemName: "books.vertical.fill"), tag: 2)
 
-        // Profile
+        
         let profile = UINavigationController(rootViewController: ProfileViewController())
         profile.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3)
 
         viewControllers = [homeNav, search, library, profile]
     }
 
-    // MARK: - Mini Player Layout
     private func setupMiniPlayerContainer() {
         view.addSubview(miniPlayerContainer)
 
@@ -73,8 +67,6 @@ final class MainTabBarController: UITabBarController {
             miniPlayerContainer.heightAnchor.constraint(equalToConstant: 70)
         ])
     }
-
-    // MARK: - Notification Listeners
     private func observePlayerEvents() {
         NotificationCenter.default.addObserver(
             self, selector: #selector(showMiniPlayer),

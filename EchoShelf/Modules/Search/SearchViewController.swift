@@ -8,10 +8,8 @@ import UIKit
 
 final class SearchViewController: UIViewController {
 
-    // MARK: - Coordinator
     weak var coordinator: HomeCoordinator?
 
-    // MARK: - Genre Preselect (Home-dan gəlir)
     var preselectedGenre: String? {
         didSet {
             guard let genre = preselectedGenre, isViewLoaded else { return }
@@ -19,7 +17,6 @@ final class SearchViewController: UIViewController {
         }
     }
 
-    // MARK: - UI
     private var collectionView: UICollectionView!
     private let searchBarView = SearchBarView()
     private let viewModel = SearchViewModel()
@@ -42,7 +39,6 @@ final class SearchViewController: UIViewController {
         viewModel.recentSearches
     }
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
@@ -52,13 +48,11 @@ final class SearchViewController: UIViewController {
         setupSearchActions()
         setupEmptyState()
 
-        // Home-dan genre ilə açıldıysa
         if let genre = preselectedGenre {
             triggerGenreSearch(genre)
         }
     }
 
-    // MARK: - Genre trigger
     private func triggerGenreSearch(_ genre: String) {
         isSearching = true
         collectionView?.setCollectionViewLayout(createLayout(), animated: false)
@@ -68,7 +62,6 @@ final class SearchViewController: UIViewController {
     }
 }
 
-// MARK: - Setup
 private extension SearchViewController {
 
     func setupBindings() {
@@ -165,7 +158,6 @@ private extension SearchViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource
 extension SearchViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -232,7 +224,6 @@ extension SearchViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - UICollectionViewDelegate
 extension SearchViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView,
@@ -256,7 +247,6 @@ extension SearchViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - Layout
 private extension SearchViewController {
 
     func makeHeader() -> NSCollectionLayoutBoundarySupplementaryItem {

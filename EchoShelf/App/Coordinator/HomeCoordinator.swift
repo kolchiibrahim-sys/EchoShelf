@@ -1,9 +1,3 @@
-//
-//  HomeCoordinator.swift
-//  EchoShelf
-//
-//  Created by Ibrahim Kolchi on 28.02.26.
-//
 import UIKit
 
 final class HomeCoordinator: Coordinator {
@@ -20,7 +14,6 @@ final class HomeCoordinator: Coordinator {
         navigationController.setViewControllers([vc], animated: false)
     }
 
-    // MARK: - View All
     func showAllBooks(type: AllBooksType) {
         let viewModel = AllBooksViewModel(type: type)
         let vc = AllBooksViewController(viewModel: viewModel)
@@ -34,9 +27,9 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(vc, animated: true)
     }
 
-    // MARK: - Book Detail
     func showBookDetail(book: Audiobook) {
         let vc = BookDetailViewController(book: book)
         navigationController.pushViewController(vc, animated: true)
     }
 }
+

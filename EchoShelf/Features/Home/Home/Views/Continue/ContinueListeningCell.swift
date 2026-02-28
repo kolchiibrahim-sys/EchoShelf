@@ -1,9 +1,3 @@
-//
-//  ContinueListeningCell.swift
-//  EchoShelf
-//
-//  Created by Ibrahim Kolchi on 24.02.26.
-//
 import UIKit
 import Kingfisher
 
@@ -114,3 +108,4 @@ final class ContinueListeningCell: UICollectionViewCell {
         progressView.setProgress(progress, animated: true)
     }
 }
+

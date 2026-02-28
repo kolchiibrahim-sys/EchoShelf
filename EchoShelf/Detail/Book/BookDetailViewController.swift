@@ -3,10 +3,10 @@ import Kingfisher
 
 final class BookDetailViewController: UIViewController {
 
-    private let book: Audiobook
+    private let viewModel: BookDetailViewModel
 
     init(book: Audiobook) {
-        self.book = book
+        self.viewModel = BookDetailViewModel(book: book)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -39,7 +39,8 @@ final class BookDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
-        configureData()
+        bindViewModel()
+        viewModel.fetchDetail()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -49,8 +50,29 @@ final class BookDetailViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
+}
 
-    private func setupLayout() {
+// MARK: - Bind
+
+private extension BookDetailViewController {
+
+    func bindViewModel() {
+
+        viewModel.onDataUpdated = { [weak self] in
+            self?.configureData()
+        }
+
+        viewModel.onError = { error in
+            print("Detail error:", error)
+        }
+    }
+}
+
+// MARK: - Layout
+
+private extension BookDetailViewController {
+
+    func setupLayout() {
 
         view.addSubview(backgroundView)
         backgroundView.pinEdges(to: view)
@@ -81,10 +103,11 @@ final class BookDetailViewController: UIViewController {
         ])
 
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
+
         setupContent()
     }
 
-    private func setupContent() {
+    func setupContent() {
 
         [coverView,titleLabel,authorLabel,statsLabel,
          listenButton,descriptionTitle,descriptionLabel,chaptersTitle]
@@ -120,6 +143,7 @@ final class BookDetailViewController: UIViewController {
             .forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
         NSLayoutConstraint.activate([
+
             coverView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 70),
             coverView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             coverView.widthAnchor.constraint(equalToConstant: 240),
@@ -154,11 +178,20 @@ final class BookDetailViewController: UIViewController {
 
             chaptersTitle.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 40),
             chaptersTitle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+
             chaptersTitle.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -140)
         ])
     }
+}
 
-    private func configureData() {
+// MARK: - Configure
+
+private extension BookDetailViewController {
+
+    func configureData() {
+
+        let book = viewModel.book
+
         titleLabel.text = book.title
         authorLabel.text = book.authorName
         statsLabel.text = "Public Domain • LibriVox"
@@ -166,19 +199,24 @@ final class BookDetailViewController: UIViewController {
 
         if let url = book.coverURL {
             coverImageView.kf.setImage(with: url)
-        } else {
-            coverImageView.image = UIImage(systemName: "book.fill")
         }
     }
+}
 
-    @objc private func listenTapped() {
-        PlayerManager.shared.play(book: book)
+// MARK: - Actions
+
+private extension BookDetailViewController {
+
+    @objc func listenTapped() {
+
+        PlayerManager.shared.play(book: viewModel.book)
+
         let playerVC = PlayerViewController()
         playerVC.modalPresentationStyle = .fullScreen
         present(playerVC, animated: true)
     }
 
-    @objc private func backTapped() {
+    @objc func backTapped() {
         navigationController?.popViewController(animated: true)
     }
 }

@@ -73,7 +73,6 @@ final class TrendingBookCell: UICollectionViewCell {
         if let url = book.coverURL {
             coverImageView.kf.setImage(with: url)
         }
-   
-        }
     }
+}
 

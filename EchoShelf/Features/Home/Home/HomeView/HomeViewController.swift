@@ -4,6 +4,7 @@
 //
 //  Created by Ibrahim Kolchi on 21.02.26.
 //
+
 import UIKit
 
 enum HomeSection: Int, CaseIterable {
@@ -16,13 +17,10 @@ enum HomeSection: Int, CaseIterable {
 
 final class HomeViewController: UIViewController {
 
-    // MARK: - Coordinator
     weak var coordinator: HomeCoordinator?
 
-    // MARK: - ViewModel
     private let viewModel = HomeViewModel()
 
-    // MARK: - UI
     private var collectionView: UICollectionView!
 
     private let genres = [
@@ -38,7 +36,6 @@ final class HomeViewController: UIViewController {
         Array(viewModel.books.dropFirst(10).prefix(10))
     }
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
@@ -48,7 +45,6 @@ final class HomeViewController: UIViewController {
     }
 }
 
-// MARK: - Setup
 private extension HomeViewController {
 
     func setupCollectionView() {
@@ -107,7 +103,6 @@ private extension HomeViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource
 extension HomeViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -198,7 +193,6 @@ extension HomeViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - UICollectionViewDelegate
 extension HomeViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView,
@@ -222,7 +216,6 @@ extension HomeViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - Layout
 private extension HomeViewController {
 
     func createLayout() -> UICollectionViewLayout {
@@ -275,22 +268,22 @@ private extension HomeViewController {
     }
 
     func trendingSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(150), heightDimension: .absolute(220)))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(150), heightDimension: .absolute(220)), subitems: [item])
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(150), heightDimension: .absolute(240)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(150), heightDimension: .absolute(240)), subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 16
-        section.contentInsets = .init(top: 30, leading: 20, bottom: 0, trailing: 20)
+        section.contentInsets = .init(top: 12, leading: 20, bottom: 8, trailing: 20)
         section.boundarySupplementaryItems = [makeHeader()]
         return section
     }
 
     func recommendedSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120)))
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(116)))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 16
-        section.contentInsets = .init(top: 30, leading: 20, bottom: 40, trailing: 20)
+        section.interGroupSpacing = 12
+        section.contentInsets = .init(top: 12, leading: 20, bottom: 40, trailing: 20)
         section.boundarySupplementaryItems = [makeHeader()]
         return section
     }

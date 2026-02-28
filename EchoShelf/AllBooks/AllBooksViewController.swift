@@ -8,11 +8,9 @@ import UIKit
 
 final class AllBooksViewController: UIViewController {
 
-    // MARK: - Properties
     weak var coordinator: HomeCoordinator?
     private let viewModel: AllBooksViewModel
 
-    // MARK: - UI
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         cv.backgroundColor = .clear
@@ -36,7 +34,6 @@ final class AllBooksViewController: UIViewController {
         return ai
     }()
 
-    // MARK: - Init
     init(viewModel: AllBooksViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -44,7 +41,6 @@ final class AllBooksViewController: UIViewController {
 
     required init?(coder: NSCoder) { fatalError() }
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
@@ -56,7 +52,6 @@ final class AllBooksViewController: UIViewController {
         activityIndicator.startAnimating()
     }
 
-    // MARK: - Setup
     private func setupNavigationBar() {
         navigationController?.navigationBar.tintColor = .systemPurple
         navigationController?.navigationBar.titleTextAttributes = [
@@ -97,7 +92,6 @@ final class AllBooksViewController: UIViewController {
         present(alert, animated: true)
     }
 
-    // MARK: - Layout
     private func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.5),
@@ -116,7 +110,6 @@ final class AllBooksViewController: UIViewController {
         section.interGroupSpacing = 16
         section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 12, bottom: 16, trailing: 12)
 
-        // Footer for loading indicator
         let footerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .absolute(60)
@@ -132,7 +125,6 @@ final class AllBooksViewController: UIViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource
 extension AllBooksViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -165,7 +157,6 @@ extension AllBooksViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - UICollectionViewDelegate
 extension AllBooksViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -173,7 +164,6 @@ extension AllBooksViewController: UICollectionViewDelegate {
         coordinator?.showBookDetail(book: book)
     }
 
-    // MARK: Infinite Scroll (Pagination)
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
@@ -183,7 +173,6 @@ extension AllBooksViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - LoadingFooterView
 final class LoadingFooterView: UICollectionReusableView {
 
     static let identifier = "LoadingFooterView"

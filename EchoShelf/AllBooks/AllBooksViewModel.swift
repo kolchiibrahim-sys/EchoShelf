@@ -19,8 +19,6 @@ enum AllBooksType {
 }
 
 final class AllBooksViewModel {
-
-    // MARK: - Public
     let type: AllBooksType
     private(set) var books: [Audiobook] = []
     private(set) var isLoading = false
@@ -28,8 +26,6 @@ final class AllBooksViewModel {
 
     var onDataUpdated: (() -> Void)?
     var onError: ((String) -> Void)?
-
-    // MARK: - Private
     private let service: AudiobookServiceProtocol
     private var currentPage = 1
     private let pageSize = 20
@@ -39,7 +35,6 @@ final class AllBooksViewModel {
         self.service = service
     }
 
-    // MARK: - Fetch
     func fetchBooks() {
         guard !isLoading, hasMore else { return }
         isLoading = true
@@ -57,7 +52,6 @@ final class AllBooksViewModel {
                     } else {
                         self.books.append(contentsOf: newBooks)
                         self.currentPage += 1
-                        // If less than pageSize returned, no more pages
                         if newBooks.count < self.pageSize {
                             self.hasMore = false
                         }

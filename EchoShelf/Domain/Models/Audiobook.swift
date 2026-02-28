@@ -1,9 +1,3 @@
-//
-//  Audiobook.swift
-//  EchoShelf
-//
-//  Created by Ibrahim Kolchi on 22.02.26.
-//
 import Foundation
 
 struct AudiobooksResponse: Decodable {
@@ -71,3 +65,4 @@ extension Audiobook {
         return URL(string: "https://archive.org/services/img/\(id)")
     }
 }
+
