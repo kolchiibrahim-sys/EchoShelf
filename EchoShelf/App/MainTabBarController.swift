@@ -4,11 +4,20 @@
 //
 //  Created by Ibrahim Kolchi on 21.02.26.
 //
+//
+//  MainTabBarController.swift
+//  EchoShelf
+//
+//  Created by Ibrahim Kolchi on 21.02.26.
+//
 import UIKit
 
 final class MainTabBarController: UITabBarController {
 
-    // MARK: Mini Player Container
+    // MARK: - Coordinators
+    private var homeCoordinator: HomeCoordinator?
+
+    // MARK: - Mini Player
     private let miniPlayerContainer: UIView = {
         let v = UIView()
         v.backgroundColor = UIColor(named: "AppBackground")
@@ -21,6 +30,7 @@ final class MainTabBarController: UITabBarController {
         return v
     }()
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabs()
@@ -28,25 +38,32 @@ final class MainTabBarController: UITabBarController {
         observePlayerEvents()
     }
 
-    // MARK: Tabs
+    // MARK: - Tabs
     private func setupTabs() {
 
-        let home = UINavigationController(rootViewController: HomeViewController())
-        let search = UINavigationController(rootViewController: SearchViewController())
-        let library = UINavigationController(rootViewController: LibraryViewController())
-        let profile = UINavigationController(rootViewController: ProfileViewController())
+        // Home - Coordinator ilə
+        let homeNav = UINavigationController()
+        homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
+        homeCoordinator = HomeCoordinator(navigationController: homeNav)
+        homeCoordinator?.start()
 
-        home.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
+        // Search
+        let search = UINavigationController(rootViewController: SearchViewController())
         search.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+
+        // Library
+        let library = UINavigationController(rootViewController: LibraryViewController())
         library.tabBarItem = UITabBarItem(title: "Library", image: UIImage(systemName: "books.vertical.fill"), tag: 2)
+
+        // Profile
+        let profile = UINavigationController(rootViewController: ProfileViewController())
         profile.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3)
 
-        viewControllers = [home, search, library, profile]
+        viewControllers = [homeNav, search, library, profile]
     }
 
-    // MARK: Mini Player Layout
+    // MARK: - Mini Player Layout
     private func setupMiniPlayerContainer() {
-
         view.addSubview(miniPlayerContainer)
 
         NSLayoutConstraint.activate([
@@ -57,34 +74,23 @@ final class MainTabBarController: UITabBarController {
         ])
     }
 
-    // MARK: Notification Listeners
+    // MARK: - Notification Listeners
     private func observePlayerEvents() {
-
-        // Mini player show
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(showMiniPlayer),
-            name: .playerStarted,
-            object: nil
+            self, selector: #selector(showMiniPlayer),
+            name: .playerStarted, object: nil
         )
-
-        // ⭐️ Full player open (ƏN VACİB HİSSƏ)
         NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(openFullPlayer),
-            name: .openFullPlayer,
-            object: nil
+            self, selector: #selector(openFullPlayer),
+            name: .openFullPlayer, object: nil
         )
     }
 
-    // MARK: Show Mini Player
     @objc private func showMiniPlayer() {
-
         if miniPlayerContainer.subviews.isEmpty {
             let mini = MiniPlayerView()
             mini.translatesAutoresizingMaskIntoConstraints = false
             miniPlayerContainer.addSubview(mini)
-
             NSLayoutConstraint.activate([
                 mini.topAnchor.constraint(equalTo: miniPlayerContainer.topAnchor),
                 mini.bottomAnchor.constraint(equalTo: miniPlayerContainer.bottomAnchor),
@@ -92,11 +98,9 @@ final class MainTabBarController: UITabBarController {
                 mini.trailingAnchor.constraint(equalTo: miniPlayerContainer.trailingAnchor)
             ])
         }
-
         miniPlayerContainer.isHidden = false
     }
 
-    // MARK: Open Full Player ⭐️
     @objc private func openFullPlayer() {
         let playerVC = PlayerViewController()
         playerVC.modalPresentationStyle = .fullScreen

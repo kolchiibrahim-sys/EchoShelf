@@ -1,3 +1,9 @@
+//
+//  HomeViewController.swift
+//  EchoShelf
+//
+//  Created by Ibrahim Kolchi on 21.02.26.
+//
 import UIKit
 
 enum HomeSection: Int, CaseIterable {
@@ -10,12 +16,18 @@ enum HomeSection: Int, CaseIterable {
 
 final class HomeViewController: UIViewController {
 
+    // MARK: - Coordinator
+    weak var coordinator: HomeCoordinator?
+
+    // MARK: - ViewModel
     private let viewModel = HomeViewModel()
+
+    // MARK: - UI
     private var collectionView: UICollectionView!
 
     private let genres = [
-        "Fantasy","Drama","Romance","Mystery",
-        "Sci-Fi","History","Adventure","Kids"
+        "Fantasy", "Drama", "Romance", "Mystery",
+        "Sci-Fi", "History", "Adventure", "Kids"
     ]
 
     private var trendingBooks: [Audiobook] {
@@ -26,6 +38,7 @@ final class HomeViewController: UIViewController {
         Array(viewModel.books.dropFirst(10).prefix(10))
     }
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
@@ -35,6 +48,7 @@ final class HomeViewController: UIViewController {
     }
 }
 
+// MARK: - Setup
 private extension HomeViewController {
 
     func setupCollectionView() {
@@ -42,7 +56,6 @@ private extension HomeViewController {
             frame: view.bounds,
             collectionViewLayout: createLayout()
         )
-
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
@@ -92,26 +105,9 @@ private extension HomeViewController {
         default: return false
         }
     }
-
-    func handleViewAll(for section: HomeSection) {
-        switch section {
-        case .trending:
-            // TODO: Trending ekranına keç
-            print("View all trending tapped")
-        case .recommended:
-            // TODO: Recommended ekranına keç
-            print("View all recommended tapped")
-        default:
-            break
-        }
-    }
-
-    func handleGenreTap(_ genre: String) {
-        // TODO: Genre filtrlənmiş axtarış ekranına keç
-        print("Genre tapped:", genre)
-    }
 }
 
+// MARK: - UICollectionViewDataSource
 extension HomeViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -132,44 +128,36 @@ extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let section = HomeSection(rawValue: indexPath.section)!
-
-        switch section {
+        switch HomeSection(rawValue: indexPath.section)! {
 
         case .header:
             return collectionView.dequeueReusableCell(
-                withReuseIdentifier: HomeHeaderCell.identifier,
-                for: indexPath
-            )
+                withReuseIdentifier: HomeHeaderCell.identifier, for: indexPath)
 
         case .continueListening:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: ContinueListeningCell.identifier,
-                for: indexPath
+                withReuseIdentifier: ContinueListeningCell.identifier, for: indexPath
             ) as! ContinueListeningCell
             cell.configure()
             return cell
 
         case .genres:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: GenreCell.identifier,
-                for: indexPath
+                withReuseIdentifier: GenreCell.identifier, for: indexPath
             ) as! GenreCell
             cell.configure(genres[indexPath.item])
             return cell
 
         case .trending:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: TrendingBookCell.identifier,
-                for: indexPath
+                withReuseIdentifier: TrendingBookCell.identifier, for: indexPath
             ) as! TrendingBookCell
             cell.configure(with: trendingBooks[indexPath.item])
             return cell
 
         case .recommended:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: RecommendedBookCell.identifier,
-                for: indexPath
+                withReuseIdentifier: RecommendedBookCell.identifier, for: indexPath
             ) as! RecommendedBookCell
             cell.configure(with: recommendedBooks[indexPath.item])
             return cell
@@ -198,37 +186,35 @@ extension HomeViewController: UICollectionViewDataSource {
         header.configure(title, showViewAll: showViewAllForSection(section))
 
         header.onViewAll = { [weak self] in
-            self?.handleViewAll(for: section)
+            guard let self else { return }
+            switch section {
+            case .trending:    self.coordinator?.showAllBooks(type: .trending)
+            case .recommended: self.coordinator?.showAllBooks(type: .recommended)
+            default: break
+            }
         }
 
         return header
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension HomeViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
 
-        let section = HomeSection(rawValue: indexPath.section)!
+        switch HomeSection(rawValue: indexPath.section)! {
 
-        switch section {
         case .trending:
-            let book = trendingBooks[indexPath.item]
-            navigationController?.pushViewController(
-                BookDetailViewController(book: book),
-                animated: true
-            )
+            coordinator?.showBookDetail(book: trendingBooks[indexPath.item])
 
         case .recommended:
-            let book = recommendedBooks[indexPath.item]
-            navigationController?.pushViewController(
-                BookDetailViewController(book: book),
-                animated: true
-            )
+            coordinator?.showBookDetail(book: recommendedBooks[indexPath.item])
 
         case .genres:
-            handleGenreTap(genres[indexPath.item])
+            let genre = genres[indexPath.item]
+            coordinator?.showGenreSearch(genre: genre)
 
         default:
             break
@@ -236,6 +222,7 @@ extension HomeViewController: UICollectionViewDelegate {
     }
 }
 
+// MARK: - Layout
 private extension HomeViewController {
 
     func createLayout() -> UICollectionViewLayout {

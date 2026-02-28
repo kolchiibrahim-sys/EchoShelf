@@ -1,18 +1,31 @@
 //
-//  Search.swift
+//  SearchViewController.swift
 //  EchoShelf
 //
 //  Created by Ibrahim Kolchi on 21.02.26.
+//
 import UIKit
 
 final class SearchViewController: UIViewController {
 
+    // MARK: - Coordinator
+    weak var coordinator: HomeCoordinator?
+
+    // MARK: - Genre Preselect (Home-dan gəlir)
+    var preselectedGenre: String? {
+        didSet {
+            guard let genre = preselectedGenre, isViewLoaded else { return }
+            triggerGenreSearch(genre)
+        }
+    }
+
+    // MARK: - UI
     private var collectionView: UICollectionView!
     private let searchBarView = SearchBarView()
     private let viewModel = SearchViewModel()
 
     private var isSearching = false
-    private let filters = ["Audiobooks","Authors","Genres","Series"]
+    private let filters = ["Audiobooks", "Authors", "Genres", "Series"]
 
     private let emptyLabel: UILabel = {
         let label = UILabel()
@@ -21,6 +34,7 @@ final class SearchViewController: UIViewController {
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -28,6 +42,7 @@ final class SearchViewController: UIViewController {
         viewModel.recentSearches
     }
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
@@ -36,9 +51,24 @@ final class SearchViewController: UIViewController {
         setupBindings()
         setupSearchActions()
         setupEmptyState()
+
+        // Home-dan genre ilə açıldıysa
+        if let genre = preselectedGenre {
+            triggerGenreSearch(genre)
+        }
+    }
+
+    // MARK: - Genre trigger
+    private func triggerGenreSearch(_ genre: String) {
+        isSearching = true
+        collectionView?.setCollectionViewLayout(createLayout(), animated: false)
+        viewModel.search(query: genre)
+        updateEmptyState()
+        collectionView?.reloadData()
     }
 }
 
+// MARK: - Setup
 private extension SearchViewController {
 
     func setupBindings() {
@@ -50,8 +80,6 @@ private extension SearchViewController {
 
     func setupEmptyState() {
         view.addSubview(emptyLabel)
-        emptyLabel.translatesAutoresizingMaskIntoConstraints = false
-
         NSLayoutConstraint.activate([
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -86,9 +114,11 @@ private extension SearchViewController {
         collectionView.register(TopResultCell.self, forCellWithReuseIdentifier: TopResultCell.identifier)
         collectionView.register(OtherVersionCell.self, forCellWithReuseIdentifier: OtherVersionCell.identifier)
         collectionView.register(RelatedAuthorCell.self, forCellWithReuseIdentifier: RelatedAuthorCell.identifier)
-        collectionView.register(SearchSectionHeaderView.self,
-                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: SearchSectionHeaderView.identifier)
+        collectionView.register(
+            SearchSectionHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SearchSectionHeaderView.identifier
+        )
 
         view.addSubview(collectionView)
 
@@ -101,7 +131,6 @@ private extension SearchViewController {
     }
 
     func setupSearchActions() {
-
         searchBarView.onSearch = { [weak self] query in
             guard let self else { return }
             self.performSearch(query)
@@ -109,9 +138,9 @@ private extension SearchViewController {
 
         searchBarView.onTextChange = { [weak self] text in
             guard let self else { return }
-
             if text.isEmpty {
                 self.isSearching = false
+                self.preselectedGenre = nil
                 self.collectionView.setCollectionViewLayout(self.createLayout(), animated: false)
                 self.collectionView.reloadData()
             }
@@ -136,6 +165,7 @@ private extension SearchViewController {
     }
 }
 
+// MARK: - UICollectionViewDataSource
 extension SearchViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -144,11 +174,9 @@ extension SearchViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-
         if !isSearching {
             return section == 0 ? filters.count : recentSearches.count
         }
-
         switch section {
         case 0: return viewModel.topResult == nil ? 0 : 1
         case 1: return viewModel.otherVersions.count
@@ -158,31 +186,26 @@ extension SearchViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
         if !isSearching {
             if indexPath.section == 0 {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterChipCell", for: indexPath) as! FilterChipCell
                 cell.configure(filters[indexPath.item])
                 return cell
             }
-
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentSearchCell.identifier, for: indexPath) as! RecentSearchCell
             cell.configure(with: recentSearches[indexPath.item])
             return cell
         }
 
         switch indexPath.section {
-
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopResultCell.identifier, for: indexPath) as! TopResultCell
             if let book = viewModel.topResult { cell.configure(with: book) }
             return cell
-
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OtherVersionCell.identifier, for: indexPath) as! OtherVersionCell
             cell.configure(with: viewModel.otherVersions[indexPath.item])
             return cell
-
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RelatedAuthorCell.identifier, for: indexPath) as! RelatedAuthorCell
             cell.configure(with: viewModel.relatedAuthors[indexPath.item])
@@ -193,7 +216,6 @@ extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
-
         guard isSearching,
               kind == UICollectionView.elementKindSectionHeader,
               let title = titleForSection(indexPath.section) else {
@@ -205,16 +227,16 @@ extension SearchViewController: UICollectionViewDataSource {
             withReuseIdentifier: SearchSectionHeaderView.identifier,
             for: indexPath
         ) as! SearchSectionHeaderView
-
         header.configure(title)
         return header
     }
 }
 
+// MARK: - UICollectionViewDelegate
 extension SearchViewController: UICollectionViewDelegate {
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
         if !isSearching {
             if indexPath.section == 1 {
                 let query = recentSearches[indexPath.item]
@@ -234,12 +256,12 @@ extension SearchViewController: UICollectionViewDelegate {
     }
 }
 
+// MARK: - Layout
 private extension SearchViewController {
 
     func makeHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: .init(widthDimension: .fractionalWidth(1),
-                              heightDimension: .absolute(40)),
+            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40)),
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
