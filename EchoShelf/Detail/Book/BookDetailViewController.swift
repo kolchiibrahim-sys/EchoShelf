@@ -52,7 +52,6 @@ final class BookDetailViewController: UIViewController {
     }
 }
 
-// MARK: - Bind
 
 private extension BookDetailViewController {
 
@@ -68,7 +67,6 @@ private extension BookDetailViewController {
     }
 }
 
-// MARK: - Layout
 
 private extension BookDetailViewController {
 
@@ -184,7 +182,6 @@ private extension BookDetailViewController {
     }
 }
 
-// MARK: - Configure
 
 private extension BookDetailViewController {
 
@@ -203,7 +200,6 @@ private extension BookDetailViewController {
     }
 }
 
-// MARK: - Actions
 
 private extension BookDetailViewController {
 

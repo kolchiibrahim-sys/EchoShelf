@@ -4,12 +4,6 @@
 //
 //  Created by Ibrahim Kolchi on 21.02.26.
 //
-//
-//  MainTabBarController.swift
-//  EchoShelf
-//
-//  Created by Ibrahim Kolchi on 21.02.26.
-//
 import UIKit
 
 final class MainTabBarController: UITabBarController {
@@ -27,7 +21,6 @@ final class MainTabBarController: UITabBarController {
         v.isHidden = true
         return v
     }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabs()

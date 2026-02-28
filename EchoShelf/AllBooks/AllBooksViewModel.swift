@@ -9,7 +9,6 @@ import Foundation
 enum AllBooksType {
     case trending
     case recommended
-
     var title: String {
         switch self {
         case .trending:    return "Trending Today"
