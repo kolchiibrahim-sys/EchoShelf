@@ -4,6 +4,12 @@
 //
 //  Created by Ibrahim Kolchi on 24.02.26.
 //
+//
+//  TopResultCell.swift
+//  EchoShelf
+//
+//  Created by Ibrahim Kolchi on 24.02.26.
+//
 import UIKit
 import Kingfisher
 
@@ -11,14 +17,26 @@ final class TopResultCell: UICollectionViewCell {
 
     static let identifier = "TopResultCell"
 
+    var onListen: (() -> Void)?
+
+    // MARK: - UI Elements
     private let container = UIView()
     private let coverImage = UIImageView()
+    private let coverShadow = UIView()
+
     private let titleLabel = UILabel()
     private let authorLabel = UILabel()
     private let narratorLabel = UILabel()
+
+    private let genreBadge = UILabel()
+    private let chapterLabel = UILabel()
+    private let starLabel = UILabel()
+    private let metaStack = UIStackView()
+
     private let listenButton = UIButton(type: .system)
     private let downloadButton = UIButton(type: .system)
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -29,52 +47,112 @@ final class TopResultCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         coverImage.image = nil
+        genreBadge.isHidden = true
+        chapterLabel.text = nil
     }
 
+    // MARK: - Setup
     private func setupUI() {
 
-        container.backgroundColor = UIColor.white.withAlphaComponent(0.05)
-        container.layer.cornerRadius = 22
+        // Container
+        container.backgroundColor = UIColor.white.withAlphaComponent(0.07)
+        container.layer.cornerRadius = 24
+        container.layer.borderWidth = 0.5
+        container.layer.borderColor = UIColor.white.withAlphaComponent(0.1).cgColor
         container.translatesAutoresizingMaskIntoConstraints = false
 
-        coverImage.layer.cornerRadius = 14
-        coverImage.clipsToBounds = true
-        coverImage.translatesAutoresizingMaskIntoConstraints = false
-        coverImage.contentMode = .scaleAspectFill
+        // Cover shadow
+        coverShadow.layer.shadowColor = UIColor.black.cgColor
+        coverShadow.layer.shadowOpacity = 0.5
+        coverShadow.layer.shadowRadius = 12
+        coverShadow.layer.shadowOffset = CGSize(width: 0, height: 6)
+        coverShadow.translatesAutoresizingMaskIntoConstraints = false
 
-        titleLabel.font = .systemFont(ofSize: 18, weight: .bold)
+        // Cover image
+        coverImage.layer.cornerRadius = 16
+        coverImage.clipsToBounds = true
+        coverImage.contentMode = .scaleAspectFill
+        coverImage.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.2)
+        coverImage.translatesAutoresizingMaskIntoConstraints = false
+
+        // Genre badge
+        genreBadge.font = .systemFont(ofSize: 10, weight: .semibold)
+        genreBadge.textColor = UIColor.systemPurple
+        genreBadge.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.15)
+        genreBadge.layer.cornerRadius = 8
+        genreBadge.clipsToBounds = true
+        genreBadge.textAlignment = .center
+        genreBadge.isHidden = true
+        genreBadge.translatesAutoresizingMaskIntoConstraints = false
+
+        // Title
+        titleLabel.font = .systemFont(ofSize: 17, weight: .bold)
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
 
-        authorLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        // Author
+        authorLabel.font = .systemFont(ofSize: 13, weight: .semibold)
         authorLabel.textColor = UIColor.systemPurple
 
-        narratorLabel.font = .systemFont(ofSize: 13)
-        narratorLabel.textColor = UIColor.white.withAlphaComponent(0.6)
+        // Narrator
+        narratorLabel.font = .systemFont(ofSize: 12)
+        narratorLabel.textColor = UIColor.white.withAlphaComponent(0.5)
         narratorLabel.text = "LibriVox Recording"
 
-        listenButton.setTitle(" Listen", for: .normal)
+        // Star
+        starLabel.font = .systemFont(ofSize: 12)
+        starLabel.textColor = UIColor.systemYellow
+
+        // Chapters
+        chapterLabel.font = .systemFont(ofSize: 12)
+        chapterLabel.textColor = UIColor.white.withAlphaComponent(0.5)
+
+        // Meta row (star + chapters)
+        metaStack.axis = .horizontal
+        metaStack.spacing = 10
+        metaStack.alignment = .center
+        metaStack.translatesAutoresizingMaskIntoConstraints = false
+        metaStack.addArrangedSubview(starLabel)
+        metaStack.addArrangedSubview(chapterLabel)
+
+        // Listen button
+        listenButton.setTitle("  Listen", for: .normal)
         listenButton.tintColor = .white
         listenButton.backgroundColor = UIColor.systemPurple
         listenButton.layer.cornerRadius = 16
-        listenButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
+        listenButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
+        listenButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         listenButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        listenButton.addTarget(self, action: #selector(listenTapped), for: .touchUpInside)
 
+        // Download button
         downloadButton.setImage(UIImage(systemName: "arrow.down.circle.fill"), for: .normal)
-        downloadButton.tintColor = UIColor.white.withAlphaComponent(0.8)
+        downloadButton.tintColor = UIColor.white.withAlphaComponent(0.7)
 
-        let buttonStack = UIStackView(arrangedSubviews: [listenButton, downloadButton])
-        buttonStack.spacing = 12
-        buttonStack.alignment = .center
-        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        let buttonRow = UIStackView(arrangedSubviews: [listenButton, downloadButton])
+        buttonRow.spacing = 12
+        buttonRow.alignment = .center
+        buttonRow.translatesAutoresizingMaskIntoConstraints = false
 
-        let textStack = UIStackView(arrangedSubviews: [titleLabel, authorLabel, narratorLabel, buttonStack])
+        // Text stack
+        let textStack = UIStackView(arrangedSubviews: [
+            genreBadge,
+            titleLabel,
+            authorLabel,
+            narratorLabel,
+            metaStack,
+            buttonRow
+        ])
         textStack.axis = .vertical
-        textStack.spacing = 6
+        textStack.spacing = 5
         textStack.translatesAutoresizingMaskIntoConstraints = false
+        textStack.setCustomSpacing(8, after: narratorLabel)
+        textStack.setCustomSpacing(10, after: metaStack)
 
+        // Add to hierarchy
         contentView.addSubview(container)
-        container.addSubview(coverImage)
+        container.addSubview(coverShadow)
+        coverShadow.addSubview(coverImage)
         container.addSubview(textStack)
 
         NSLayoutConstraint.activate([
@@ -83,12 +161,22 @@ final class TopResultCell: UICollectionViewCell {
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            coverImage.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
-            coverImage.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            coverImage.widthAnchor.constraint(equalToConstant: 80),
-            coverImage.heightAnchor.constraint(equalToConstant: 110),
+            // Cover shadow + image
+            coverShadow.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            coverShadow.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            coverShadow.widthAnchor.constraint(equalToConstant: 100),
+            coverShadow.heightAnchor.constraint(equalToConstant: 130),
 
-            textStack.leadingAnchor.constraint(equalTo: coverImage.trailingAnchor, constant: 14),
+            coverImage.topAnchor.constraint(equalTo: coverShadow.topAnchor),
+            coverImage.bottomAnchor.constraint(equalTo: coverShadow.bottomAnchor),
+            coverImage.leadingAnchor.constraint(equalTo: coverShadow.leadingAnchor),
+            coverImage.trailingAnchor.constraint(equalTo: coverShadow.trailingAnchor),
+
+            // Genre badge height
+            genreBadge.heightAnchor.constraint(equalToConstant: 20),
+
+            // Text stack
+            textStack.leadingAnchor.constraint(equalTo: coverShadow.trailingAnchor, constant: 14),
             textStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
             textStack.centerYAnchor.constraint(equalTo: container.centerYAnchor)
         ])
@@ -96,11 +184,29 @@ final class TopResultCell: UICollectionViewCell {
 
     func configure(with book: Audiobook) {
         titleLabel.text = book.title
-        authorLabel.text = book.authors?.first?.firstName ?? "Unknown Author"
+        authorLabel.text = book.authorName
+        narratorLabel.text = "LibriVox Recording"
 
         if let url = book.coverURL {
-            coverImage.kf.setImage(with: url)
+            coverImage.kf.setImage(with: url, placeholder: UIImage(systemName: "book.fill"))
+        } else {
+            coverImage.image = UIImage(systemName: "book.fill")
         }
+
+        if let sections = book.numSections?.value {
+            let word = sections == 1 ? "chapter" : "chapters"
+            chapterLabel.text = "· \(sections) \(word)"
+            starLabel.text = "⭐ 4.5"
+            metaStack.isHidden = false
+        } else {
+            metaStack.isHidden = true
         }
+
+        genreBadge.text = "  LibriVox  "
+        genreBadge.isHidden = false
     }
 
+    @objc private func listenTapped() {
+        onListen?()
+    }
+}
