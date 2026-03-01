@@ -28,10 +28,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func makeTabbarControllerRoot() {
-        window?.rootViewController = MainTabBarController()
+        guard let nav = window?.rootViewController as? UINavigationController else { return }
+        let coordinator = TabBarCoordinator(navigationController: nav)
+        coordinator.start()
         window?.makeKeyAndVisible()
     }
-    
+
     func sceneDidDisconnect(_ scene: UIScene) {}
     func sceneDidBecomeActive(_ scene: UIScene) {}
     func sceneWillResignActive(_ scene: UIScene) {}

@@ -8,7 +8,15 @@ import UIKit
 
 final class MainTabBarController: UITabBarController {
 
+    private let favoritesViewModel: FavoritesViewModel
     private var homeCoordinator: HomeCoordinator?
+
+    init(favoritesViewModel: FavoritesViewModel) {
+        self.favoritesViewModel = favoritesViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
 
     private let miniPlayerContainer: UIView = {
         let v = UIView()
@@ -38,11 +46,16 @@ final class MainTabBarController: UITabBarController {
             image: UIImage(systemName: "house"),
             selectedImage: UIImage(systemName: "house.fill")
         )
-        homeCoordinator = HomeCoordinator(navigationController: homeNav)
+        homeCoordinator = HomeCoordinator(
+            navigationController: homeNav,
+            favoritesViewModel: favoritesViewModel
+        )
         homeCoordinator?.start()
 
         // Search
-        let search = UINavigationController(rootViewController: SearchViewController())
+        let searchVC = SearchViewController()
+        searchVC.favoritesViewModel = favoritesViewModel
+        let search = UINavigationController(rootViewController: searchVC)
         search.tabBarItem = UITabBarItem(
             title: "Search",
             image: UIImage(systemName: "magnifyingglass"),
@@ -50,7 +63,8 @@ final class MainTabBarController: UITabBarController {
         )
 
         // Favorites
-        let favorites = UINavigationController(rootViewController: FavoritesViewController())
+        let favoritesVC = FavoritesViewController(viewModel: favoritesViewModel)
+        let favorites = UINavigationController(rootViewController: favoritesVC)
         favorites.tabBarItem = UITabBarItem(
             title: "Favorites",
             image: UIImage(systemName: "heart"),
@@ -81,19 +95,15 @@ final class MainTabBarController: UITabBarController {
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor(named: "AppBackground") ?? UIColor(white: 0.05, alpha: 1)
 
-        let normal: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.white.withAlphaComponent(0.4)
-        ]
-        let selected: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.systemPurple
-        ]
+        let normal:   [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.white.withAlphaComponent(0.4)]
+        let selected: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.systemPurple]
 
-        appearance.stackedLayoutAppearance.normal.iconColor    = UIColor.white.withAlphaComponent(0.4)
-        appearance.stackedLayoutAppearance.selected.iconColor  = .systemPurple
+        appearance.stackedLayoutAppearance.normal.iconColor   = UIColor.white.withAlphaComponent(0.4)
+        appearance.stackedLayoutAppearance.selected.iconColor = .systemPurple
         appearance.stackedLayoutAppearance.normal.titleTextAttributes   = normal
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = selected
 
-        tabBar.standardAppearance = appearance
+        tabBar.standardAppearance  = appearance
         tabBar.scrollEdgeAppearance = appearance
     }
 

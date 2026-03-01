@@ -4,9 +4,11 @@ import Kingfisher
 final class BookDetailViewController: UIViewController {
 
     private let viewModel: BookDetailViewModel
+    private let favoritesViewModel: FavoritesViewModel
 
-    init(book: Audiobook) {
+    init(book: Audiobook, favoritesViewModel: FavoritesViewModel) {
         self.viewModel = BookDetailViewModel(book: book)
+        self.favoritesViewModel = favoritesViewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -185,6 +187,7 @@ final class BookDetailViewController: UIViewController {
         bindViewModel()
         viewModel.fetchDetail()
         configureData()
+        updateFavoriteButton()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -541,10 +544,15 @@ private extension BookDetailViewController {
     }
 
     @objc func favTapped() {
-        let isFav = favoriteButton.tintColor == UIColor.systemPink
-        favoriteButton.tintColor = isFav ? .white : .systemPink
+        favoritesViewModel.toggleBook(viewModel.book)
+        updateFavoriteButton()
+    }
+
+    func updateFavoriteButton() {
+        let isFav = favoritesViewModel.isBookFavorited(viewModel.book)
+        favoriteButton.tintColor = isFav ? .systemPink : .white
         favoriteButton.setImage(
-            UIImage(systemName: isFav ? "heart" : "heart.fill"), for: .normal
+            UIImage(systemName: isFav ? "heart.fill" : "heart"), for: .normal
         )
     }
 

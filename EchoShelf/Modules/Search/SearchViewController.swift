@@ -9,6 +9,7 @@ import UIKit
 final class SearchViewController: UIViewController {
 
     weak var coordinator: HomeCoordinator?
+    var favoritesViewModel: FavoritesViewModel?
 
     var preselectedGenre: String? {
         didSet {
@@ -168,6 +169,14 @@ private extension SearchViewController {
         }
     }
 
+    func makeBookDetail(book: Audiobook) -> BookDetailViewController {
+        guard let fvm = favoritesViewModel else {
+            // Fallback — coordinator olmadan açılırsa
+            fatalError("favoritesViewModel inject edilməyib")
+        }
+        return BookDetailViewController(book: book, favoritesViewModel: fvm)
+    }
+
     func resetToHomeState() {
         isSearching = false
         preselectedGenre = nil
@@ -257,8 +266,9 @@ extension SearchViewController: UICollectionViewDataSource {
             if let book = viewModel.topResult {
                 cell.configure(with: book)
                 cell.onListen = { [weak self] in
-                    self?.navigationController?.pushViewController(
-                        BookDetailViewController(book: book), animated: true
+                    guard let self else { return }
+                    self.navigationController?.pushViewController(
+                        self.makeBookDetail(book: book), animated: true
                     )
                 }
             }
@@ -343,7 +353,7 @@ extension SearchViewController: UICollectionViewDelegate {
             case .youMightLike:
                 let book = viewModel.youMightLike[indexPath.item]
                 navigationController?.pushViewController(
-                    BookDetailViewController(book: book), animated: true
+                    makeBookDetail(book: book), animated: true
                 )
 
             case .none:
@@ -357,13 +367,13 @@ extension SearchViewController: UICollectionViewDelegate {
         case 0:
             if let book = viewModel.topResult {
                 navigationController?.pushViewController(
-                    BookDetailViewController(book: book), animated: true
+                    makeBookDetail(book: book), animated: true
                 )
             }
         case 1:
             let book = viewModel.otherVersions[indexPath.item]
             navigationController?.pushViewController(
-                BookDetailViewController(book: book), animated: true
+                makeBookDetail(book: book), animated: true
             )
         default:
             break

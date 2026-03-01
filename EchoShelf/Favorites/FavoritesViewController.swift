@@ -10,7 +10,14 @@ final class FavoritesViewController: UIViewController {
 
     // MARK: - ViewModel
 
-    private let viewModel = FavoritesViewModel()
+    private let viewModel: FavoritesViewModel
+
+    init(viewModel: FavoritesViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
 
     // MARK: - UI
 
@@ -240,10 +247,14 @@ extension FavoritesViewController: UICollectionViewDelegate {
         switch selectedSection {
         case .books:
             let book = viewModel.favoriteBooks[indexPath.item]
-            navigationController?.pushViewController(BookDetailViewController(book: book), animated: true)
+            navigationController?.pushViewController(
+                BookDetailViewController(book: book, favoritesViewModel: viewModel), animated: true
+            )
         case .audiobooks:
             let book = viewModel.favoriteAudiobooks[indexPath.item]
-            navigationController?.pushViewController(BookDetailViewController(book: book), animated: true)
+            navigationController?.pushViewController(
+                BookDetailViewController(book: book, favoritesViewModel: viewModel), animated: true
+            )
         default:
             break
         }

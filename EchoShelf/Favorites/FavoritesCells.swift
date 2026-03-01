@@ -46,6 +46,7 @@ final class FavoriteBookCell: UICollectionViewCell {
         btn.tintColor = .systemPink
         btn.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         btn.layer.cornerRadius = 14
+        btn.isUserInteractionEnabled = false  // tap didSelectItemAt-a düşsün
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()

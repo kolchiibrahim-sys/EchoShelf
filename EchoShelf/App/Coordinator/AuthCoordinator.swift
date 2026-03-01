@@ -15,7 +15,6 @@ final class AuthCoordinator: Coordinator {
     }
 
     func start() {
-//        let viewModel = SignInViewModel()
         let vc = SignInViewController(viewModel: .init())
 
         vc.onLoginSuccess = { [weak self] in
@@ -32,8 +31,8 @@ final class AuthCoordinator: Coordinator {
     }
 
     private func showMainApp() {
-        let tabBar = MainTabBarController()
-        navigationController.setViewControllers([tabBar], animated: true)
+        let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
+        tabBarCoordinator.start()
     }
 
     private func showCreateAccount() {

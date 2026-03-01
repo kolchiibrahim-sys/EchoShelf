@@ -8,21 +8,31 @@ import Foundation
 
 final class FavoritesViewModel {
 
+    // MARK: - Data
+
     private(set) var favoriteBooks:      [Audiobook] = []
-    private(set) var favoriteAudiobooks: [Audiobook] = []
+    var favoriteAudiobooks: [Audiobook] { favoriteBooks }
     private(set) var favoriteAuthors:    [Author]    = []
     private(set) var favoriteGenres:     [String]    = []
 
+    // MARK: - Callbacks
+
     var onDataUpdated: (() -> Void)?
     var onError: ((String) -> Void)?
+
+    // MARK: - Persistence Keys
 
     private let booksKey   = "favorite_books"
     private let authorsKey = "favorite_authors"
     private let genresKey  = "favorite_genres"
 
+    // MARK: - Init
+
     init() {
         loadFromStorage()
     }
+
+    // MARK: - Current Section Data
 
     func items(for section: FavoriteSection) -> Int {
         switch section {
@@ -37,19 +47,13 @@ final class FavoritesViewModel {
         items(for: section) == 0
     }
 
-    func toggleBook(_ book: Audiobook, isAudiobook: Bool = false) {
-        if isAudiobook {
-            if let idx = favoriteAudiobooks.firstIndex(where: { $0.id.value == book.id.value }) {
-                favoriteAudiobooks.remove(at: idx)
-            } else {
-                favoriteAudiobooks.insert(book, at: 0)
-            }
+    // MARK: - Toggle Favorites
+
+    func toggleBook(_ book: Audiobook) {
+        if let idx = favoriteBooks.firstIndex(where: { $0.id.value == book.id.value }) {
+            favoriteBooks.remove(at: idx)
         } else {
-            if let idx = favoriteBooks.firstIndex(where: { $0.id.value == book.id.value }) {
-                favoriteBooks.remove(at: idx)
-            } else {
-                favoriteBooks.insert(book, at: 0)
-            }
+            favoriteBooks.insert(book, at: 0)
         }
         saveToStorage()
         onDataUpdated?()
@@ -77,9 +81,10 @@ final class FavoritesViewModel {
         onDataUpdated?()
     }
 
-    func isBookFavorited(_ book: Audiobook, isAudiobook: Bool = false) -> Bool {
-        let list = isAudiobook ? favoriteAudiobooks : favoriteBooks
-        return list.contains(where: { $0.id.value == book.id.value })
+    // MARK: - Check
+
+    func isBookFavorited(_ book: Audiobook) -> Bool {
+        favoriteBooks.contains(where: { $0.id.value == book.id.value })
     }
 
     func isAuthorFavorited(_ author: Author) -> Bool {
@@ -93,14 +98,13 @@ final class FavoritesViewModel {
     }
 }
 
+// MARK: - Persistence (UserDefaults + Codable)
+
 private extension FavoritesViewModel {
 
     func saveToStorage() {
         if let booksData = try? JSONEncoder().encode(favoriteBooks) {
             UserDefaults.standard.set(booksData, forKey: booksKey)
-        }
-        if let audiobooksData = try? JSONEncoder().encode(favoriteAudiobooks) {
-            UserDefaults.standard.set(audiobooksData, forKey: booksKey + "_audio")
         }
         if let authorsData = try? JSONEncoder().encode(favoriteAuthors) {
             UserDefaults.standard.set(authorsData, forKey: authorsKey)
@@ -113,10 +117,6 @@ private extension FavoritesViewModel {
            let books = try? JSONDecoder().decode([Audiobook].self, from: data) {
             favoriteBooks = books
         }
-        if let data = UserDefaults.standard.data(forKey: booksKey + "_audio"),
-           let books = try? JSONDecoder().decode([Audiobook].self, from: data) {
-            favoriteAudiobooks = books
-        }
         if let data = UserDefaults.standard.data(forKey: authorsKey),
            let authors = try? JSONDecoder().decode([Author].self, from: data) {
             favoriteAuthors = authors
@@ -124,6 +124,8 @@ private extension FavoritesViewModel {
         favoriteGenres = UserDefaults.standard.stringArray(forKey: genresKey) ?? []
     }
 }
+
+// MARK: - Section Enum (ViewController ilə paylaşılır)
 
 enum FavoriteSection: Int, CaseIterable {
     case books      = 0
