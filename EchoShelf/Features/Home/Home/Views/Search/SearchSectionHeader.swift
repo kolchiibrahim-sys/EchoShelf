@@ -10,19 +10,24 @@ final class SearchSectionHeaderView: UICollectionReusableView {
 
     static let identifier = "SearchSectionHeaderView"
 
+    var onClearAll: (() -> Void)?
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.font = .systemFont(ofSize: 20, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
-    private let divider: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.white.withAlphaComponent(0.06)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    private let clearAllButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Clear All", for: .normal)
+        btn.setTitleColor(UIColor.systemPurple, for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
+        btn.isHidden = true
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
     }()
 
     override init(frame: CGRect) {
@@ -35,28 +40,32 @@ final class SearchSectionHeaderView: UICollectionReusableView {
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil
+        clearAllButton.isHidden = true
+        onClearAll = nil
     }
 
     private func setupUI() {
-
         backgroundColor = .clear
-
         addSubview(titleLabel)
-        addSubview(divider)
+        addSubview(clearAllButton)
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 6),
+            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            divider.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            divider.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            divider.bottomAnchor.constraint(equalTo: bottomAnchor),
-            divider.heightAnchor.constraint(equalToConstant: 1)
+            clearAllButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            clearAllButton.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+
+        clearAllButton.addTarget(self, action: #selector(clearTapped), for: .touchUpInside)
     }
 
-    func configure(_ title: String) {
+    func configure(_ title: String, showClearAll: Bool = false) {
         titleLabel.text = title
+        clearAllButton.isHidden = !showClearAll
+    }
+
+    @objc private func clearTapped() {
+        onClearAll?()
     }
 }

@@ -12,6 +12,7 @@ final class SearchViewModel {
 
     private(set) var books: [Audiobook] = []
     private(set) var recentSearches: [String] = []
+    private(set) var youMightLike: [Audiobook] = []
     private(set) var isLoading = false
 
     var onDataUpdated: (() -> Void)?
@@ -20,11 +21,12 @@ final class SearchViewModel {
     init(service: AudiobookServiceProtocol = AudiobookService()) {
         self.service = service
         loadRecents()
+        fetchYouMightLike()
     }
 
+    // MARK: - Search
 
     func search(query: String) {
-
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
         guard !trimmed.isEmpty else {
@@ -34,31 +36,43 @@ final class SearchViewModel {
         }
 
         addRecent(trimmed)
-
         isLoading = true
         DispatchQueue.main.async { self.onDataUpdated?() }
 
         service.searchAudiobooks(query: trimmed) { [weak self] result in
             guard let self else { return }
-
             DispatchQueue.main.async {
-
                 self.isLoading = false
-
                 switch result {
-
                 case .success(let books):
                     self.books = books
-
                 case .failure:
                     self.books = []
                     self.onError?("Search failed")
                 }
-
                 self.onDataUpdated?()
             }
         }
     }
+
+    // MARK: - You Might Like
+
+    private func fetchYouMightLike() {
+        let queries = ["fiction", "science", "thriller"]
+        let query = queries.randomElement() ?? "fiction"
+
+        service.searchAudiobooks(query: query) { [weak self] result in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                if case .success(let books) = result {
+                    self.youMightLike = Array(books.prefix(6))
+                    self.onDataUpdated?()
+                }
+            }
+        }
+    }
+
+    // MARK: - Recents
 
     func deleteRecent(at index: Int) {
         guard index < recentSearches.count else { return }
@@ -74,6 +88,8 @@ final class SearchViewModel {
     }
 }
 
+// MARK: - Private Helpers
+
 private extension SearchViewModel {
 
     var recentsKey: String { "recent_searches" }
@@ -87,23 +103,18 @@ private extension SearchViewModel {
     }
 
     func addRecent(_ query: String) {
-
         recentSearches.removeAll { $0.lowercased() == query.lowercased() }
         recentSearches.insert(query, at: 0)
-
-        if recentSearches.count > 5 {
-            recentSearches.removeLast()
-        }
-
+        if recentSearches.count > 5 { recentSearches.removeLast() }
         saveRecents()
     }
 }
 
+// MARK: - Computed Properties
+
 extension SearchViewModel {
 
-    var topResult: Audiobook? {
-        books.first
-    }
+    var topResult: Audiobook? { books.first }
 
     var otherVersions: [Audiobook] {
         guard books.count > 1 else { return [] }
@@ -111,19 +122,13 @@ extension SearchViewModel {
     }
 
     var relatedAuthors: [Author] {
-
         let authors = books.compactMap { $0.authors?.first }
         var unique: [Author] = []
-
         for author in authors {
             if !unique.contains(where: {
-                $0.firstName == author.firstName &&
-                $0.lastName == author.lastName
-            }) {
-                unique.append(author)
-            }
+                $0.firstName == author.firstName && $0.lastName == author.lastName
+            }) { unique.append(author) }
         }
-
         return Array(unique.prefix(6))
     }
 }

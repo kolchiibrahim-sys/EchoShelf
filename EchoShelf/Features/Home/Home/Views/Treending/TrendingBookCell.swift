@@ -75,4 +75,3 @@ final class TrendingBookCell: UICollectionViewCell {
         }
     }
 }
-

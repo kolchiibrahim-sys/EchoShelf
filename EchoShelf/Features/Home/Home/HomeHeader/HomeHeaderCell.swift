@@ -6,7 +6,7 @@ final class HomeHeaderCell: UICollectionViewCell {
 
     private let greetingLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "GOOD MORNING,"
+        lbl.text = "Good Morning,"
         lbl.textColor = UIColor.white.withAlphaComponent(0.6)
         lbl.font = .systemFont(ofSize: 13, weight: .medium)
         lbl.translatesAutoresizingMaskIntoConstraints = false

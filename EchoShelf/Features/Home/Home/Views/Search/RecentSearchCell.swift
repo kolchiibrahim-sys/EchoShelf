@@ -12,44 +12,69 @@ final class RecentSearchCell: UICollectionViewCell {
 
     var onDelete: (() -> Void)?
 
-    private let label = UILabel()
+    private let historyIcon: UIImageView = {
+        let iv = UIImageView(image: UIImage(systemName: "clock.arrow.circlepath"))
+        iv.tintColor = UIColor.white.withAlphaComponent(0.4)
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 18).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 18).isActive = true
+        return iv
+    }()
+
+    private let label: UILabel = {
+        let lbl = UILabel()
+        lbl.textColor = .white
+        lbl.font = .systemFont(ofSize: 15, weight: .medium)
+        return lbl
+    }()
 
     private let deleteButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        b.tintColor = UIColor.white.withAlphaComponent(0.5)
-        return b
+        let btn = UIButton(type: .system)
+        btn.setImage(UIImage(systemName: "xmark"), for: .normal)
+        btn.tintColor = UIColor.white.withAlphaComponent(0.4)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.widthAnchor.constraint(equalToConstant: 28).isActive = true
+        btn.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        return btn
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupUI()
+    }
 
-        backgroundColor = UIColor.white.withAlphaComponent(0.05)
-        layer.cornerRadius = 16
+    required init?(coder: NSCoder) { fatalError() }
 
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 15, weight: .medium)
+    private func setupUI() {
+        backgroundColor = .clear
 
-        contentView.addSubview(label)
-        contentView.addSubview(deleteButton)
+        let stack = UIStackView(arrangedSubviews: [historyIcon, label, UIView(), deleteButton])
+        stack.axis = .horizontal
+        stack.spacing = 12
+        stack.alignment = .center
+        stack.translatesAutoresizingMaskIntoConstraints = false
 
-        label.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
-
+        contentView.addSubview(stack)
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            stack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
 
-            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -14),
-            deleteButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            deleteButton.widthAnchor.constraint(equalToConstant: 22),
-            deleteButton.heightAnchor.constraint(equalToConstant: 22)
+        // Bottom divider
+        let divider = UIView()
+        divider.backgroundColor = UIColor.white.withAlphaComponent(0.06)
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(divider)
+        NSLayoutConstraint.activate([
+            divider.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            divider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            divider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            divider.heightAnchor.constraint(equalToConstant: 0.5)
         ])
 
         deleteButton.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
     }
-
-    required init?(coder: NSCoder) { fatalError() }
 
     func configure(with text: String) {
         label.text = text

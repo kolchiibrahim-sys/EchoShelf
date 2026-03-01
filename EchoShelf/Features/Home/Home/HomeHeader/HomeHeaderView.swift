@@ -10,7 +10,7 @@ final class HomeHeaderView: UIView {
 
     private let greetingLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "GOOD MORNING,"
+        lbl.text = "Good Morning,"
         lbl.font = .systemFont(ofSize: 13, weight: .medium)
         lbl.textColor = UIColor.white.withAlphaComponent(0.6)
         return lbl
