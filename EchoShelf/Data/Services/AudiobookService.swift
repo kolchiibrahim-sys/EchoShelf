@@ -15,10 +15,8 @@ final class AudiobookService: AudiobookServiceProtocol {
         completion: @escaping (Result<[Audiobook], APIError>) -> Void
     ) {
         let endpoint = AudiobookEndpoint.getAudiobooks(page: page)
-
         network.request(endpoint) { [weak self] (result: Result<AudiobooksResponse, APIError>) in
             guard let self else { return }
-
             switch result {
             case .success(let response):
                 print("First book identifier:", response.books.first?.archiveIdentifier ?? "NIL")
@@ -34,10 +32,8 @@ final class AudiobookService: AudiobookServiceProtocol {
         completion: @escaping (Result<[Audiobook], APIError>) -> Void
     ) {
         let endpoint = AudiobookEndpoint.search(query: query)
-
         network.request(endpoint) { [weak self] (result: Result<AudiobooksResponse, APIError>) in
             guard let self else { return }
-
             switch result {
             case .success(let response):
                 self.attachCovers(to: response.books, completion: completion)
@@ -52,10 +48,8 @@ final class AudiobookService: AudiobookServiceProtocol {
         completion: @escaping (Result<Audiobook, APIError>) -> Void
     ) {
         let endpoint = AudiobookEndpoint.detail(id: id)
-
         network.request(endpoint) { [weak self] (result: Result<AudiobooksResponse, APIError>) in
             guard let self else { return }
-
             switch result {
             case .success(let response):
                 guard var book = response.books.first else {
@@ -71,7 +65,26 @@ final class AudiobookService: AudiobookServiceProtocol {
             }
         }
     }
+
+    func fetchByGenre(
+        subject: String,
+        page: Int,
+        completion: @escaping (Result<[Audiobook], APIError>) -> Void
+    ) {
+        let endpoint = AudiobookEndpoint.genre(subject: subject, page: page)
+        network.request(endpoint) { [weak self] (result: Result<AudiobooksResponse, APIError>) in
+            guard let self else { return }
+            switch result {
+            case .success(let response):
+                self.attachCovers(to: response.books, completion: completion)
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }
+
+// MARK: - Private
 
 private extension AudiobookService {
 

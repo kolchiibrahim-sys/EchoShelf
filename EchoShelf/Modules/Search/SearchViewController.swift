@@ -27,12 +27,12 @@ final class SearchViewController: UIViewController {
 
     // Trending Categories data
     private let trendingCategories: [TrendingCategory] = [
-        TrendingCategory(title: "AI Picks",    icon: "🤖", colors: [UIColor(hex: "#6C5CE7"), UIColor(hex: "#4834D4")]),
-        TrendingCategory(title: "Bestsellers", icon: "🔥", colors: [UIColor(hex: "#E55039"), UIColor(hex: "#E74C3C")]),
-        TrendingCategory(title: "Sci-Fi",      icon: "🚀", colors: [UIColor(hex: "#00B894"), UIColor(hex: "#00897B")]),
-        TrendingCategory(title: "Thriller",    icon: "👁",  colors: [UIColor(hex: "#F39C12"), UIColor(hex: "#E67E22")]),
-        TrendingCategory(title: "Classics",    icon: "📖", colors: [UIColor(hex: "#A855F7"), UIColor(hex: "#7C3AED")]),
-        TrendingCategory(title: "Narrators",   icon: "🎙", colors: [UIColor(hex: "#3B82F6"), UIColor(hex: "#2563EB")])
+        TrendingCategory(title: "AI Picks",    icon: "🤖", colors: [UIColor(hex: "#6C5CE7"), UIColor(hex: "#4834D4")], query: "science",         subject: "Science Fiction"),
+        TrendingCategory(title: "Bestsellers", icon: "🔥", colors: [UIColor(hex: "#E55039"), UIColor(hex: "#E74C3C")], query: "adventure",       subject: "Adventure"),
+        TrendingCategory(title: "Sci-Fi",      icon: "🚀", colors: [UIColor(hex: "#00B894"), UIColor(hex: "#00897B")], query: "science fiction", subject: "Science Fiction"),
+        TrendingCategory(title: "Thriller",    icon: "👁",  colors: [UIColor(hex: "#F39C12"), UIColor(hex: "#E67E22")], query: "mystery",         subject: "Mystery & Detective Stories"),
+        TrendingCategory(title: "Classics",    icon: "📖", colors: [UIColor(hex: "#A855F7"), UIColor(hex: "#7C3AED")], query: "classic",         subject: "General Fiction"),
+        TrendingCategory(title: "Narrators",   icon: "🎙", colors: [UIColor(hex: "#3B82F6"), UIColor(hex: "#2563EB")], query: "drama",           subject: "Plays")
     ]
 
     private let emptyLabel: UILabel = {
@@ -332,8 +332,13 @@ extension SearchViewController: UICollectionViewDelegate {
                 searchBarView.onSearch?(query)
 
             case .trending:
-                let genre = trendingCategories[indexPath.item].title
-                searchBarView.onSearch?(genre)
+                let category = trendingCategories[indexPath.item]
+                isSearching = true
+                searchBarView.setText(category.title)
+                viewModel.searchByGenre(subject: category.subject, displayTitle: category.title)
+                collectionView.setCollectionViewLayout(createLayout(), animated: false)
+                updateEmptyState()
+                collectionView.reloadData()
 
             case .youMightLike:
                 let book = viewModel.youMightLike[indexPath.item]

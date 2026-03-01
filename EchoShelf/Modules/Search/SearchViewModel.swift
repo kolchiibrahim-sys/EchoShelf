@@ -26,6 +26,26 @@ final class SearchViewModel {
 
     // MARK: - Search
 
+    func searchByGenre(subject: String, displayTitle: String) {
+        isLoading = true
+        DispatchQueue.main.async { self.onDataUpdated?() }
+
+        service.fetchByGenre(subject: subject, page: 0) { [weak self] result in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                self.isLoading = false
+                switch result {
+                case .success(let books):
+                    self.books = books
+                case .failure:
+                    self.books = []
+                    self.onError?("Could not load \(displayTitle)")
+                }
+                self.onDataUpdated?()
+            }
+        }
+    }
+
     func search(query: String) {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -58,14 +78,11 @@ final class SearchViewModel {
     // MARK: - You Might Like
 
     private func fetchYouMightLike() {
-        let queries = ["fiction", "science", "thriller"]
-        let query = queries.randomElement() ?? "fiction"
-
-        service.searchAudiobooks(query: query) { [weak self] result in
+        service.fetchAudiobooks(page: 1) { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
                 if case .success(let books) = result {
-                    self.youMightLike = Array(books.prefix(6))
+                    self.youMightLike = Array(books.prefix(8))
                     self.onDataUpdated?()
                 }
             }

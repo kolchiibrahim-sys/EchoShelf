@@ -1,9 +1,3 @@
-//
-//  AudiobookEndpoint.swift
-//  EchoShelf
-//
-//  Created by Ibrahim Kolchi on 24.02.26.
-//
 import Foundation
 import Alamofire
 
@@ -12,6 +6,7 @@ enum AudiobookEndpoint: Endpoint {
     case getAudiobooks(page: Int)
     case search(query: String)
     case detail(id: Int)
+    case genre(subject: String, page: Int)
 
     var baseURL: String {
         "https://librivox.org/api/feed/audiobooks/"
@@ -34,7 +29,7 @@ enum AudiobookEndpoint: Endpoint {
         case .search(let query):
             return [
                 "format": "json",
-                "title": "^\(query)",   
+                "title": "^\(query)",
                 "limit": 20,
                 "offset": 0
             ]
@@ -43,6 +38,14 @@ enum AudiobookEndpoint: Endpoint {
             return [
                 "format": "json",
                 "id": id
+            ]
+
+        case .genre(let subject, let page):
+            return [
+                "format": "json",
+                "subject": subject,
+                "limit": 20,
+                "offset": page * 20
             ]
         }
     }
