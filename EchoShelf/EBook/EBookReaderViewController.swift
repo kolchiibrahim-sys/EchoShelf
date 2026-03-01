@@ -6,6 +6,7 @@
 //
 import UIKit
 import PDFKit
+import WebKit
 
 final class EbookReaderViewController: UIViewController {
 
@@ -16,6 +17,7 @@ final class EbookReaderViewController: UIViewController {
     // MARK: - UI
 
     private var pdfView: PDFView!
+    private var webView: WKWebView!
 
     private let loadingView: UIView = {
         let v = UIView()
@@ -82,6 +84,7 @@ final class EbookReaderViewController: UIViewController {
         view.backgroundColor = UIColor(named: "AppBackground")
         setupNavBar()
         setupPDFView()
+        setupWebView()
         setupLoadingView()
         setupErrorView()
         setupProgressLabel()
@@ -113,15 +116,19 @@ private extension EbookReaderViewController {
             case .loading:
                 self.showLoading(true)
 
-            case .loaded(let document):
+            case .loadedPDF(let document):
                 self.showLoading(false)
+                self.pdfView.isHidden = false
+                self.webView.isHidden = true
                 self.pdfView.document = document
                 self.pdfView.scaleFactor = self.viewModel.scaleFactor
 
-            case .redirecting(let url):
+            case .loadedWeb(let url):
                 self.showLoading(false)
-                UIApplication.shared.open(url)
-                self.navigationController?.popViewController(animated: true)
+                self.webView.isHidden = false
+                self.pdfView.isHidden = true
+                self.progressLabel.isHidden = true
+                self.webView.load(URLRequest(url: url))
 
             case .error(let message):
                 self.showLoading(false)
@@ -137,11 +144,7 @@ private extension EbookReaderViewController {
 
     func showLoading(_ show: Bool) {
         loadingView.isHidden = !show
-        if show {
-            activityIndicator.startAnimating()
-        } else {
-            activityIndicator.stopAnimating()
-        }
+        show ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
 
     func showError(_ message: String) {
@@ -156,6 +159,7 @@ private extension EbookReaderViewController {
 
     func setupNavBar() {
         title = viewModel.ebook.title
+
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left"),
             style: .plain,
@@ -167,15 +171,15 @@ private extension EbookReaderViewController {
         let fontMenu = UIMenu(title: "Text Size", children: [
             UIAction(title: "Increase", image: UIImage(systemName: "textformat.size.larger")) { [weak self] _ in
                 self?.viewModel.increaseScale()
-                self?.applyScale()
+                self?.pdfView.scaleFactor = self?.viewModel.scaleFactor ?? 1.0
             },
             UIAction(title: "Decrease", image: UIImage(systemName: "textformat.size.smaller")) { [weak self] _ in
                 self?.viewModel.decreaseScale()
-                self?.applyScale()
+                self?.pdfView.scaleFactor = self?.viewModel.scaleFactor ?? 1.0
             },
             UIAction(title: "Reset", image: UIImage(systemName: "arrow.counterclockwise")) { [weak self] _ in
                 self?.viewModel.resetScale()
-                self?.applyScale()
+                self?.pdfView.scaleFactor = self?.viewModel.scaleFactor ?? 1.0
             }
         ])
 
@@ -200,6 +204,7 @@ private extension EbookReaderViewController {
         pdfView.displayMode = .singlePageContinuous
         pdfView.displayDirection = .vertical
         pdfView.pageShadowsEnabled = false
+        pdfView.isHidden = true
         pdfView.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(pdfView)
@@ -216,6 +221,27 @@ private extension EbookReaderViewController {
             name: .PDFViewPageChanged,
             object: pdfView
         )
+    }
+
+    func setupWebView() {
+        let config = WKWebViewConfiguration()
+        // App içindən xaricə çıxışı bloklayırıq
+        config.preferences.javaScriptCanOpenWindowsAutomatically = false
+
+        webView = WKWebView(frame: .zero, configuration: config)
+        webView.backgroundColor = UIColor(named: "AppBackground") ?? .black
+        webView.scrollView.backgroundColor = UIColor(named: "AppBackground") ?? .black
+        webView.isHidden = true
+        webView.navigationDelegate = self
+        webView.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(webView)
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     func setupLoadingView() {
@@ -272,10 +298,6 @@ private extension EbookReaderViewController {
             progressLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
-
-    func applyScale() {
-        pdfView.scaleFactor = viewModel.scaleFactor
-    }
 }
 
 // MARK: - Actions
@@ -291,5 +313,40 @@ private extension EbookReaderViewController {
               let document = pdfView.document else { return }
         let index = document.index(for: page)
         viewModel.updateCurrentPage(index)
+    }
+}
+
+// MARK: - WKNavigationDelegate (xarici linklər app içində qalsın)
+
+extension EbookReaderViewController: WKNavigationDelegate {
+
+    func webView(_ webView: WKWebView,
+                 decidePolicyFor navigationAction: WKNavigationAction,
+                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        // Yalnız allowed domenləri izin ver, xarici linklər bloklanır
+        let allowedHosts = ["openlibrary.org", "archive.org", "standardebooks.org"]
+
+        if let host = navigationAction.request.url?.host,
+           allowedHosts.contains(where: { host.hasSuffix($0) }) {
+            decisionHandler(.allow)
+        } else if navigationAction.navigationType == .linkActivated {
+            // Xarici link — blokla, app-dən çıxma
+            decisionHandler(.cancel)
+        } else {
+            decisionHandler(.allow)
+        }
+    }
+
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        showLoading(true)
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        showLoading(false)
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        showLoading(false)
+        showError("Could not load the book. Please try again.")
     }
 }

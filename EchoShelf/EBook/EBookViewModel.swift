@@ -10,8 +10,8 @@ import PDFKit
 enum EbookReaderState {
     case idle
     case loading
-    case loaded(PDFDocument)
-    case redirecting(URL)   // PDF deyil, browser-ə yönləndir
+    case loadedPDF(PDFDocument)
+    case loadedWeb(URL)     // WKWebView ilə app içində aç
     case error(String)
 }
 
@@ -46,16 +46,13 @@ final class EbookReaderViewModel {
         setState(.loading)
 
         let isPDF = readURL.pathExtension.lowercased() == "pdf"
-
         if isPDF {
             loadPDF(from: readURL)
         } else {
-            // EPUB və ya web link — browser-ə yönləndir
-            setState(.redirecting(readURL))
+            setState(.loadedWeb(readURL))
         }
     }
 
-    // Read link hələ yoxdursa, əvvəlcə fetch et
     func fetchAndLoad(workKey: String) {
         guard state.isIdle else { return }
         setState(.loading)
@@ -69,10 +66,12 @@ final class EbookReaderViewModel {
                     if isPDF {
                         self.loadPDF(from: url)
                     } else {
-                        self.setState(.redirecting(url))
+                        self.setState(.loadedWeb(url))
                     }
                 } else {
-                    self.setState(.error("Could not find a readable version of this book."))
+                    // Fallback — Open Library web reader
+                    let fallback = URL(string: "https://openlibrary.org\(workKey)")!
+                    self.setState(.loadedWeb(fallback))
                 }
             }
         }
@@ -102,20 +101,31 @@ final class EbookReaderViewModel {
     // MARK: - Private
 
     private func loadPDF(from url: URL) {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        // PDFDocument(url:) yalnız local fayllar üçün işləyir
+        // Remote URL-lər üçün əvvəlcə data yükləmək lazımdır
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             guard let self else { return }
-            if let document = PDFDocument(url: url) {
-                self.totalPages = document.pageCount
+
+            if let error {
                 DispatchQueue.main.async {
-                    self.setState(.loaded(document))
-                    self.onProgressChanged?(0, document.pageCount)
+                    self.setState(.error("Download failed: \(error.localizedDescription)"))
                 }
-            } else {
+                return
+            }
+
+            guard let data, let document = PDFDocument(data: data) else {
                 DispatchQueue.main.async {
                     self.setState(.error("Could not open this document."))
                 }
+                return
             }
-        }
+
+            self.totalPages = document.pageCount
+            DispatchQueue.main.async {
+                self.setState(.loadedPDF(document))
+                self.onProgressChanged?(0, document.pageCount)
+            }
+        }.resume()
     }
 
     private func setState(_ newState: EbookReaderState) {
