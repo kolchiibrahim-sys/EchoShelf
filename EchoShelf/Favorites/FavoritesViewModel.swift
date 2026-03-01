@@ -10,8 +10,9 @@ final class FavoritesViewModel {
 
     // MARK: - Data
 
-    private(set) var favoriteBooks:      [Audiobook] = []
-    var favoriteAudiobooks: [Audiobook] { favoriteBooks }
+    private(set) var favoriteBooks:      [Audiobook] = []   // LibriVox audiobooks
+    var favoriteAudiobooks: [Audiobook] { favoriteBooks }   // eyni data
+    private(set) var favoriteEbooks:     [Ebook]     = []   // Open Library ebooks
     private(set) var favoriteAuthors:    [Author]    = []
     private(set) var favoriteGenres:     [String]    = []
 
@@ -23,6 +24,7 @@ final class FavoritesViewModel {
     // MARK: - Persistence Keys
 
     private let booksKey   = "favorite_books"
+    private let ebooksKey  = "favorite_ebooks"
     private let authorsKey = "favorite_authors"
     private let genresKey  = "favorite_genres"
 
@@ -36,8 +38,8 @@ final class FavoritesViewModel {
 
     func items(for section: FavoriteSection) -> Int {
         switch section {
-        case .books:      return favoriteBooks.count
-        case .audiobooks: return favoriteAudiobooks.count
+        case .books:      return favoriteEbooks.count
+        case .audiobooks: return favoriteBooks.count
         case .authors:    return favoriteAuthors.count
         case .genres:     return favoriteGenres.count
         }
@@ -54,6 +56,16 @@ final class FavoritesViewModel {
             favoriteBooks.remove(at: idx)
         } else {
             favoriteBooks.insert(book, at: 0)
+        }
+        saveToStorage()
+        onDataUpdated?()
+    }
+
+    func toggleEbook(_ ebook: Ebook) {
+        if let idx = favoriteEbooks.firstIndex(where: { $0.id == ebook.id }) {
+            favoriteEbooks.remove(at: idx)
+        } else {
+            favoriteEbooks.insert(ebook, at: 0)
         }
         saveToStorage()
         onDataUpdated?()
@@ -87,6 +99,10 @@ final class FavoritesViewModel {
         favoriteBooks.contains(where: { $0.id.value == book.id.value })
     }
 
+    func isEbookFavorited(_ ebook: Ebook) -> Bool {
+        favoriteEbooks.contains(where: { $0.id == ebook.id })
+    }
+
     func isAuthorFavorited(_ author: Author) -> Bool {
         favoriteAuthors.contains(where: {
             $0.firstName == author.firstName && $0.lastName == author.lastName
@@ -103,24 +119,19 @@ final class FavoritesViewModel {
 private extension FavoritesViewModel {
 
     func saveToStorage() {
-        if let booksData = try? JSONEncoder().encode(favoriteBooks) {
-            UserDefaults.standard.set(booksData, forKey: booksKey)
-        }
-        if let authorsData = try? JSONEncoder().encode(favoriteAuthors) {
-            UserDefaults.standard.set(authorsData, forKey: authorsKey)
-        }
+        if let d = try? JSONEncoder().encode(favoriteBooks)   { UserDefaults.standard.set(d, forKey: booksKey) }
+        if let d = try? JSONEncoder().encode(favoriteEbooks)  { UserDefaults.standard.set(d, forKey: ebooksKey) }
+        if let d = try? JSONEncoder().encode(favoriteAuthors) { UserDefaults.standard.set(d, forKey: authorsKey) }
         UserDefaults.standard.set(favoriteGenres, forKey: genresKey)
     }
 
     func loadFromStorage() {
-        if let data = UserDefaults.standard.data(forKey: booksKey),
-           let books = try? JSONDecoder().decode([Audiobook].self, from: data) {
-            favoriteBooks = books
-        }
-        if let data = UserDefaults.standard.data(forKey: authorsKey),
-           let authors = try? JSONDecoder().decode([Author].self, from: data) {
-            favoriteAuthors = authors
-        }
+        if let d = UserDefaults.standard.data(forKey: booksKey),
+           let v = try? JSONDecoder().decode([Audiobook].self, from: d) { favoriteBooks = v }
+        if let d = UserDefaults.standard.data(forKey: ebooksKey),
+           let v = try? JSONDecoder().decode([Ebook].self, from: d) { favoriteEbooks = v }
+        if let d = UserDefaults.standard.data(forKey: authorsKey),
+           let v = try? JSONDecoder().decode([Author].self, from: d) { favoriteAuthors = v }
         favoriteGenres = UserDefaults.standard.stringArray(forKey: genresKey) ?? []
     }
 }

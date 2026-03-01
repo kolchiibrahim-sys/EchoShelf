@@ -1,13 +1,43 @@
 import UIKit
 import Kingfisher
 
+// MARK: - Book Type
+
+enum BookDetailType {
+    case audiobook(Audiobook)
+    case ebook(Ebook)
+}
+
 final class BookDetailViewController: UIViewController {
 
     private let viewModel: BookDetailViewModel
     private let favoritesViewModel: FavoritesViewModel
+    private let bookType: BookDetailType
+
+    // Ebook üçün read link
+    private var ebookReadURL: URL?
 
     init(book: Audiobook, favoritesViewModel: FavoritesViewModel) {
+        self.bookType = .audiobook(book)
         self.viewModel = BookDetailViewModel(book: book)
+        self.favoritesViewModel = favoritesViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    init(ebook: Ebook, favoritesViewModel: FavoritesViewModel) {
+        self.bookType = .ebook(ebook)
+        // Ebook üçün placeholder Audiobook yaradırıq
+        self.viewModel = BookDetailViewModel(book: Audiobook(
+            id: FlexibleInt(from: 0),
+            title: ebook.title,
+            description: nil,
+            urlLibrivox: nil,
+            urlRss: nil,
+            urlZipFile: nil,
+            numSections: nil,
+            authors: [Author(firstName: ebook.authorName, lastName: nil)],
+            coverURL: ebook.coverURL
+        ))
         self.favoritesViewModel = favoritesViewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -185,9 +215,9 @@ final class BookDetailViewController: UIViewController {
         view.backgroundColor = UIColor(named: "AppBackground")
         setupLayout()
         bindViewModel()
-        viewModel.fetchDetail()
         configureData()
         updateFavoriteButton()
+        configureByBookType()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -528,15 +558,80 @@ private extension BookDetailViewController {
     }
 }
 
+// MARK: - Book Type Configuration
+
+private extension BookDetailViewController {
+
+    func configureByBookType() {
+        switch bookType {
+        case .audiobook:
+            headerLabel.text = "NOW PLAYING"
+            var config = listenButton.configuration
+            config?.image = UIImage(systemName: "play.fill")
+            var title = AttributedString("Listen Now")
+            title.font = .systemFont(ofSize: 16, weight: .bold)
+            config?.attributedTitle = title
+            listenButton.configuration = config
+            viewModel.fetchDetail()
+
+        case .ebook(let ebook):
+            headerLabel.text = "EBOOK"
+            var config = listenButton.configuration
+            config?.image = UIImage(systemName: "book.fill")
+            var title = AttributedString("Read Now")
+            title.font = .systemFont(ofSize: 16, weight: .bold)
+            config?.attributedTitle = title
+            listenButton.configuration = config
+
+            titleLabel.text = ebook.title
+            authorLabel.text = ebook.authorName
+            if let url = ebook.coverURL {
+                coverImageView.kf.setImage(with: url)
+            }
+            if let year = ebook.publishYear {
+                durationValueLabel.text = "\(year)"
+            }
+
+            // Read link arxa planda yüklə
+            EbookService.shared.fetchReadLinks(workKey: ebook.id) { [weak self] url in
+                DispatchQueue.main.async {
+                    self?.ebookReadURL = url
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Actions
 
 private extension BookDetailViewController {
 
     @objc func listenTapped() {
-        PlayerManager.shared.play(book: viewModel.book)
-        let playerVC = PlayerViewController()
-        playerVC.modalPresentationStyle = .fullScreen
-        present(playerVC, animated: true)
+        switch bookType {
+        case .audiobook:
+            PlayerManager.shared.play(book: viewModel.book)
+            let playerVC = PlayerViewController()
+            playerVC.modalPresentationStyle = .fullScreen
+            present(playerVC, animated: true)
+
+        case .ebook(let ebook):
+            if let url = ebookReadURL {
+                let readerVC = EbookReaderViewController(ebook: ebook, readURL: url)
+                navigationController?.pushViewController(readerVC, animated: true)
+            } else {
+                // Hələ yüklənmir — gözlə
+                listenButton.isEnabled = false
+                EbookService.shared.fetchReadLinks(workKey: ebook.id) { [weak self] url in
+                    DispatchQueue.main.async {
+                        self?.listenButton.isEnabled = true
+                        guard let url else { return }
+                        self?.ebookReadURL = url
+                        let readerVC = EbookReaderViewController(ebook: ebook, readURL: url)
+                        self?.navigationController?.pushViewController(readerVC, animated: true)
+                    }
+                }
+            }
+        }
     }
 
     @objc func backTapped() {
@@ -544,12 +639,23 @@ private extension BookDetailViewController {
     }
 
     @objc func favTapped() {
-        favoritesViewModel.toggleBook(viewModel.book)
+        switch bookType {
+        case .audiobook:
+            favoritesViewModel.toggleBook(viewModel.book)
+        case .ebook(let ebook):
+            favoritesViewModel.toggleEbook(ebook)
+        }
         updateFavoriteButton()
     }
 
     func updateFavoriteButton() {
-        let isFav = favoritesViewModel.isBookFavorited(viewModel.book)
+        let isFav: Bool
+        switch bookType {
+        case .audiobook:
+            isFav = favoritesViewModel.isBookFavorited(viewModel.book)
+        case .ebook(let ebook):
+            isFav = favoritesViewModel.isEbookFavorited(ebook)
+        }
         favoriteButton.tintColor = isFav ? .systemPink : .white
         favoriteButton.setImage(
             UIImage(systemName: isFav ? "heart.fill" : "heart"), for: .normal

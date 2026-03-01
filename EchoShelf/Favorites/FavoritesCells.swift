@@ -40,17 +40,6 @@ final class FavoriteBookCell: UICollectionViewCell {
         return lbl
     }()
 
-    private let heartButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-        btn.tintColor = .systemPink
-        btn.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        btn.layer.cornerRadius = 14
-        btn.isUserInteractionEnabled = false  // tap didSelectItemAt-a düşsün
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        return btn
-    }()
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -67,18 +56,12 @@ final class FavoriteBookCell: UICollectionViewCell {
         contentView.addSubview(coverImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(authorLabel)
-        contentView.addSubview(heartButton)
 
         NSLayoutConstraint.activate([
             coverImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             coverImageView.heightAnchor.constraint(equalToConstant: 160),
-
-            heartButton.topAnchor.constraint(equalTo: coverImageView.topAnchor, constant: 8),
-            heartButton.trailingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: -8),
-            heartButton.widthAnchor.constraint(equalToConstant: 28),
-            heartButton.heightAnchor.constraint(equalToConstant: 28),
 
             titleLabel.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -94,6 +77,14 @@ final class FavoriteBookCell: UICollectionViewCell {
         titleLabel.text = book.title
         authorLabel.text = book.authorName
         if let url = book.coverURL {
+            coverImageView.kf.setImage(with: url)
+        }
+    }
+
+    func configureEbook(with ebook: Ebook) {
+        titleLabel.text = ebook.title
+        authorLabel.text = ebook.authorName
+        if let url = ebook.coverURL {
             coverImageView.kf.setImage(with: url)
         }
     }

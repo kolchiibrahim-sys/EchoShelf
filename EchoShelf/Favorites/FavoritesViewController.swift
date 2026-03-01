@@ -211,14 +211,15 @@ extension FavoritesViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: FavoriteBookCell.identifier, for: indexPath
             ) as! FavoriteBookCell
-            cell.configure(with: viewModel.favoriteBooks[indexPath.item])
+            let ebook = viewModel.favoriteEbooks[indexPath.item]
+            cell.configureEbook(with: ebook)
             return cell
 
         case .audiobooks:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: FavoriteBookCell.identifier, for: indexPath
             ) as! FavoriteBookCell
-            cell.configure(with: viewModel.favoriteAudiobooks[indexPath.item])
+            cell.configure(with: viewModel.favoriteBooks[indexPath.item])
             return cell
 
         case .authors:
@@ -246,12 +247,12 @@ extension FavoritesViewController: UICollectionViewDelegate {
                         didSelectItemAt indexPath: IndexPath) {
         switch selectedSection {
         case .books:
-            let book = viewModel.favoriteBooks[indexPath.item]
+            let ebook = viewModel.favoriteEbooks[indexPath.item]
             navigationController?.pushViewController(
-                BookDetailViewController(book: book, favoritesViewModel: viewModel), animated: true
+                BookDetailViewController(ebook: ebook, favoritesViewModel: viewModel), animated: true
             )
         case .audiobooks:
-            let book = viewModel.favoriteAudiobooks[indexPath.item]
+            let book = viewModel.favoriteBooks[indexPath.item]
             navigationController?.pushViewController(
                 BookDetailViewController(book: book, favoritesViewModel: viewModel), animated: true
             )

@@ -9,6 +9,10 @@ import Foundation
 struct FlexibleInt: Codable {
     let value: Int
 
+    init(from value: Int) {
+        self.value = value
+    }
+
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
 
