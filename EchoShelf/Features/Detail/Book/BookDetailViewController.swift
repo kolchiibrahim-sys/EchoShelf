@@ -69,7 +69,16 @@ final class BookDetailViewController: UIViewController {
         return lbl
     }()
 
-    // Stats
+    // Stats - duration label ayrıca saxlanır ki, update edə bilək
+    private let durationValueLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.text = "—"
+        lbl.font = .systemFont(ofSize: 17, weight: .bold)
+        lbl.textColor = .white
+        lbl.textAlignment = .center
+        return lbl
+    }()
+
     private let statsView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -293,9 +302,9 @@ private extension BookDetailViewController {
         let divider1 = makeDivider()
         let divider2 = makeDivider()
 
-        let ratingItem  = makeStatItem(value: "4.8", label: "RATING",   icon: "star.fill",   iconColor: .systemYellow)
-        let durationItem = makeStatItem(value: "—",  label: "DURATION", icon: "clock",        iconColor: .systemPurple)
-        let languageItem = makeStatItem(value: "EN", label: "LANGUAGE", icon: "globe",        iconColor: .systemBlue)
+        let ratingItem   = makeStatItem(value: "4.8",  label: "RATING",   icon: "star.fill", iconColor: .systemYellow)
+        let durationItem = makeDurationStatItem()
+        let languageItem = makeStatItem(value: "EN",   label: "LANGUAGE", icon: "globe",     iconColor: .systemBlue)
 
         [ratingItem, divider1, durationItem, divider2, languageItem].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -311,7 +320,7 @@ private extension BookDetailViewController {
             ratingItem.leadingAnchor.constraint(equalTo: statsView.leadingAnchor),
             ratingItem.centerYAnchor.constraint(equalTo: statsView.centerYAnchor),
 
-            divider1.centerXAnchor.constraint(equalTo: statsView.centerXAnchor, constant: -statsView.bounds.width / 3),
+            divider1.centerXAnchor.constraint(equalTo: statsView.centerXAnchor, constant: -60),
             divider1.centerYAnchor.constraint(equalTo: statsView.centerYAnchor),
             divider1.widthAnchor.constraint(equalToConstant: 1),
             divider1.heightAnchor.constraint(equalToConstant: 36),
@@ -319,7 +328,7 @@ private extension BookDetailViewController {
             durationItem.centerXAnchor.constraint(equalTo: statsView.centerXAnchor),
             durationItem.centerYAnchor.constraint(equalTo: statsView.centerYAnchor),
 
-            divider2.centerXAnchor.constraint(equalTo: statsView.centerXAnchor, constant: statsView.bounds.width / 3),
+            divider2.centerXAnchor.constraint(equalTo: statsView.centerXAnchor, constant: 60),
             divider2.centerYAnchor.constraint(equalTo: statsView.centerYAnchor),
             divider2.widthAnchor.constraint(equalToConstant: 1),
             divider2.heightAnchor.constraint(equalToConstant: 36),
@@ -410,9 +419,18 @@ private extension BookDetailViewController {
             coverImageView.kf.setImage(with: url)
         }
 
-        // Duration
-        if let sections = book.numSections?.value {
-            updateStatValue(in: statsView, label: "DURATION", value: "\(sections)h 30m")
+        // Duration - numSections ortalama 30 dəq hesabı ilə
+        if let sections = book.numSections?.value, sections > 0 {
+            let totalMinutes = sections * 30
+            let hours = totalMinutes / 60
+            let minutes = totalMinutes % 60
+            if hours > 0 {
+                durationValueLabel.text = minutes > 0 ? "\(hours)h \(minutes)m" : "\(hours)h"
+            } else {
+                durationValueLabel.text = "\(minutes)m"
+            }
+        } else {
+            durationValueLabel.text = "—"
         }
 
         // AI Summary
@@ -450,22 +468,28 @@ private extension BookDetailViewController {
         return stack
     }
 
-    func updateStatValue(in container: UIView, label: String, value: String) {
-        // stat item-ləri tap edib value-ni yenilə
-        for sub in container.subviews {
-            if let stack = sub as? UIStackView {
-                for arranged in stack.arrangedSubviews {
-                    if let lbl = arranged as? UILabel, lbl.text == label {
-                        if let valueLabel = stack.arrangedSubviews.first as? UILabel {
-                            valueLabel.text = value
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     // MARK: - Helpers
+
+    func makeDurationStatItem() -> UIStackView {
+        let iconImage = UIImageView(image: UIImage(systemName: "clock"))
+        iconImage.tintColor = .systemPurple
+        iconImage.contentMode = .scaleAspectFit
+        iconImage.translatesAutoresizingMaskIntoConstraints = false
+        iconImage.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        iconImage.heightAnchor.constraint(equalToConstant: 20).isActive = true
+
+        let titleLbl = UILabel()
+        titleLbl.text = "DURATION"
+        titleLbl.font = .systemFont(ofSize: 10, weight: .medium)
+        titleLbl.textColor = UIColor.white.withAlphaComponent(0.4)
+        titleLbl.textAlignment = .center
+
+        let stack = UIStackView(arrangedSubviews: [iconImage, durationValueLabel, titleLbl])
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.spacing = 4
+        return stack
+    }
 
     func makeStatItem(value: String, label: String, icon: String, iconColor: UIColor) -> UIStackView {
         let iconImage = UIImageView(image: UIImage(systemName: icon))

@@ -21,37 +21,84 @@ final class MainTabBarController: UITabBarController {
         v.isHidden = true
         return v
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupTabs()
+        setupTabBarAppearance()
         setupMiniPlayerContainer()
         observePlayerEvents()
     }
 
     private func setupTabs() {
+        // Home
         let homeNav = UINavigationController()
-        homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
+        homeNav.tabBarItem = UITabBarItem(
+            title: "Home",
+            image: UIImage(systemName: "house"),
+            selectedImage: UIImage(systemName: "house.fill")
+        )
         homeCoordinator = HomeCoordinator(navigationController: homeNav)
         homeCoordinator?.start()
 
+        // Search
         let search = UINavigationController(rootViewController: SearchViewController())
-        search.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        search.tabBarItem = UITabBarItem(
+            title: "Search",
+            image: UIImage(systemName: "magnifyingglass"),
+            selectedImage: UIImage(systemName: "magnifyingglass")
+        )
 
+        // Favorites
+        let favorites = UINavigationController(rootViewController: FavoritesViewController())
+        favorites.tabBarItem = UITabBarItem(
+            title: "Favorites",
+            image: UIImage(systemName: "heart"),
+            selectedImage: UIImage(systemName: "heart.fill")
+        )
+
+        // Library
         let library = UINavigationController(rootViewController: LibraryViewController())
-        library.tabBarItem = UITabBarItem(title: "Library", image: UIImage(systemName: "books.vertical.fill"), tag: 2)
+        library.tabBarItem = UITabBarItem(
+            title: "Library",
+            image: UIImage(systemName: "books.vertical"),
+            selectedImage: UIImage(systemName: "books.vertical.fill")
+        )
 
-        
+        // Profile
         let profile = UINavigationController(rootViewController: ProfileViewController())
-        profile.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 3)
+        profile.tabBarItem = UITabBarItem(
+            title: "Profile",
+            image: UIImage(systemName: "person"),
+            selectedImage: UIImage(systemName: "person.fill")
+        )
 
-        viewControllers = [homeNav, search, library, profile]
+        viewControllers = [homeNav, search, favorites, library, profile]
+    }
+
+    private func setupTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(named: "AppBackground") ?? UIColor(white: 0.05, alpha: 1)
+
+        let normal: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.white.withAlphaComponent(0.4)
+        ]
+        let selected: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.systemPurple
+        ]
+
+        appearance.stackedLayoutAppearance.normal.iconColor    = UIColor.white.withAlphaComponent(0.4)
+        appearance.stackedLayoutAppearance.selected.iconColor  = .systemPurple
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes   = normal
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = selected
+
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
     }
 
     private func setupMiniPlayerContainer() {
         view.addSubview(miniPlayerContainer)
-
         NSLayoutConstraint.activate([
             miniPlayerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             miniPlayerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -59,6 +106,7 @@ final class MainTabBarController: UITabBarController {
             miniPlayerContainer.heightAnchor.constraint(equalToConstant: 70)
         ])
     }
+
     private func observePlayerEvents() {
         NotificationCenter.default.addObserver(
             self, selector: #selector(showMiniPlayer),

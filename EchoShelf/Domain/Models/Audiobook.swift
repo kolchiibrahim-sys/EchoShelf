@@ -4,7 +4,7 @@ struct AudiobooksResponse: Decodable {
     let books: [Audiobook]
 }
 
-struct Audiobook: Decodable {
+struct Audiobook: Codable {
 
     let id: FlexibleInt
     let title: String
@@ -25,10 +25,11 @@ struct Audiobook: Decodable {
         case urlZipFile  = "url_zip_file"
         case numSections = "num_sections"
         case authors
+        case coverURL
     }
 }
 
-struct Author: Decodable {
+struct Author: Codable {
     let firstName: String?
     let lastName: String?
 
@@ -56,7 +57,6 @@ extension Audiobook {
         let candidate = components[2]
         let blacklist = ["compress", "download", "stream"]
         guard !blacklist.contains(candidate.lowercased()) else { return nil }
-
         return candidate
     }
 
@@ -65,4 +65,3 @@ extension Audiobook {
         return URL(string: "https://archive.org/services/img/\(id)")
     }
 }
-

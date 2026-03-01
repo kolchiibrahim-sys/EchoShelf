@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct FlexibleInt: Decodable {
+struct FlexibleInt: Codable {
     let value: Int
 
     init(from decoder: Decoder) throws {
@@ -24,5 +24,10 @@ struct FlexibleInt: Decodable {
         }
 
         value = 0
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(value)
     }
 }
