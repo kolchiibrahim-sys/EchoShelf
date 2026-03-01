@@ -2,16 +2,15 @@
 //  EbookReaderViewModel.swift
 //  EchoShelf
 //
-//  Created by Ibrahim Kolchi on 01.03.26.
+//  Created by Ibrahim Kolchi on 02.03.26.
 //
 import Foundation
 import PDFKit
 
 enum EbookReaderState {
     case idle
-    case loading
-    case loadedPDF(PDFDocument)
-    case loadedWeb(URL)     // WKWebView ilə app içində aç
+    case downloading(Float)   // 0.0 - 1.0 progress
+    case loaded(PDFDocument)
     case error(String)
 }
 
@@ -20,64 +19,52 @@ final class EbookReaderViewModel {
     // MARK: - Properties
 
     let ebook: Ebook
-    private(set) var readURL: URL
-    private(set) var state: EbookReaderState = .idle
 
+    private(set) var state: EbookReaderState = .idle
     private(set) var currentPage: Int = 0
     private(set) var totalPages: Int = 0
     private(set) var scaleFactor: CGFloat = 1.0
 
+    private var downloadTask: URLSessionDataTask?
+
     // MARK: - Callbacks
 
     var onStateChanged: ((EbookReaderState) -> Void)?
-    var onProgressChanged: ((Int, Int) -> Void)?  // current, total
+    var onProgressChanged: ((Int, Int) -> Void)?
 
     // MARK: - Init
 
-    init(ebook: Ebook, readURL: URL) {
+    init(ebook: Ebook) {
         self.ebook = ebook
-        self.readURL = readURL
     }
 
     // MARK: - Load
 
     func loadDocument() {
-        guard state.isIdle else { return }
-        setState(.loading)
+        guard case .idle = state else { return }
 
-        let isPDF = readURL.pathExtension.lowercased() == "pdf"
-        if isPDF {
-            loadPDF(from: readURL)
-        } else {
-            setState(.loadedWeb(readURL))
+        guard let rawURL = ebook.pdfURL else {
+            setState(.error("No PDF available for this book."))
+            return
         }
+
+        // http → https (ATS policy)
+        let urlStr = rawURL.absoluteString.replacingOccurrences(of: "http://", with: "https://")
+        guard let pdfURL = URL(string: urlStr) else {
+            setState(.error("Invalid PDF URL."))
+            return
+        }
+
+        setState(.downloading(0))
+        downloadPDF(from: pdfURL)
     }
 
-    func fetchAndLoad(workKey: String) {
-        guard state.isIdle else { return }
-        setState(.loading)
-
-        EbookService.shared.fetchReadLinks(workKey: workKey) { [weak self] url in
-            guard let self else { return }
-            DispatchQueue.main.async {
-                if let url {
-                    self.readURL = url
-                    let isPDF = url.pathExtension.lowercased() == "pdf"
-                    if isPDF {
-                        self.loadPDF(from: url)
-                    } else {
-                        self.setState(.loadedWeb(url))
-                    }
-                } else {
-                    // Fallback — Open Library web reader
-                    let fallback = URL(string: "https://openlibrary.org\(workKey)")!
-                    self.setState(.loadedWeb(fallback))
-                }
-            }
-        }
+    func cancelDownload() {
+        downloadTask?.cancel()
+        setState(.idle)
     }
 
-    // MARK: - Page Navigation
+    // MARK: - Page
 
     func updateCurrentPage(_ page: Int) {
         currentPage = page
@@ -86,46 +73,51 @@ final class EbookReaderViewModel {
 
     // MARK: - Scale
 
-    func increaseScale() {
-        scaleFactor = min(scaleFactor + 0.25, 3.0)
-    }
-
-    func decreaseScale() {
-        scaleFactor = max(scaleFactor - 0.25, 0.5)
-    }
-
-    func resetScale() {
-        scaleFactor = 1.0
-    }
+    func increaseScale() { scaleFactor = min(scaleFactor + 0.25, 3.0) }
+    func decreaseScale() { scaleFactor = max(scaleFactor - 0.25, 0.5) }
+    func resetScale()    { scaleFactor = 1.0 }
 
     // MARK: - Private
 
-    private func loadPDF(from url: URL) {
-        // PDFDocument(url:) yalnız local fayllar üçün işləyir
-        // Remote URL-lər üçün əvvəlcə data yükləmək lazımdır
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+    private func downloadPDF(from url: URL) {
+        var request = URLRequest(url: url)
+        request.timeoutInterval = 60
+
+        // Progress tracking üçün delegate-li session
+        let session = URLSession(
+            configuration: .default,
+            delegate: DownloadDelegate { [weak self] progress in
+                DispatchQueue.main.async {
+                    self?.setState(.downloading(progress))
+                }
+            },
+            delegateQueue: nil
+        )
+
+        downloadTask = session.dataTask(with: request) { [weak self] data, _, error in
             guard let self else { return }
 
-            if let error {
-                DispatchQueue.main.async {
-                    self.setState(.error("Download failed: \(error.localizedDescription)"))
-                }
-                return
-            }
-
-            guard let data, let document = PDFDocument(data: data) else {
-                DispatchQueue.main.async {
-                    self.setState(.error("Could not open this document."))
-                }
-                return
-            }
-
-            self.totalPages = document.pageCount
             DispatchQueue.main.async {
-                self.setState(.loadedPDF(document))
+                if let error = error as NSError?, error.code == NSURLErrorCancelled {
+                    return
+                }
+
+                guard let data, error == nil else {
+                    self.setState(.error("Download failed. Please check your connection."))
+                    return
+                }
+
+                guard let document = PDFDocument(data: data) else {
+                    self.setState(.error("Could not open this PDF."))
+                    return
+                }
+
+                self.totalPages = document.pageCount
+                self.setState(.loaded(document))
                 self.onProgressChanged?(0, document.pageCount)
             }
-        }.resume()
+        }
+        downloadTask?.resume()
     }
 
     private func setState(_ newState: EbookReaderState) {
@@ -134,11 +126,32 @@ final class EbookReaderViewModel {
     }
 }
 
-// MARK: - State Helpers
+// MARK: - Download Progress Delegate
 
-private extension EbookReaderState {
-    var isIdle: Bool {
-        if case .idle = self { return true }
-        return false
+private final class DownloadDelegate: NSObject, URLSessionDataDelegate {
+
+    private var expectedBytes: Int64 = 0
+    private var receivedBytes: Int64 = 0
+    private let onProgress: (Float) -> Void
+
+    init(onProgress: @escaping (Float) -> Void) {
+        self.onProgress = onProgress
+    }
+
+    func urlSession(_ session: URLSession,
+                    dataTask: URLSessionDataTask,
+                    didReceive response: URLResponse,
+                    completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        expectedBytes = response.expectedContentLength
+        completionHandler(.allow)
+    }
+
+    func urlSession(_ session: URLSession,
+                    dataTask: URLSessionDataTask,
+                    didReceive data: Data) {
+        receivedBytes += Int64(data.count)
+        guard expectedBytes > 0 else { return }
+        let progress = Float(receivedBytes) / Float(expectedBytes)
+        onProgress(min(progress, 1.0))
     }
 }

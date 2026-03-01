@@ -18,15 +18,21 @@ final class SearchViewController: UIViewController {
         }
     }
 
-    // MARK: - UI
+    // MARK: - State
 
-    private var collectionView: UICollectionView!
-    private let searchBarView = SearchBarView()
-    private let viewModel = SearchViewModel()
-
+    private var selectedTab: SearchTab = .audiobooks {
+        didSet {
+            guard selectedTab != oldValue else { return }
+            updateTabIndicator()
+            resetToHomeState()
+        }
+    }
     private var isSearching = false
 
-    // Trending Categories data
+    // MARK: - Data
+
+    private let viewModel = SearchViewModel()
+
     private let trendingCategories: [TrendingCategory] = [
         TrendingCategory(title: "AI Picks",    icon: "🤖", colors: [UIColor(hex: "#6C5CE7"), UIColor(hex: "#4834D4")], query: "science",         subject: "Science Fiction"),
         TrendingCategory(title: "Bestsellers", icon: "🔥", colors: [UIColor(hex: "#E55039"), UIColor(hex: "#E74C3C")], query: "adventure",       subject: "Adventure"),
@@ -35,6 +41,52 @@ final class SearchViewController: UIViewController {
         TrendingCategory(title: "Classics",    icon: "📖", colors: [UIColor(hex: "#A855F7"), UIColor(hex: "#7C3AED")], query: "classic",         subject: "General Fiction"),
         TrendingCategory(title: "Narrators",   icon: "🎙", colors: [UIColor(hex: "#3B82F6"), UIColor(hex: "#2563EB")], query: "drama",           subject: "Plays")
     ]
+
+    private var recentSearches: [String] { viewModel.recentSearches }
+
+    // MARK: - UI
+
+    private var collectionView: UICollectionView!
+    private let searchBarView = SearchBarView()
+
+    // Tab bar (Home ekranındakı ilə eyni dizayn)
+    private let tabContainer: UIView = {
+        let v = UIView()
+        v.backgroundColor = UIColor.white.withAlphaComponent(0.06)
+        v.layer.cornerRadius = 14
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+
+    private let tabIndicator: UIView = {
+        let v = UIView()
+        v.backgroundColor = .systemPurple
+        v.layer.cornerRadius = 11
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+
+    private let audiobooksTabBtn: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Audiobooks", for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        btn.tintColor = .white
+        btn.tag = 0
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+
+    private let booksTabBtn: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Books", for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        btn.tintColor = UIColor.white.withAlphaComponent(0.5)
+        btn.tag = 1
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+
+    private var indicatorLeading: NSLayoutConstraint!
 
     private let emptyLabel: UILabel = {
         let label = UILabel()
@@ -47,12 +99,11 @@ final class SearchViewController: UIViewController {
         return label
     }()
 
-    private var recentSearches: [String] { viewModel.recentSearches }
+    // MARK: - Sections
 
-    // MARK: - Sections (non-searching state)
     private enum HomeSection: Int, CaseIterable {
-        case recents    = 0
-        case trending   = 1
+        case recents      = 0
+        case trending     = 1
         case youMightLike = 2
     }
 
@@ -62,6 +113,7 @@ final class SearchViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
         setupSearchBar()
+        setupTabBar()
         setupCollectionView()
         setupBindings()
         setupSearchActions()
@@ -72,39 +124,15 @@ final class SearchViewController: UIViewController {
         }
     }
 
-    private func triggerGenreSearch(_ genre: String) {
-        isSearching = true
-        searchBarView.setText(genre)
-        collectionView?.setCollectionViewLayout(createLayout(), animated: false)
-        viewModel.search(query: genre)
-        updateEmptyState()
-        collectionView?.reloadData()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
 }
 
 // MARK: - Setup
 
 private extension SearchViewController {
-
-    func setupBindings() {
-        viewModel.onDataUpdated = { [weak self] in
-            guard let self else { return }
-            self.updateEmptyState()
-            self.collectionView.reloadData()
-        }
-    }
-
-    func setupEmptyState() {
-        view.addSubview(emptyLabel)
-        NSLayoutConstraint.activate([
-            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
-    }
-
-    func updateEmptyState() {
-        emptyLabel.isHidden = !(isSearching && viewModel.books.isEmpty && !viewModel.isLoading)
-    }
 
     func setupSearchBar() {
         view.addSubview(searchBarView)
@@ -117,6 +145,40 @@ private extension SearchViewController {
         ])
     }
 
+    func setupTabBar() {
+        view.addSubview(tabContainer)
+        tabContainer.addSubview(tabIndicator)
+        tabContainer.addSubview(audiobooksTabBtn)
+        tabContainer.addSubview(booksTabBtn)
+
+        NSLayoutConstraint.activate([
+            tabContainer.topAnchor.constraint(equalTo: searchBarView.bottomAnchor, constant: 4),
+            tabContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tabContainer.widthAnchor.constraint(equalToConstant: 240),
+            tabContainer.heightAnchor.constraint(equalToConstant: 36),
+
+            audiobooksTabBtn.leadingAnchor.constraint(equalTo: tabContainer.leadingAnchor),
+            audiobooksTabBtn.topAnchor.constraint(equalTo: tabContainer.topAnchor),
+            audiobooksTabBtn.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
+            audiobooksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5),
+
+            booksTabBtn.trailingAnchor.constraint(equalTo: tabContainer.trailingAnchor),
+            booksTabBtn.topAnchor.constraint(equalTo: tabContainer.topAnchor),
+            booksTabBtn.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
+            booksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5),
+
+            tabIndicator.topAnchor.constraint(equalTo: tabContainer.topAnchor, constant: 3),
+            tabIndicator.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor, constant: -3),
+            tabIndicator.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5, constant: -3)
+        ])
+
+        indicatorLeading = tabIndicator.leadingAnchor.constraint(equalTo: tabContainer.leadingAnchor, constant: 3)
+        indicatorLeading.isActive = true
+
+        audiobooksTabBtn.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
+        booksTabBtn.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
+    }
+
     func setupCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
@@ -124,18 +186,21 @@ private extension SearchViewController {
         collectionView.delegate = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.keyboardDismissMode = .onDrag
+        collectionView.showsVerticalScrollIndicator = false
 
-        // Home state cells
-        collectionView.register(RecentSearchCell.self,     forCellWithReuseIdentifier: RecentSearchCell.identifier)
-        collectionView.register(TrendingCategoryCell.self, forCellWithReuseIdentifier: TrendingCategoryCell.identifier)
-        collectionView.register(TrendingBookCell.self,     forCellWithReuseIdentifier: TrendingBookCell.identifier)
+        // Audiobook cells
+        collectionView.register(RecentSearchCell.self,      forCellWithReuseIdentifier: RecentSearchCell.identifier)
+        collectionView.register(TrendingCategoryCell.self,  forCellWithReuseIdentifier: TrendingCategoryCell.identifier)
+        collectionView.register(TrendingBookCell.self,      forCellWithReuseIdentifier: TrendingBookCell.identifier)
+        collectionView.register(TopResultCell.self,         forCellWithReuseIdentifier: TopResultCell.identifier)
+        collectionView.register(OtherVersionCell.self,      forCellWithReuseIdentifier: OtherVersionCell.identifier)
+        collectionView.register(RelatedAuthorCell.self,     forCellWithReuseIdentifier: RelatedAuthorCell.identifier)
 
-        // Search result cells
-        collectionView.register(TopResultCell.self,        forCellWithReuseIdentifier: TopResultCell.identifier)
-        collectionView.register(OtherVersionCell.self,     forCellWithReuseIdentifier: OtherVersionCell.identifier)
-        collectionView.register(RelatedAuthorCell.self,    forCellWithReuseIdentifier: RelatedAuthorCell.identifier)
+        // Ebook cells
+        collectionView.register(EbookTopResultCell.self,    forCellWithReuseIdentifier: EbookTopResultCell.identifier)
+        collectionView.register(EbookOtherResultCell.self,  forCellWithReuseIdentifier: EbookOtherResultCell.identifier)
+        collectionView.register(EbookYouMightLikeCell.self, forCellWithReuseIdentifier: EbookYouMightLikeCell.identifier)
 
-        // Header
         collectionView.register(
             SearchSectionHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -144,37 +209,77 @@ private extension SearchViewController {
 
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: searchBarView.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: tabContainer.bottomAnchor, constant: 8),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
+    func setupBindings() {
+        viewModel.onDataUpdated = { [weak self] in
+            guard let self else { return }
+            self.updateEmptyState()
+            self.collectionView.reloadData()
+        }
+    }
+
     func setupSearchActions() {
         searchBarView.onSearch = { [weak self] query in
-            guard let self else { return }
-            self.performSearch(query)
+            self?.performSearch(query)
         }
-
         searchBarView.onTextChange = { [weak self] text in
-            guard let self else { return }
-            if text.isEmpty {
-                self.resetToHomeState()
-            }
+            if text.isEmpty { self?.resetToHomeState() }
         }
-
         searchBarView.onCancel = { [weak self] in
             self?.resetToHomeState()
         }
     }
 
-    func makeBookDetail(book: Audiobook) -> BookDetailViewController {
-        guard let fvm = favoritesViewModel else {
-            // Fallback — coordinator olmadan açılırsa
-            fatalError("favoritesViewModel inject edilməyib")
+    func setupEmptyState() {
+        view.addSubview(emptyLabel)
+        NSLayoutConstraint.activate([
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+
+    // MARK: - Helpers
+
+    func updateTabIndicator() {
+        let isAudio = selectedTab == .audiobooks
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
+            self.indicatorLeading.constant = isAudio ? 3 : 120
+            self.tabContainer.layoutIfNeeded()
         }
-        return BookDetailViewController(book: book, favoritesViewModel: fvm)
+        audiobooksTabBtn.tintColor = isAudio ? .white : UIColor.white.withAlphaComponent(0.5)
+        booksTabBtn.tintColor      = isAudio ? UIColor.white.withAlphaComponent(0.5) : .white
+    }
+
+    func updateEmptyState() {
+        let isEmpty = selectedTab == .audiobooks
+            ? viewModel.books.isEmpty
+            : viewModel.ebooks.isEmpty
+        emptyLabel.isHidden = !(isSearching && isEmpty && !viewModel.isLoading)
+    }
+
+    func triggerGenreSearch(_ genre: String) {
+        isSearching = true
+        searchBarView.setText(genre)
+        collectionView.setCollectionViewLayout(createLayout(), animated: false)
+        viewModel.searchByGenre(subject: genre, displayTitle: genre, tab: selectedTab)
+        updateEmptyState()
+        collectionView.reloadData()
+    }
+
+    func performSearch(_ query: String) {
+        guard !query.isEmpty else { return }
+        isSearching = true
+        searchBarView.setText(query)
+        viewModel.search(query: query, tab: selectedTab)
+        collectionView.setCollectionViewLayout(createLayout(), animated: false)
+        updateEmptyState()
+        collectionView.reloadData()
     }
 
     func resetToHomeState() {
@@ -186,14 +291,22 @@ private extension SearchViewController {
         updateEmptyState()
     }
 
-    func performSearch(_ query: String) {
-        guard !query.isEmpty else { return }
-        isSearching = true
-        searchBarView.setText(query)
-        viewModel.search(query: query)
-        collectionView.setCollectionViewLayout(createLayout(), animated: false)
-        updateEmptyState()
-        collectionView.reloadData()
+    func openAudiobookDetail(_ book: Audiobook) {
+        guard let fvm = favoritesViewModel else { return }
+        let vc = BookDetailViewController(book: book, favoritesViewModel: fvm)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    func openEbookDetail(_ ebook: Ebook) {
+        guard let fvm = favoritesViewModel else { return }
+        let vc = BookDetailViewController(ebook: ebook, favoritesViewModel: fvm)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    @objc func tabTapped(_ sender: UIButton) {
+        let newTab: SearchTab = sender.tag == 0 ? .audiobooks : .books
+        guard newTab != selectedTab else { return }
+        selectedTab = newTab
     }
 }
 
@@ -201,9 +314,7 @@ private extension SearchViewController {
 
 extension SearchViewController: UICollectionViewDataSource {
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        isSearching ? 3 : 3
-    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int { 3 }
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -211,92 +322,106 @@ extension SearchViewController: UICollectionViewDataSource {
             switch HomeSection(rawValue: section) {
             case .recents:      return recentSearches.count
             case .trending:     return trendingCategories.count
-            case .youMightLike: return viewModel.youMightLike.count
-            case .none:         return 0
+            case .youMightLike:
+                return selectedTab == .audiobooks
+                    ? viewModel.youMightLike.count
+                    : viewModel.youMightLikeEbooks.count
+            case .none: return 0
             }
-        }
-        // Searching state
-        switch section {
-        case 0: return viewModel.topResult == nil ? 0 : 1
-        case 1: return viewModel.otherVersions.count
-        default: return viewModel.relatedAuthors.count
+        } else {
+            switch section {
+            case 0:
+                return selectedTab == .audiobooks
+                    ? (viewModel.topResult != nil ? 1 : 0)
+                    : (viewModel.topEbookResult != nil ? 1 : 0)
+            case 1:
+                return selectedTab == .audiobooks
+                    ? viewModel.otherVersions.count
+                    : viewModel.otherEbooks.count
+            case 2:
+                return selectedTab == .audiobooks ? viewModel.relatedAuthors.count : 0
+            default: return 0
+            }
         }
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if !isSearching {
-            switch HomeSection(rawValue: indexPath.section) {
-            case .recents:
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: RecentSearchCell.identifier, for: indexPath
-                ) as! RecentSearchCell
-                cell.configure(with: recentSearches[indexPath.item])
-                cell.onDelete = { [weak self] in
-                    guard let self else { return }
-                    self.viewModel.deleteRecent(at: indexPath.item)
-                }
-                return cell
+            return homeCellForItem(at: indexPath)
+        } else {
+            return searchCellForItem(at: indexPath)
+        }
+    }
 
-            case .trending:
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: TrendingCategoryCell.identifier, for: indexPath
-                ) as! TrendingCategoryCell
-                cell.configure(with: trendingCategories[indexPath.item])
-                return cell
+    private func homeCellForItem(at indexPath: IndexPath) -> UICollectionViewCell {
+        switch HomeSection(rawValue: indexPath.section) {
+        case .recents:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentSearchCell.identifier, for: indexPath) as! RecentSearchCell
+            cell.configure(with: recentSearches[indexPath.item])
+            cell.onDelete = { [weak self] in self?.viewModel.deleteRecent(at: indexPath.item) }
+            return cell
 
-            case .youMightLike:
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: TrendingBookCell.identifier, for: indexPath
-                ) as! TrendingBookCell
+        case .trending:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrendingCategoryCell.identifier, for: indexPath) as! TrendingCategoryCell
+            cell.configure(with: trendingCategories[indexPath.item])
+            return cell
+
+        case .youMightLike:
+            if selectedTab == .audiobooks {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrendingBookCell.identifier, for: indexPath) as! TrendingBookCell
                 cell.configure(with: viewModel.youMightLike[indexPath.item])
                 return cell
-
-            case .none:
-                return UICollectionViewCell()
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EbookYouMightLikeCell.identifier, for: indexPath) as! EbookYouMightLikeCell
+                cell.configure(with: viewModel.youMightLikeEbooks[indexPath.item])
+                return cell
             }
+
+        case .none:
+            return UICollectionViewCell()
         }
+    }
 
-        // Searching state
-        switch indexPath.section {
-        case 0:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: TopResultCell.identifier, for: indexPath
-            ) as! TopResultCell
-            if let book = viewModel.topResult {
-                cell.configure(with: book)
-                cell.onListen = { [weak self] in
-                    guard let self else { return }
-                    self.navigationController?.pushViewController(
-                        self.makeBookDetail(book: book), animated: true
-                    )
+    private func searchCellForItem(at indexPath: IndexPath) -> UICollectionViewCell {
+        if selectedTab == .audiobooks {
+            switch indexPath.section {
+            case 0:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopResultCell.identifier, for: indexPath) as! TopResultCell
+                if let book = viewModel.topResult {
+                    cell.configure(with: book)
+                    cell.onListen = { [weak self] in self?.openAudiobookDetail(book) }
                 }
+                return cell
+            case 1:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OtherVersionCell.identifier, for: indexPath) as! OtherVersionCell
+                cell.configure(with: viewModel.otherVersions[indexPath.item])
+                return cell
+            default:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RelatedAuthorCell.identifier, for: indexPath) as! RelatedAuthorCell
+                cell.configure(with: viewModel.relatedAuthors[indexPath.item])
+                return cell
             }
-            return cell
-
-        case 1:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: OtherVersionCell.identifier, for: indexPath
-            ) as! OtherVersionCell
-            cell.configure(with: viewModel.otherVersions[indexPath.item])
-            return cell
-
-        default:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: RelatedAuthorCell.identifier, for: indexPath
-            ) as! RelatedAuthorCell
-            cell.configure(with: viewModel.relatedAuthors[indexPath.item])
-            return cell
+        } else {
+            switch indexPath.section {
+            case 0:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EbookTopResultCell.identifier, for: indexPath) as! EbookTopResultCell
+                if let ebook = viewModel.topEbookResult {
+                    cell.configure(with: ebook)
+                    cell.onRead = { [weak self] in self?.openEbookDetail(ebook) }
+                }
+                return cell
+            default:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EbookOtherResultCell.identifier, for: indexPath) as! EbookOtherResultCell
+                cell.configure(with: viewModel.otherEbooks[indexPath.item])
+                return cell
+            }
         }
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader else {
-            return UICollectionReusableView()
-        }
-
         let header = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: SearchSectionHeaderView.identifier,
@@ -307,24 +432,21 @@ extension SearchViewController: UICollectionViewDataSource {
             switch HomeSection(rawValue: indexPath.section) {
             case .recents:
                 header.configure("Recent Searches", showClearAll: !recentSearches.isEmpty)
-                header.onClearAll = { [weak self] in
-                    self?.viewModel.clearRecents()
-                }
+                header.onClearAll = { [weak self] in self?.viewModel.clearRecents() }
             case .trending:
                 header.configure("Trending Categories")
             case .youMightLike:
-                header.configure("You Might Like")
-            case .none:
-                break
+                let title = selectedTab == .audiobooks ? "You Might Like" : "Popular Books"
+                header.configure(title)
+            case .none: break
             }
         } else {
             switch indexPath.section {
-            case 0:  header.configure("Top Result")
-            case 1:  header.configure("Other Results")
+            case 0: header.configure("Top Result")
+            case 1: header.configure(selectedTab == .audiobooks ? "Other Versions" : "More Books")
             default: header.configure("Authors")
             }
         }
-
         return header
     }
 }
@@ -345,38 +467,36 @@ extension SearchViewController: UICollectionViewDelegate {
                 let category = trendingCategories[indexPath.item]
                 isSearching = true
                 searchBarView.setText(category.title)
-                viewModel.searchByGenre(subject: category.subject, displayTitle: category.title)
+                viewModel.searchByGenre(subject: category.subject, displayTitle: category.title, tab: selectedTab)
                 collectionView.setCollectionViewLayout(createLayout(), animated: false)
                 updateEmptyState()
                 collectionView.reloadData()
 
             case .youMightLike:
-                let book = viewModel.youMightLike[indexPath.item]
-                navigationController?.pushViewController(
-                    makeBookDetail(book: book), animated: true
-                )
+                if selectedTab == .audiobooks {
+                    openAudiobookDetail(viewModel.youMightLike[indexPath.item])
+                } else {
+                    openEbookDetail(viewModel.youMightLikeEbooks[indexPath.item])
+                }
 
-            case .none:
-                break
+            case .none: break
             }
-            return
-        }
-
-        // Searching state
-        switch indexPath.section {
-        case 0:
-            if let book = viewModel.topResult {
-                navigationController?.pushViewController(
-                    makeBookDetail(book: book), animated: true
-                )
+        } else {
+            switch indexPath.section {
+            case 0:
+                if selectedTab == .audiobooks, let book = viewModel.topResult {
+                    openAudiobookDetail(book)
+                } else if let ebook = viewModel.topEbookResult {
+                    openEbookDetail(ebook)
+                }
+            case 1:
+                if selectedTab == .audiobooks {
+                    openAudiobookDetail(viewModel.otherVersions[indexPath.item])
+                } else {
+                    openEbookDetail(viewModel.otherEbooks[indexPath.item])
+                }
+            default: break
             }
-        case 1:
-            let book = viewModel.otherVersions[indexPath.item]
-            navigationController?.pushViewController(
-                makeBookDetail(book: book), animated: true
-            )
-        default:
-            break
         }
     }
 }
@@ -426,19 +546,14 @@ private extension SearchViewController {
                     let s = self.youMightLikeSection()
                     s.boundarySupplementaryItems = [self.makeHeader()]
                     return s
-                case .none:
-                    return nil
+                case .none: return nil
                 }
             }
         }
     }
 
-    // MARK: Home Sections
-
     func recentSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(
-            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
-        )
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 10
@@ -447,16 +562,12 @@ private extension SearchViewController {
     }
 
     func trendingSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(
-            layoutSize: .init(widthDimension: .fractionalWidth(0.5), heightDimension: .absolute(110))
-        )
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(0.5), heightDimension: .absolute(110)))
         item.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 8)
-
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(110)),
             subitems: [item, item]
         )
-
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 12
         section.contentInsets = .init(top: 10, leading: 20, bottom: 28, trailing: 12)
@@ -464,9 +575,7 @@ private extension SearchViewController {
     }
 
     func youMightLikeSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(
-            layoutSize: .init(widthDimension: .absolute(140), heightDimension: .absolute(230))
-        )
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(140), heightDimension: .absolute(230)))
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: .init(widthDimension: .absolute(140), heightDimension: .absolute(230)),
             subitems: [item]
@@ -478,12 +587,8 @@ private extension SearchViewController {
         return section
     }
 
-    // MARK: Search Sections
-
     func topResultSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(
-            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(170))
-        )
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(170)))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = .init(top: 10, leading: 20, bottom: 20, trailing: 20)
@@ -491,20 +596,16 @@ private extension SearchViewController {
     }
 
     func otherVersionsSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(
-            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(80))
-        )
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(90)))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 14
+        section.interGroupSpacing = 12
         section.contentInsets = .init(top: 10, leading: 20, bottom: 20, trailing: 20)
         return section
     }
 
     func relatedAuthorsSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(
-            layoutSize: .init(widthDimension: .absolute(90), heightDimension: .absolute(120))
-        )
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(90), heightDimension: .absolute(120)))
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: .init(widthDimension: .absolute(90), heightDimension: .absolute(120)),
             subitems: [item]

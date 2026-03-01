@@ -13,9 +13,7 @@ final class BookDetailViewController: UIViewController {
     private let viewModel: BookDetailViewModel
     private let favoritesViewModel: FavoritesViewModel
     private let bookType: BookDetailType
-
-    // Ebook üçün read link
-    private var ebookReadURL: URL?
+    private var ebookDetailVM: EbookDetailViewModel?
 
     init(book: Audiobook, favoritesViewModel: FavoritesViewModel) {
         self.bookType = .audiobook(book)
@@ -588,16 +586,15 @@ private extension BookDetailViewController {
             if let url = ebook.coverURL {
                 coverImageView.kf.setImage(with: url)
             }
-            if let year = ebook.publishYear {
-                durationValueLabel.text = "\(year)"
+            if ebook.downloadCount > 0 {
+                durationValueLabel.text = "\(ebook.downloadCount)↓"
             }
 
-            // Read link arxa planda yüklə
-            EbookService.shared.fetchReadLinks(workKey: ebook.id) { [weak self] url in
-                DispatchQueue.main.async {
-                    self?.ebookReadURL = url
-                }
-            }
+            // EbookDetailViewModel ilə description + AI summary
+            let vm = EbookDetailViewModel(ebook: ebook)
+            ebookDetailVM = vm
+            descriptionLabel.text = vm.description
+            buildAISummary(vm.aiSummary)
         }
     }
 }
@@ -615,22 +612,8 @@ private extension BookDetailViewController {
             present(playerVC, animated: true)
 
         case .ebook(let ebook):
-            if let url = ebookReadURL {
-                let readerVC = EbookReaderViewController(ebook: ebook, readURL: url)
-                navigationController?.pushViewController(readerVC, animated: true)
-            } else {
-                // Hələ yüklənmir — gözlə
-                listenButton.isEnabled = false
-                EbookService.shared.fetchReadLinks(workKey: ebook.id) { [weak self] url in
-                    DispatchQueue.main.async {
-                        self?.listenButton.isEnabled = true
-                        guard let url else { return }
-                        self?.ebookReadURL = url
-                        let readerVC = EbookReaderViewController(ebook: ebook, readURL: url)
-                        self?.navigationController?.pushViewController(readerVC, animated: true)
-                    }
-                }
-            }
+            let readerVC = EbookReaderViewController(ebook: ebook)
+            navigationController?.pushViewController(readerVC, animated: true)
         }
     }
 
