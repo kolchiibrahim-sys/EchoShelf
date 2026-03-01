@@ -25,9 +25,9 @@ final class HomeCoordinator: Coordinator {
     }
 
     func showGenreSearch(genre: String) {
-        let vc = SearchViewController()
-        vc.preselectedGenre = genre
-        vc.favoritesViewModel = favoritesViewModel
+        let viewModel = GenreViewModel(genre: genre)
+        let vc = GenreViewController(viewModel: viewModel)
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
 

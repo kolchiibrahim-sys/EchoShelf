@@ -61,7 +61,7 @@ final class HomeViewModel {
     }
 
     func fetchEbooks() {
-        ebookService.fetchEbooksBySubject(subject: "fiction") { [weak self] result in
+        ebookService.fetchEbooksBySubject(subject: "fiction", page: 0) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let books):

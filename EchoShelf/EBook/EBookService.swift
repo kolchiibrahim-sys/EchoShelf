@@ -9,7 +9,7 @@ import Alamofire
 
 protocol EbookServiceProtocol {
     func searchEbooks(query: String, completion: @escaping (Result<[Ebook], APIError>) -> Void)
-    func fetchEbooksBySubject(subject: String, completion: @escaping (Result<[Ebook], APIError>) -> Void)
+    func fetchEbooksBySubject(subject: String, page: Int, completion: @escaping (Result<[Ebook], APIError>) -> Void)
     func fetchReadLinks(workKey: String, completion: @escaping (URL?) -> Void)
 }
 
@@ -53,10 +53,15 @@ final class EbookService: EbookServiceProtocol {
 
     // MARK: - Fetch by Subject
 
-    func fetchEbooksBySubject(subject: String, completion: @escaping (Result<[Ebook], APIError>) -> Void) {
+    func fetchEbooksBySubject(subject: String, page: Int = 0, completion: @escaping (Result<[Ebook], APIError>) -> Void) {
         let slug = subject.lowercased().replacingOccurrences(of: " ", with: "_")
         let url = "\(baseURL)/subjects/\(slug).json"
-        let params: [String: Any] = ["limit": 20, "ebooks": true]
+        let limit = 20
+        let params: [String: Any] = [
+            "limit": limit,
+            "offset": page * limit,
+            "ebooks": true
+        ]
 
         AF.request(url, parameters: params)
             .validate()
