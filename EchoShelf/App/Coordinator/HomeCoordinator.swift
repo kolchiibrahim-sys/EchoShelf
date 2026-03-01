@@ -35,4 +35,9 @@ final class HomeCoordinator: Coordinator {
         let vc = BookDetailViewController(book: book, favoritesViewModel: favoritesViewModel)
         navigationController.pushViewController(vc, animated: true)
     }
+
+    func showEbookDetail(ebook: Ebook) {
+        let vc = BookDetailViewController(ebook: ebook, favoritesViewModel: favoritesViewModel)
+        navigationController.pushViewController(vc, animated: true)
+    }
 }
