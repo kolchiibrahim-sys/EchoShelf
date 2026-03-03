@@ -86,6 +86,16 @@ final class SearchViewController: UIViewController {
         return btn
     }()
 
+    private let kidsTabBtn: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Kids", for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        btn.tintColor = UIColor.white.withAlphaComponent(0.5)
+        btn.tag = 2
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+
     private var indicatorLeading: NSLayoutConstraint!
 
     private let emptyLabel: UILabel = {
@@ -146,37 +156,51 @@ private extension SearchViewController {
     }
 
     func setupTabBar() {
+
         view.addSubview(tabContainer)
+
         tabContainer.addSubview(tabIndicator)
         tabContainer.addSubview(audiobooksTabBtn)
         tabContainer.addSubview(booksTabBtn)
+        tabContainer.addSubview(kidsTabBtn)
+
+        indicatorLeading = tabIndicator.leadingAnchor.constraint(
+            equalTo: tabContainer.leadingAnchor,
+            constant: 3
+        )
 
         NSLayoutConstraint.activate([
+
             tabContainer.topAnchor.constraint(equalTo: searchBarView.bottomAnchor, constant: 4),
             tabContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            tabContainer.widthAnchor.constraint(equalToConstant: 240),
+            tabContainer.widthAnchor.constraint(equalToConstant: 300),
             tabContainer.heightAnchor.constraint(equalToConstant: 36),
 
             audiobooksTabBtn.leadingAnchor.constraint(equalTo: tabContainer.leadingAnchor),
             audiobooksTabBtn.topAnchor.constraint(equalTo: tabContainer.topAnchor),
             audiobooksTabBtn.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
-            audiobooksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5),
+            audiobooksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 1.0/3.0),
 
-            booksTabBtn.trailingAnchor.constraint(equalTo: tabContainer.trailingAnchor),
+            booksTabBtn.leadingAnchor.constraint(equalTo: audiobooksTabBtn.trailingAnchor),
             booksTabBtn.topAnchor.constraint(equalTo: tabContainer.topAnchor),
             booksTabBtn.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
-            booksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5),
+            booksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 1.0/3.0),
+
+            kidsTabBtn.leadingAnchor.constraint(equalTo: booksTabBtn.trailingAnchor),
+            kidsTabBtn.topAnchor.constraint(equalTo: tabContainer.topAnchor),
+            kidsTabBtn.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
+            kidsTabBtn.trailingAnchor.constraint(equalTo: tabContainer.trailingAnchor),
 
             tabIndicator.topAnchor.constraint(equalTo: tabContainer.topAnchor, constant: 3),
             tabIndicator.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor, constant: -3),
-            tabIndicator.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5, constant: -3)
-        ])
+            tabIndicator.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 1.0/3.0, constant: -3),
 
-        indicatorLeading = tabIndicator.leadingAnchor.constraint(equalTo: tabContainer.leadingAnchor, constant: 3)
-        indicatorLeading.isActive = true
+            indicatorLeading
+        ])
 
         audiobooksTabBtn.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
         booksTabBtn.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
+        kidsTabBtn.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
     }
 
     func setupCollectionView() {
@@ -200,6 +224,10 @@ private extension SearchViewController {
         collectionView.register(EbookTopResultCell.self,    forCellWithReuseIdentifier: EbookTopResultCell.identifier)
         collectionView.register(EbookOtherResultCell.self,  forCellWithReuseIdentifier: EbookOtherResultCell.identifier)
         collectionView.register(EbookYouMightLikeCell.self, forCellWithReuseIdentifier: EbookYouMightLikeCell.identifier)
+
+        // Kids cells
+        collectionView.register(KidsTrendingCell.self,      forCellWithReuseIdentifier: KidsTrendingCell.identifier)
+        collectionView.register(KidsRecommendedCell.self,   forCellWithReuseIdentifier: KidsRecommendedCell.identifier)
 
         collectionView.register(
             SearchSectionHeaderView.self,
@@ -247,19 +275,29 @@ private extension SearchViewController {
     // MARK: - Helpers
 
     func updateTabIndicator() {
-        let isAudio = selectedTab == .audiobooks
+        let tabW = tabContainer.bounds.width / 3
+        let offset: CGFloat
+        switch selectedTab {
+        case .audiobooks: offset = 3
+        case .books:      offset = tabW
+        case .kids:       offset = tabW * 2
+        }
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
-            self.indicatorLeading.constant = isAudio ? 3 : 120
+            self.indicatorLeading.constant = offset
             self.tabContainer.layoutIfNeeded()
         }
-        audiobooksTabBtn.tintColor = isAudio ? .white : UIColor.white.withAlphaComponent(0.5)
-        booksTabBtn.tintColor      = isAudio ? UIColor.white.withAlphaComponent(0.5) : .white
+        audiobooksTabBtn.tintColor = selectedTab == .audiobooks ? .white : UIColor.white.withAlphaComponent(0.5)
+        booksTabBtn.tintColor      = selectedTab == .books       ? .white : UIColor.white.withAlphaComponent(0.5)
+        kidsTabBtn.tintColor       = selectedTab == .kids        ? .white : UIColor.white.withAlphaComponent(0.5)
     }
 
     func updateEmptyState() {
-        let isEmpty = selectedTab == .audiobooks
-            ? viewModel.books.isEmpty
-            : viewModel.ebooks.isEmpty
+        let isEmpty: Bool
+        switch selectedTab {
+        case .audiobooks: isEmpty = viewModel.books.isEmpty
+        case .books:      isEmpty = viewModel.ebooks.isEmpty
+        case .kids:       isEmpty = viewModel.kidsBooks.isEmpty
+        }
         emptyLabel.isHidden = !(isSearching && isEmpty && !viewModel.isLoading)
     }
 
@@ -304,7 +342,12 @@ private extension SearchViewController {
     }
 
     @objc func tabTapped(_ sender: UIButton) {
-        let newTab: SearchTab = sender.tag == 0 ? .audiobooks : .books
+        let newTab: SearchTab
+        switch sender.tag {
+        case 1:  newTab = .books
+        case 2:  newTab = .kids
+        default: newTab = .audiobooks
+        }
         guard newTab != selectedTab else { return }
         selectedTab = newTab
     }
@@ -323,21 +366,27 @@ extension SearchViewController: UICollectionViewDataSource {
             case .recents:      return recentSearches.count
             case .trending:     return trendingCategories.count
             case .youMightLike:
-                return selectedTab == .audiobooks
-                    ? viewModel.youMightLike.count
-                    : viewModel.youMightLikeEbooks.count
+                switch selectedTab {
+                    case .audiobooks: return viewModel.youMightLike.count
+                    case .books:      return viewModel.youMightLikeEbooks.count
+                    case .kids:       return viewModel.youMightLikeKids.count
+                    }
             case .none: return 0
             }
         } else {
             switch section {
             case 0:
-                return selectedTab == .audiobooks
-                    ? (viewModel.topResult != nil ? 1 : 0)
-                    : (viewModel.topEbookResult != nil ? 1 : 0)
+                switch selectedTab {
+                    case .audiobooks: return viewModel.topResult != nil ? 1 : 0
+                    case .books:      return viewModel.topEbookResult != nil ? 1 : 0
+                    case .kids:       return viewModel.topKidsResult != nil ? 1 : 0
+                    }
             case 1:
-                return selectedTab == .audiobooks
-                    ? viewModel.otherVersions.count
-                    : viewModel.otherEbooks.count
+                switch selectedTab {
+                    case .audiobooks: return viewModel.otherVersions.count
+                    case .books:      return viewModel.otherEbooks.count
+                    case .kids:       return viewModel.otherKidsBooks.count
+                    }
             case 2:
                 return selectedTab == .audiobooks ? viewModel.relatedAuthors.count : 0
             default: return 0
@@ -372,9 +421,13 @@ extension SearchViewController: UICollectionViewDataSource {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrendingBookCell.identifier, for: indexPath) as! TrendingBookCell
                 cell.configure(with: viewModel.youMightLike[indexPath.item])
                 return cell
-            } else {
+            } else if selectedTab == .books {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EbookYouMightLikeCell.identifier, for: indexPath) as! EbookYouMightLikeCell
                 cell.configure(with: viewModel.youMightLikeEbooks[indexPath.item])
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KidsTrendingCell.identifier, for: indexPath) as! KidsTrendingCell
+                cell.configure(with: viewModel.youMightLikeKids[indexPath.item])
                 return cell
             }
 
@@ -473,10 +526,10 @@ extension SearchViewController: UICollectionViewDelegate {
                 collectionView.reloadData()
 
             case .youMightLike:
-                if selectedTab == .audiobooks {
-                    openAudiobookDetail(viewModel.youMightLike[indexPath.item])
-                } else {
-                    openEbookDetail(viewModel.youMightLikeEbooks[indexPath.item])
+                switch selectedTab {
+                case .audiobooks: openAudiobookDetail(viewModel.youMightLike[indexPath.item])
+                case .books:      openEbookDetail(viewModel.youMightLikeEbooks[indexPath.item])
+                case .kids:       openEbookDetail(viewModel.youMightLikeKids[indexPath.item])
                 }
 
             case .none: break

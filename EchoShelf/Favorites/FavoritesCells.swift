@@ -88,6 +88,17 @@ final class FavoriteBookCell: UICollectionViewCell {
             coverImageView.kf.setImage(with: url)
         }
     }
+
+    func configureKids(with ebook: Ebook) {
+        titleLabel.text = ebook.title
+        authorLabel.text = ebook.authorName
+        // Kids badge - köşədə ulduz
+        if let url = ebook.coverURL {
+            coverImageView.kf.setImage(with: url)
+        }
+        // Açıq sarı/yaşıl tint - uşaq hissi
+        authorLabel.textColor = UIColor.systemYellow.withAlphaComponent(0.8)
+    }
 }
 
 // MARK: - FavoriteAuthorCell

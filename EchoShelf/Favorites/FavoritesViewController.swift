@@ -146,7 +146,7 @@ private extension FavoritesViewController {
         UICollectionViewCompositionalLayout { [weak self] _, _ in
             guard let self else { return nil }
             switch self.selectedSection {
-            case .books, .audiobooks: return self.bookGridSection()
+            case .books, .audiobooks, .kids: return self.bookGridSection()
             case .authors:            return self.authorListSection()
             case .genres:             return self.genreGridSection()
             }
@@ -222,6 +222,13 @@ extension FavoritesViewController: UICollectionViewDataSource {
             cell.configure(with: viewModel.favoriteBooks[indexPath.item])
             return cell
 
+        case .kids:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: FavoriteBookCell.identifier, for: indexPath
+            ) as! FavoriteBookCell
+            cell.configureKids(with: viewModel.favoriteKidsBooks[indexPath.item])
+            return cell
+
         case .authors:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: FavoriteAuthorCell.identifier, for: indexPath
@@ -255,6 +262,11 @@ extension FavoritesViewController: UICollectionViewDelegate {
             let book = viewModel.favoriteBooks[indexPath.item]
             navigationController?.pushViewController(
                 BookDetailViewController(book: book, favoritesViewModel: viewModel), animated: true
+            )
+        case .kids:
+            let ebook = viewModel.favoriteKidsBooks[indexPath.item]
+            navigationController?.pushViewController(
+                BookDetailViewController(ebook: ebook, favoritesViewModel: viewModel), animated: true
             )
         default:
             break

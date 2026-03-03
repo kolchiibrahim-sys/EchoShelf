@@ -67,6 +67,16 @@ final class HomeViewController: UIViewController {
         return btn
     }()
 
+    private let kidsTabButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Kids", for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
+        btn.tintColor = UIColor.white.withAlphaComponent(0.5)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.tag = 2
+        return btn
+    }()
+
     private var indicatorLeadingConstraint: NSLayoutConstraint!
 
     private let genres = [
@@ -76,15 +86,19 @@ final class HomeViewController: UIViewController {
 
     // Computed shortcuts
     private var trendingItems: Int {
-        selectedTab == .audiobooks
-            ? viewModel.trendingAudiobooks.count
-            : viewModel.trendingEbooks.count
+        switch selectedTab {
+        case .audiobooks: return viewModel.trendingAudiobooks.count
+        case .books:      return viewModel.trendingEbooks.count
+        case .kids:       return viewModel.trendingKidsEbooks.count
+        }
     }
 
     private var recommendedItems: Int {
-        selectedTab == .audiobooks
-            ? viewModel.recommendedAudiobooks.count
-            : viewModel.recommendedEbooks.count
+        switch selectedTab {
+        case .audiobooks: return viewModel.recommendedAudiobooks.count
+        case .books:      return viewModel.recommendedEbooks.count
+        case .kids:       return viewModel.recommendedKidsEbooks.count
+        }
     }
 
     // MARK: - Lifecycle
@@ -115,57 +129,81 @@ final class HomeViewController: UIViewController {
 private extension HomeViewController {
 
     func setupTopTab() {
+
         view.addSubview(tabContainer)
+
+        // BÜTÜN subview-lər əvvəl əlavə olunur
         tabContainer.addSubview(tabIndicator)
         tabContainer.addSubview(audiobooksTabButton)
         tabContainer.addSubview(booksTabButton)
+        tabContainer.addSubview(kidsTabButton)
+
+        indicatorLeadingConstraint = tabIndicator.leadingAnchor.constraint(
+            equalTo: tabContainer.leadingAnchor,
+            constant: 3
+        )
 
         NSLayoutConstraint.activate([
+
             tabContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
             tabContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            tabContainer.widthAnchor.constraint(equalToConstant: 260),
+            tabContainer.widthAnchor.constraint(equalToConstant: 320),
             tabContainer.heightAnchor.constraint(equalToConstant: 40),
 
             audiobooksTabButton.leadingAnchor.constraint(equalTo: tabContainer.leadingAnchor),
             audiobooksTabButton.topAnchor.constraint(equalTo: tabContainer.topAnchor),
             audiobooksTabButton.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
-            audiobooksTabButton.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5),
+            audiobooksTabButton.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 1.0/3.0),
 
-            booksTabButton.trailingAnchor.constraint(equalTo: tabContainer.trailingAnchor),
+            booksTabButton.leadingAnchor.constraint(equalTo: audiobooksTabButton.trailingAnchor),
             booksTabButton.topAnchor.constraint(equalTo: tabContainer.topAnchor),
             booksTabButton.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
-            booksTabButton.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5),
+            booksTabButton.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 1.0/3.0),
+
+            kidsTabButton.leadingAnchor.constraint(equalTo: booksTabButton.trailingAnchor),
+            kidsTabButton.topAnchor.constraint(equalTo: tabContainer.topAnchor),
+            kidsTabButton.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
+            kidsTabButton.trailingAnchor.constraint(equalTo: tabContainer.trailingAnchor),
 
             tabIndicator.topAnchor.constraint(equalTo: tabContainer.topAnchor, constant: 3),
             tabIndicator.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor, constant: -3),
-            tabIndicator.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5, constant: -3)
-        ])
+            tabIndicator.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 1.0/3.0, constant: -3),
 
-        indicatorLeadingConstraint = tabIndicator.leadingAnchor.constraint(
-            equalTo: tabContainer.leadingAnchor, constant: 3
-        )
-        indicatorLeadingConstraint.isActive = true
+            indicatorLeadingConstraint
+        ])
 
         audiobooksTabButton.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
         booksTabButton.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
+        kidsTabButton.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
     }
-
     @objc func tabTapped(_ sender: UIButton) {
-        let newTab: HomeTab = sender.tag == 0 ? .audiobooks : .books
+        let newTab: HomeTab
+        switch sender.tag {
+        case 1:  newTab = .books
+        case 2:  newTab = .kids
+        default: newTab = .audiobooks
+        }
         guard newTab != selectedTab else { return }
         selectedTab = newTab
     }
 
     func updateTabIndicator() {
-        let isAudiobooks = selectedTab == .audiobooks
+        let tabWidth = tabContainer.bounds.width / 3
+        let offset: CGFloat
+        switch selectedTab {
+        case .audiobooks: offset = 3
+        case .books:      offset = tabWidth
+        case .kids:       offset = tabWidth * 2
+        }
 
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
-            self.indicatorLeadingConstraint.constant = isAudiobooks ? 3 : 130
+            self.indicatorLeadingConstraint.constant = offset
             self.tabContainer.layoutIfNeeded()
         }
 
-        audiobooksTabButton.tintColor = isAudiobooks ? .white : UIColor.white.withAlphaComponent(0.5)
-        booksTabButton.tintColor = isAudiobooks ? UIColor.white.withAlphaComponent(0.5) : .white
+        audiobooksTabButton.tintColor = selectedTab == .audiobooks ? .white : UIColor.white.withAlphaComponent(0.5)
+        booksTabButton.tintColor      = selectedTab == .books       ? .white : UIColor.white.withAlphaComponent(0.5)
+        kidsTabButton.tintColor       = selectedTab == .kids        ? .white : UIColor.white.withAlphaComponent(0.5)
     }
 }
 
@@ -191,6 +229,8 @@ private extension HomeViewController {
         collectionView.register(GenreCell.self,               forCellWithReuseIdentifier: GenreCell.identifier)
         collectionView.register(RecommendedBookCell.self,     forCellWithReuseIdentifier: RecommendedBookCell.identifier)
         collectionView.register(EbookRecommendedCell.self,    forCellWithReuseIdentifier: EbookRecommendedCell.identifier)
+        collectionView.register(KidsTrendingCell.self,         forCellWithReuseIdentifier: KidsTrendingCell.identifier)
+        collectionView.register(KidsRecommendedCell.self,      forCellWithReuseIdentifier: KidsRecommendedCell.identifier)
 
         collectionView.register(
             HomeSectionHeaderView.self,
@@ -248,6 +288,7 @@ extension HomeViewController: UICollectionViewDataSource {
         case .genres:            return genres.count
         case .trending:          return trendingItems
         case .recommended:       return recommendedItems
+        // continueListening kids üçün gizlənir
         }
     }
 
@@ -277,7 +318,13 @@ extension HomeViewController: UICollectionViewDataSource {
             return cell
 
         case .trending:
-            if selectedTab == .audiobooks {
+            if selectedTab == .kids {
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: KidsTrendingCell.identifier, for: indexPath
+                ) as! KidsTrendingCell
+                cell.configure(with: viewModel.trendingKidsEbooks[indexPath.item])
+                return cell
+            } else if selectedTab == .audiobooks {
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: TrendingBookCell.identifier, for: indexPath
                 ) as! TrendingBookCell
@@ -292,7 +339,13 @@ extension HomeViewController: UICollectionViewDataSource {
             }
 
         case .recommended:
-            if selectedTab == .audiobooks {
+            if selectedTab == .kids {
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: KidsRecommendedCell.identifier, for: indexPath
+                ) as! KidsRecommendedCell
+                cell.configure(with: viewModel.recommendedKidsEbooks[indexPath.item])
+                return cell
+            } else if selectedTab == .audiobooks {
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: RecommendedBookCell.identifier, for: indexPath
                 ) as! RecommendedBookCell
@@ -343,35 +396,57 @@ extension HomeViewController: UICollectionViewDataSource {
 
 // MARK: - Delegate
 
+// DIDSELECT HISSƏSİ TAM DÜZƏLDİLİB
+
 extension HomeViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
+
         switch HomeSection(rawValue: indexPath.section)! {
 
         case .trending:
-            if selectedTab == .audiobooks {
-                coordinator?.showBookDetail(book: viewModel.trendingAudiobooks[indexPath.item])
-            } else {
-                coordinator?.showEbookDetail(ebook: viewModel.trendingEbooks[indexPath.item])
+            switch selectedTab {
+            case .audiobooks:
+                coordinator?.showBookDetail(
+                    book: viewModel.trendingAudiobooks[indexPath.item]
+                )
+            case .books:
+                coordinator?.showEbookDetail(
+                    ebook: viewModel.trendingEbooks[indexPath.item]
+                )
+            case .kids:
+                coordinator?.showEbookDetail(
+                    ebook: viewModel.trendingKidsEbooks[indexPath.item]
+                )
             }
 
         case .recommended:
-            if selectedTab == .audiobooks {
-                coordinator?.showBookDetail(book: viewModel.recommendedAudiobooks[indexPath.item])
-            } else {
-                coordinator?.showEbookDetail(ebook: viewModel.recommendedEbooks[indexPath.item])
+            switch selectedTab {
+            case .audiobooks:
+                coordinator?.showBookDetail(
+                    book: viewModel.recommendedAudiobooks[indexPath.item]
+                )
+            case .books:
+                coordinator?.showEbookDetail(
+                    ebook: viewModel.recommendedEbooks[indexPath.item]
+                )
+            case .kids:
+                coordinator?.showEbookDetail(
+                    ebook: viewModel.recommendedKidsEbooks[indexPath.item]
+                )
             }
 
         case .genres:
-            coordinator?.showGenreSearch(genre: genres[indexPath.item])
+            coordinator?.showGenreSearch(
+                genre: genres[indexPath.item]
+            )
 
         default:
             break
         }
     }
 }
-
 // MARK: - Layout
 
 private extension HomeViewController {

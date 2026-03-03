@@ -18,6 +18,8 @@ final class SearchViewModel {
     // Ebooks
     private(set) var ebooks: [Ebook] = []
     private(set) var youMightLikeEbooks: [Ebook] = []
+    private(set) var kidsBooks: [Ebook] = []
+    private(set) var youMightLikeKids: [Ebook] = []
 
     private(set) var recentSearches: [String] = []
     private(set) var isLoading = false
@@ -51,6 +53,7 @@ final class SearchViewModel {
         switch tab {
         case .audiobooks: searchAudiobooks(query: trimmed)
         case .books:      searchEbooks(query: trimmed)
+        case .kids:       searchKidsBooks(query: trimmed)
         }
     }
 
@@ -76,6 +79,16 @@ final class SearchViewModel {
                     self.isLoading = false
                     if case .success(let b) = result { self.ebooks = b }
                     else { self.ebooks = []; self.onError?("Could not load \(displayTitle)") }
+                    self.onDataUpdated?()
+                }
+            }
+        case .kids:
+            ebookService.fetchEbooksBySubject(subject: subject, page: 0) { [weak self] result in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    if case .success(let b) = result { self.kidsBooks = b }
+                    else { self.kidsBooks = []; self.onError?("Could not load \(displayTitle)") }
                     self.onDataUpdated?()
                 }
             }
@@ -121,6 +134,12 @@ final class SearchViewModel {
         guard ebooks.count > 1 else { return [] }
         return Array(ebooks.dropFirst().prefix(5))
     }
+
+    var topKidsResult: Ebook? { kidsBooks.first }
+    var otherKidsBooks: [Ebook] {
+        guard kidsBooks.count > 1 else { return [] }
+        return Array(kidsBooks.dropFirst().prefix(5))
+    }
 }
 
 // MARK: - Private
@@ -161,6 +180,18 @@ private extension SearchViewModel {
             DispatchQueue.main.async {
                 self.isLoading = false
                 self.ebooks = (try? result.get()) ?? []
+                self.onDataUpdated?()
+            }
+        }
+    }
+
+
+    func searchKidsBooks(query: String) {
+        ebookService.searchEbooks(query: query) { [weak self] result in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                self.isLoading = false
+                self.kidsBooks = (try? result.get()) ?? []
                 self.onDataUpdated?()
             }
         }

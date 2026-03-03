@@ -9,6 +9,7 @@ import Foundation
 enum HomeTab {
     case audiobooks
     case books
+    case kids
 }
 
 final class HomeViewModel {
@@ -21,6 +22,9 @@ final class HomeViewModel {
 
     // Ebooks
     private(set) var ebooks: [Ebook] = []
+
+    // Kids
+    private(set) var kidsEbooks: [Ebook] = []
 
     var onDataUpdated: (() -> Void)?
     var onError: ((String) -> Void)?
@@ -41,6 +45,7 @@ final class HomeViewModel {
     func fetchBooks() {
         fetchAudiobooks()
         fetchEbooks()
+        fetchKidsEbooks()
     }
 
     func fetchAudiobooks() {
@@ -77,6 +82,23 @@ final class HomeViewModel {
         }
     }
 
+    func fetchKidsEbooks() {
+        ebookService.fetchEbooksBySubject(subject: "children", page: 0) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let books):
+                DispatchQueue.main.async {
+                    self.kidsEbooks = books
+                    self.onDataUpdated?()
+                }
+            case .failure:
+                DispatchQueue.main.async {
+                    self.onError?("Failed to load kids books")
+                }
+            }
+        }
+    }
+
     // MARK: - Computed
 
     var trendingAudiobooks: [Audiobook] { Array(audiobooks.prefix(10)) }
@@ -84,4 +106,7 @@ final class HomeViewModel {
 
     var trendingEbooks: [Ebook] { Array(ebooks.prefix(10)) }
     var recommendedEbooks: [Ebook] { Array(ebooks.dropFirst(10).prefix(10)) }
+
+    var trendingKidsEbooks: [Ebook] { Array(kidsEbooks.prefix(10)) }
+    var recommendedKidsEbooks: [Ebook] { Array(kidsEbooks.dropFirst(10).prefix(10)) }
 }
