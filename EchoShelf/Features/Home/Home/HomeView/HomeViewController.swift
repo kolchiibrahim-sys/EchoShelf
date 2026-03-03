@@ -13,7 +13,6 @@ enum HomeSection: Int, CaseIterable {
     case trending
     case recommended
 }
-
 final class HomeViewController: UIViewController {
 
     weak var coordinator: HomeCoordinator?
