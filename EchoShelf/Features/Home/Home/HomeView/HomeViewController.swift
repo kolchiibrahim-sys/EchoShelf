@@ -30,6 +30,8 @@ final class HomeViewController: UIViewController {
         }
     }
 
+    private lazy var greetingView: HomeHeaderCell = HomeHeaderCell()
+
     private let tabContainer: UIView = {
         let v = UIView()
         v.backgroundColor = UIColor.white.withAlphaComponent(0.06)
@@ -105,6 +107,7 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
+        setupGreeting()
         setupTopTab()
         setupCollectionView()
         bindViewModel()
@@ -115,11 +118,23 @@ final class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
 
-        // Greeting-i yenilə (saat dəyişmiş ola bilər)
-        let headerIndex = IndexPath(item: 0, section: HomeSection.header.rawValue)
-        if let cell = collectionView.cellForItem(at: headerIndex) as? HomeHeaderCell {
-            cell.configure()
-        }
+        greetingView.configure()
+    }
+}
+
+// MARK: - Greeting Setup
+
+private extension HomeViewController {
+    func setupGreeting() {
+        greetingView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(greetingView)
+        NSLayoutConstraint.activate([
+            greetingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            greetingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            greetingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            greetingView.heightAnchor.constraint(equalToConstant: 60)
+        ])
+        greetingView.configure()
     }
 }
 
@@ -144,7 +159,7 @@ private extension HomeViewController {
 
         NSLayoutConstraint.activate([
 
-            tabContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            tabContainer.topAnchor.constraint(equalTo: greetingView.bottomAnchor, constant: 8),
             tabContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tabContainer.widthAnchor.constraint(equalToConstant: 320),
             tabContainer.heightAnchor.constraint(equalToConstant: 40),
@@ -282,7 +297,7 @@ extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         switch HomeSection(rawValue: section)! {
-        case .header:            return 1
+        case .header:            return 0
         case .continueListening: return 1
         case .genres:            return genres.count
         case .trending:          return trendingItems

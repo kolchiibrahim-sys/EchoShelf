@@ -400,7 +400,7 @@ final class SignInViewController: UIViewController {
     }
 
     @objc private func appleSignInTapped() {
-        AuthService.shared.signInWithApple { [weak self] result in
+        AuthService.shared.signInWithApple { result in
             if case .success = result {
                 DispatchQueue.main.async {
 //                    self?.onLoginSuccess?()
