@@ -5,6 +5,7 @@
 //  Created by Ibrahim Kolchi on 05.03.26.
 //
 
+
 import Foundation
 
 struct LibraryItem: Codable, Identifiable {
@@ -69,6 +70,13 @@ extension LibraryItem {
         self.downloadedAt   = Date()
         self.lastReadPage   = 0
         self.totalPages     = 0
-        self.type           = .ebook
+
+        // Bütün subjects-ə bax — kids detection
+        let kidsKeywords = ["children", "juvenile", "kids", "picture books", "fairy tales"]
+        let allSubjects  = ebook.subjects.map { $0.lowercased() }
+        let isKids = allSubjects.contains(where: { sub in
+            kidsKeywords.contains(where: { sub.contains($0) })
+        })
+        self.type = isKids ? .kids : .ebook
     }
 }

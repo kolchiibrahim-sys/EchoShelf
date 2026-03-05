@@ -125,6 +125,30 @@ final class BookDetailViewController: UIViewController {
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
+
+    private let inLibraryBadge: UIView = {
+        let v = UIView()
+        v.backgroundColor = UIColor(hex: "#2D5A27").withAlphaComponent(0.9)
+        v.layer.cornerRadius = 12
+        v.isHidden = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+
+    private let inLibraryLabel: UILabel = {
+        let lbl = UILabel()
+        let attachment = NSTextAttachment()
+        attachment.image = UIImage(systemName: "checkmark")?
+            .withTintColor(.white)
+            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 10, weight: .bold))
+        let str = NSMutableAttributedString(attachment: attachment)
+        str.append(NSAttributedString(string: "  In Library",
+            attributes: [.font: UIFont.systemFont(ofSize: 11, weight: .semibold),
+                         .foregroundColor: UIColor.white]))
+        lbl.attributedText = str
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        return lbl
+    }()
     private let listenButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = .systemPurple
@@ -216,11 +240,13 @@ final class BookDetailViewController: UIViewController {
         configureData()
         updateFavoriteButton()
         configureByBookType()
+        updateLibraryBadge()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        updateLibraryBadge()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -387,6 +413,19 @@ private extension BookDetailViewController {
             favoriteButton.leadingAnchor.constraint(equalTo: listenButton.trailingAnchor, constant: 16),
             favoriteButton.widthAnchor.constraint(equalToConstant: 56),
             favoriteButton.heightAnchor.constraint(equalToConstant: 56)
+        ])
+
+        inLibraryBadge.addSubview(inLibraryLabel)
+        contentView.addSubview(inLibraryBadge)
+
+        NSLayoutConstraint.activate([
+            inLibraryLabel.topAnchor.constraint(equalTo: inLibraryBadge.topAnchor, constant: 6),
+            inLibraryLabel.bottomAnchor.constraint(equalTo: inLibraryBadge.bottomAnchor, constant: -6),
+            inLibraryLabel.leadingAnchor.constraint(equalTo: inLibraryBadge.leadingAnchor, constant: 10),
+            inLibraryLabel.trailingAnchor.constraint(equalTo: inLibraryBadge.trailingAnchor, constant: -10),
+
+            inLibraryBadge.topAnchor.constraint(equalTo: listenButton.bottomAnchor, constant: 12),
+            inLibraryBadge.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
 
         listenButton.addTarget(self, action: #selector(listenTapped), for: .touchUpInside)
@@ -614,7 +653,19 @@ private extension BookDetailViewController {
         case .ebook(let ebook):
             let readerVC = EbookReaderViewController(ebook: ebook)
             navigationController?.pushViewController(readerVC, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.updateLibraryBadge()
+            }
         }
+    }
+
+    func updateLibraryBadge() {
+        guard case .ebook(let ebook) = bookType else {
+            inLibraryBadge.isHidden = true
+            return
+        }
+        let isInLibrary = LibraryManager.shared.isDownloaded(id: ebook.id)
+        inLibraryBadge.isHidden = !isInLibrary
     }
 
     @objc func backTapped() {

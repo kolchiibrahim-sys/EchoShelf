@@ -79,6 +79,7 @@ struct Ebook: Codable {
     let coverURL: URL?
     let pdfURL: URL?
     let subject: String?
+    let subjects: [String]
     let downloadCount: Int
 
     var isReadable: Bool { pdfURL != nil }
@@ -90,18 +91,21 @@ struct Ebook: Codable {
         self.coverURL     = book.coverURL
         self.pdfURL       = book.pdfURL
         self.subject      = book.subjects.first
+        self.subjects     = book.subjects
         self.downloadCount = book.downloadCount
     }
 
     // Manuel init (FavoritesViewModel üçün)
     init(id: String, title: String, authorName: String,
-         coverURL: URL?, pdfURL: URL?, subject: String?, downloadCount: Int) {
+         coverURL: URL?, pdfURL: URL?, subject: String?,
+         subjects: [String] = [], downloadCount: Int) {
         self.id            = id
         self.title         = title
         self.authorName    = authorName
         self.coverURL      = coverURL
         self.pdfURL        = pdfURL
         self.subject       = subject
+        self.subjects      = subjects
         self.downloadCount = downloadCount
     }
 }
