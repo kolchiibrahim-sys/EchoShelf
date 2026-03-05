@@ -141,6 +141,7 @@ private extension LibraryViewController {
         // Cells
         collectionView.register(BookSpineCell.self,        forCellWithReuseIdentifier: BookSpineCell.identifier)
         collectionView.register(LibraryEmptyCell.self,     forCellWithReuseIdentifier: LibraryEmptyCell.identifier)
+        collectionView.register(AudioDiskCell.self,        forCellWithReuseIdentifier: AudioDiskCell.identifier)
 
         // Supplementary
         collectionView.register(
@@ -194,7 +195,49 @@ private extension LibraryViewController {
         }
     }
 
+    func audioshelfLayout() -> NSCollectionLayoutSection {
+        let isEmpty = viewModel.isEmpty(for: .audiobooks)
+
+        let item = NSCollectionLayoutItem(
+            layoutSize: .init(
+                widthDimension: isEmpty ? .fractionalWidth(1) : .absolute(110),
+                heightDimension: .absolute(isEmpty ? 160 : 140)
+            )
+        )
+
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: .init(
+                widthDimension: isEmpty ? .fractionalWidth(1) : .estimated(600),
+                heightDimension: .absolute(isEmpty ? 160 : 140)
+            ),
+            subitems: [item]
+        )
+        if !isEmpty { group.interItemSpacing = .fixed(12) }
+
+        let layout = NSCollectionLayoutSection(group: group)
+        layout.contentInsets = .init(top: 12, leading: 20, bottom: 0, trailing: 20)
+        if !isEmpty { layout.orthogonalScrollingBehavior = .continuous }
+
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(52))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        let woodSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(18))
+        let woodFooter = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: woodSize,
+            elementKind: "shelf-wood",
+            alignment: .bottom
+        )
+        layout.boundarySupplementaryItems = [header, woodFooter]
+        return layout
+    }
+
     func shelfLayout(for section: LibrarySection) -> NSCollectionLayoutSection {
+        if section == .audiobooks {
+            return audioshelfLayout()
+        }
         let isEmpty = viewModel.isEmpty(for: section)
 
         let itemWidth: NSCollectionLayoutDimension  = isEmpty ? .fractionalWidth(1) : .absolute(48)
@@ -270,12 +313,20 @@ extension LibraryViewController: UICollectionViewDataSource {
 
         let items = viewModel.items(for: section)
 
-        // Boş rəf
         if items.isEmpty {
             return collectionView.dequeueReusableCell(
                 withReuseIdentifier: LibraryEmptyCell.identifier,
                 for: indexPath
             )
+        }
+
+        if section == .audiobooks {
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: AudioDiskCell.identifier,
+                for: indexPath
+            ) as! AudioDiskCell
+            cell.configure(with: items[indexPath.item])
+            return cell
         }
 
         let cell = collectionView.dequeueReusableCell(
@@ -332,6 +383,9 @@ extension LibraryViewController: UICollectionViewDelegate {
         let item = items[indexPath.item]
 
         if item.type == .audiobook {
+            if let cell = collectionView.cellForItem(at: indexPath) as? AudioDiskCell {
+                cell.animateSpin()
+            }
             coordinator?.openAudiobook(item)
             return
         }

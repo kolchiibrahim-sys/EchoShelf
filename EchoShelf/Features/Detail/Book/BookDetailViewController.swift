@@ -125,6 +125,24 @@ final class BookDetailViewController: UIViewController {
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
+
+    private let inLibraryBadge: UIView = {
+        let v = UIView()
+        v.backgroundColor = UIColor(hex: "#2D5A27").withAlphaComponent(0.9)
+        v.layer.cornerRadius = 12
+        v.isHidden = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+
+    private let inLibraryLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.font = .systemFont(ofSize: 11, weight: .semibold)
+        lbl.textColor = .white
+        lbl.text = "✓  In Library"
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        return lbl
+    }()
     private let listenButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = .systemPurple
@@ -216,11 +234,15 @@ final class BookDetailViewController: UIViewController {
         configureData()
         updateFavoriteButton()
         configureByBookType()
+        updateDownloadButton()
+        updateLibraryBadge()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        updateDownloadButton()
+        updateLibraryBadge()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -231,7 +253,7 @@ final class BookDetailViewController: UIViewController {
 
 // MARK: - Binding
 
-private extension BookDetailViewController {
+extension BookDetailViewController {
 
     func bindViewModel() {
         viewModel.onDataUpdated = { [weak self] in
@@ -245,7 +267,7 @@ private extension BookDetailViewController {
 
 // MARK: - Layout
 
-private extension BookDetailViewController {
+extension BookDetailViewController {
 
     func setupLayout() {
         view.addSubview(scrollView)
@@ -389,8 +411,20 @@ private extension BookDetailViewController {
             favoriteButton.heightAnchor.constraint(equalToConstant: 56)
         ])
 
+        inLibraryBadge.addSubview(inLibraryLabel)
+        contentView.addSubview(inLibraryBadge)
+        NSLayoutConstraint.activate([
+            inLibraryLabel.topAnchor.constraint(equalTo: inLibraryBadge.topAnchor, constant: 6),
+            inLibraryLabel.bottomAnchor.constraint(equalTo: inLibraryBadge.bottomAnchor, constant: -6),
+            inLibraryLabel.leadingAnchor.constraint(equalTo: inLibraryBadge.leadingAnchor, constant: 10),
+            inLibraryLabel.trailingAnchor.constraint(equalTo: inLibraryBadge.trailingAnchor, constant: -10),
+            inLibraryBadge.topAnchor.constraint(equalTo: listenButton.bottomAnchor, constant: 12),
+            inLibraryBadge.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+        ])
+
         listenButton.addTarget(self, action: #selector(listenTapped), for: .touchUpInside)
         favoriteButton.addTarget(self, action: #selector(favTapped), for: .touchUpInside)
+        downloadButton.addTarget(self, action: #selector(downloadTapped), for: .touchUpInside)
     }
 
     func setupAISummary() {
@@ -437,7 +471,7 @@ private extension BookDetailViewController {
 
 // MARK: - Configure Data
 
-private extension BookDetailViewController {
+extension BookDetailViewController {
 
     func configureData() {
         let book = viewModel.book
@@ -558,7 +592,7 @@ private extension BookDetailViewController {
 
 // MARK: - Book Type Configuration
 
-private extension BookDetailViewController {
+extension BookDetailViewController {
 
     func configureByBookType() {
         switch bookType {
@@ -601,12 +635,11 @@ private extension BookDetailViewController {
 
 // MARK: - Actions
 
-private extension BookDetailViewController {
+extension BookDetailViewController {
 
     @objc func listenTapped() {
         switch bookType {
         case .audiobook:
-            LibraryManager.shared.saveAudiobook(viewModel.book)
             PlayerManager.shared.play(book: viewModel.book)
             let playerVC = PlayerViewController()
             playerVC.modalPresentationStyle = .fullScreen
@@ -620,6 +653,58 @@ private extension BookDetailViewController {
 
     @objc func backTapped() {
         navigationController?.popViewController(animated: true)
+    }
+
+    func updateDownloadButton() {
+        downloadButton.isHidden = false
+        switch bookType {
+        case .audiobook:
+            let isSaved = LibraryManager.shared.isDownloaded(id: String(viewModel.book.id.value))
+            downloadButton.setImage(UIImage(systemName: isSaved ? "checkmark.circle.fill" : "arrow.down.circle"), for: .normal)
+            downloadButton.tintColor = isSaved ? UIColor(hex: "#4CAF50") : .white
+            downloadButton.isUserInteractionEnabled = !isSaved
+        case .ebook(let ebook):
+            let isSaved = LibraryManager.shared.isDownloaded(id: ebook.id)
+            downloadButton.setImage(UIImage(systemName: isSaved ? "checkmark.circle.fill" : "arrow.down.circle"), for: .normal)
+            downloadButton.tintColor = isSaved ? UIColor(hex: "#4CAF50") : .white
+            downloadButton.isUserInteractionEnabled = !isSaved
+        }
+    }
+
+    func updateLibraryBadge() {
+        guard case .ebook(let ebook) = bookType else {
+            inLibraryBadge.isHidden = true
+            return
+        }
+        inLibraryBadge.isHidden = !LibraryManager.shared.isDownloaded(id: ebook.id)
+    }
+
+    @objc func downloadTapped() {
+        switch bookType {
+        case .audiobook:
+            LibraryManager.shared.saveAudiobook(viewModel.book)
+        case .ebook(let ebook):
+            let readerVC = EbookReaderViewController(ebook: ebook)
+            navigationController?.pushViewController(readerVC, animated: true)
+            return
+        }
+
+        let isSaved = LibraryManager.shared.isDownloaded(id: String(viewModel.book.id.value))
+        let iconName = isSaved ? "checkmark.circle.fill" : "arrow.down.circle"
+        let tint: UIColor = isSaved ? UIColor(hex: "#4CAF50") : .white
+        downloadButton.setImage(UIImage(systemName: iconName), for: .normal)
+        downloadButton.tintColor = tint
+        downloadButton.isUserInteractionEnabled = !isSaved
+
+
+
+        UIView.animate(withDuration: 0.2, animations: {
+            self.downloadButton.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        }) { _ in
+            UIView.animate(withDuration: 0.15) {
+                self.downloadButton.transform = .identity
+            }
+        }
     }
 
     @objc func favTapped() {

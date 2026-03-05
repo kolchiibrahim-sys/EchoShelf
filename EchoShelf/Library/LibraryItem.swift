@@ -63,7 +63,7 @@ struct LibraryItem: Codable, Identifiable {
 
 extension LibraryItem {
     init(from book: Audiobook) {
-        self.id             = book.id.value
+        self.id             = String(book.id.value)
         self.title          = book.title
         self.author         = book.authorName
         self.coverURLString = book.coverURL?.absoluteString
