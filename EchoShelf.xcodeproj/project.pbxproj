@@ -31,6 +31,7 @@
 		86601CBE2F5C28E50008EEAE /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 86601CBD2F5C28E50008EEAE /* FirebaseRemoteConfig */; };
 		86601CC02F5C28E50008EEAE /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 86601CBF2F5C28E50008EEAE /* FirebaseStorage */; };
 		86601CC22F5C28E50008EEAE /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 86601CC12F5C28E50008EEAE /* FirebaseStorageCombine-Community */; };
+		86601CC52F5C29B60008EEAE /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 86601CC42F5C29B60008EEAE /* Lottie */; };
 		8660C1BB2F493018003E8EFD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C1BA2F493018003E8EFD /* Alamofire */; };
 		86C006452F4B2B2000123293 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 86C006442F4B2B2000123293 /* Kingfisher */; };
 /* End PBXBuildFile section */
@@ -85,6 +86,7 @@
 				86601CBE2F5C28E50008EEAE /* FirebaseRemoteConfig in Frameworks */,
 				86601CA82F5C28E40008EEAE /* FirebaseCrashlytics in Frameworks */,
 				86601C942F5C28E40008EEAE /* FirebaseAI in Frameworks */,
+				86601CC52F5C29B60008EEAE /* Lottie in Frameworks */,
 				86601CBC2F5C28E50008EEAE /* FirebasePerformance in Frameworks */,
 				86601CA62F5C28E40008EEAE /* FirebaseCore in Frameworks */,
 				86601CAA2F5C28E50008EEAE /* FirebaseDatabase in Frameworks */,
@@ -167,6 +169,7 @@
 				86601CBD2F5C28E50008EEAE /* FirebaseRemoteConfig */,
 				86601CBF2F5C28E50008EEAE /* FirebaseStorage */,
 				86601CC12F5C28E50008EEAE /* FirebaseStorageCombine-Community */,
+				86601CC42F5C29B60008EEAE /* Lottie */,
 			);
 			productName = EchoShelf;
 			productReference = 8660C15E2F48F2DC003E8EFD /* EchoShelf.app */;
@@ -200,6 +203,7 @@
 				8660C1B92F493018003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */,
 				86C006432F4B2B2000123293 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				86601C922F5C28E40008EEAE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				86601CC32F5C29B60008EEAE /* XCRemoteSwiftPackageReference "lottie-spm" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8660C15F2F48F2DC003E8EFD /* Products */;
@@ -453,6 +457,14 @@
 				minimumVersion = 12.10.0;
 			};
 		};
+		86601CC32F5C29B60008EEAE /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.6.0;
+			};
+		};
 		8660C1B92F493018003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -591,6 +603,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 86601C922F5C28E40008EEAE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		86601CC42F5C29B60008EEAE /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86601CC32F5C29B60008EEAE /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
 		};
 		8660C1BA2F493018003E8EFD /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
