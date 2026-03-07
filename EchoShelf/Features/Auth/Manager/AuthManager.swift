@@ -4,45 +4,83 @@
 //
 //  Created by Ibrahim Kolchi on 26.02.26.
 //
+//
+//  AuthManager.swift
+//  EchoShelf
+//
+
 import Foundation
+import FirebaseAuth
 
 final class AuthManager {
 
     static let shared = AuthManager()
     private let service = AuthService.shared
-
     private init() {}
 
-    func login(email: String, password: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    var currentUser: FirebaseAuth.User? {
+        Auth.auth().currentUser
+    }
+
+    var isLoggedIn: Bool {
+        currentUser != nil
+    }
+
+    private var authStateHandle: AuthStateDidChangeListenerHandle?
+
+    func startListening(onChange: @escaping (FirebaseAuth.User?) -> Void) {
+        authStateHandle = Auth.auth().addStateDidChangeListener { _, user in
+            onChange(user)
+        }
+    }
+
+    func stopListening() {
+        if let handle = authStateHandle {
+            Auth.auth().removeStateDidChangeListener(handle)
+        }
+    }
+
+
+    func login(
+        email: String,
+        password: String,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
         service.signIn(email: email, password: password) { result in
-            if case .success = result {
-                
-            }
-            completion(result)
+            completion(result.map { _ in () })
         }
     }
 
-    func register(name: String, email: String, password: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func register(
+        name: String,
+        email: String,
+        password: String,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
         service.signUp(name: name, email: email, password: password) { result in
-            if case .success = result {
-                // TODO: Firebase gələndə yeni user session buraya
-            }
-            completion(result)
+            completion(result.map { _ in () })
         }
     }
 
-    func resetPassword(email: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func resetPassword(
+        email: String,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
         service.resetPassword(email: email, completion: completion)
     }
 
-    func signInWithApple(completion: @escaping (Result<Void, Error>) -> Void) {
-        service.signInWithApple(completion: completion)
+
+    func signInWithApple(
+        presentingVC: UIViewController,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        service.signInWithApple(presentingVC: presentingVC) { result in
+            completion(result.map { _ in () })
+        }
     }
 
-    func signInWithGoogle(completion: @escaping (Result<Void, Error>) -> Void) {
-        service.signInWithGoogle(completion: completion)
-    }
 
     func logout() {
+        try? service.signOut()
     }
 }
