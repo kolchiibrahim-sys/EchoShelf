@@ -14,7 +14,20 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
+        if AuthManager.shared.isLoggedIn {
+            showMainApp()
+        } else {
+            showAuth()
+        }
+    }
+
+    private func showAuth() {
         authCoordinator = AuthCoordinator(navigationController: navigationController)
         authCoordinator?.start()
+    }
+
+    private func showMainApp() {
+        let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
+        tabBarCoordinator.start()
     }
 }
