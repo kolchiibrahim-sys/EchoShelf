@@ -18,8 +18,6 @@ final class SearchViewController: UIViewController {
         }
     }
 
-    
-
     private var selectedTab: SearchTab = .audiobooks {
         didSet {
             guard selectedTab != oldValue else { return }
