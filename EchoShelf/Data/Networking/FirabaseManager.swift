@@ -4,5 +4,7 @@
 //
 //  Created by Ibrahim Kolchi on 07.03.26.
 //
-
 import Foundation
+import FirebaseCore
+import FirebaseAuth
+import FirebaseFirestore

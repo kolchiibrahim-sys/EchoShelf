@@ -34,7 +34,6 @@ final class AuthCoordinator: Coordinator {
         let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
         tabBarCoordinator.start()
     }
-
     private func showCreateAccount() {
         let vc = CreateAccountViewController(viewModel: .init())
 
