@@ -400,7 +400,7 @@ final class SignInViewController: UIViewController {
     }
 
     @objc private func appleSignInTapped() {
-        AuthService.shared.signInWithApple { result in
+        AuthService.shared.signInWithApple(presentingVC: self) { [weak self] result in
             if case .success = result {
                 DispatchQueue.main.async {
 //                    self?.onLoginSuccess?()
@@ -414,7 +414,7 @@ final class SignInViewController: UIViewController {
     }
 
     @objc private func googleSignInTapped() {
-        AuthService.shared.signInWithGoogle { [weak self] result in
+        AuthManager.shared.signInWithGoogle { [weak self] result in
             if case .success = result {
                 DispatchQueue.main.async {
                     self?.onLoginSuccess?()

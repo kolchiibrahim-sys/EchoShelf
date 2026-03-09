@@ -4,6 +4,7 @@
 //
 //  Created by Ibrahim Kolchi on 26.02.26.
 //
+
 import Foundation
 import FirebaseAuth
 import AuthenticationServices
@@ -13,6 +14,8 @@ final class AuthService: NSObject {
 
     static let shared = AuthService()
     private override init() {}
+
+    // MARK: - Email / Password
 
     func signIn(email: String, password: String, completion: @escaping (Result<FirebaseAuth.User, Error>) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
@@ -33,6 +36,8 @@ final class AuthService: NSObject {
             let changeRequest = user.createProfileChangeRequest()
             changeRequest.displayName = name
             changeRequest.commitChanges { _ in
+                // Firestore-da user profili yarat
+                FirebaseManager.shared.createUserProfile(uid: user.uid, name: name, email: email)
                 completion(.success(user))
             }
         }
@@ -48,6 +53,8 @@ final class AuthService: NSObject {
     func signOut() throws {
         try Auth.auth().signOut()
     }
+
+    // MARK: - Apple Sign In
 
     private var currentNonce: String?
     private var appleCompletion: ((Result<FirebaseAuth.User, Error>) -> Void)?

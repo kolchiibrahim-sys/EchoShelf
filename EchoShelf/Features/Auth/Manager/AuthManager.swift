@@ -2,14 +2,8 @@
 //  AuthManager.swift
 //  EchoShelf
 //
-//  Created by Ibrahim Kolchi on 26.02.26.
-//
-//
-//  AuthManager.swift
-//  EchoShelf
-//
 
-import Foundation
+import UIKit
 import FirebaseAuth
 
 final class AuthManager {
@@ -18,6 +12,8 @@ final class AuthManager {
     private let service = AuthService.shared
     private init() {}
 
+    // MARK: - Current User
+
     var currentUser: FirebaseAuth.User? {
         Auth.auth().currentUser
     }
@@ -25,6 +21,8 @@ final class AuthManager {
     var isLoggedIn: Bool {
         currentUser != nil
     }
+
+    // MARK: - Auth State Listener
 
     private var authStateHandle: AuthStateDidChangeListenerHandle?
 
@@ -40,6 +38,7 @@ final class AuthManager {
         }
     }
 
+    // MARK: - Login
 
     func login(
         email: String,
@@ -50,6 +49,8 @@ final class AuthManager {
             completion(result.map { _ in () })
         }
     }
+
+    // MARK: - Register
 
     func register(
         name: String,
@@ -62,6 +63,8 @@ final class AuthManager {
         }
     }
 
+    // MARK: - Reset Password
+
     func resetPassword(
         email: String,
         completion: @escaping (Result<Void, Error>) -> Void
@@ -69,6 +72,7 @@ final class AuthManager {
         service.resetPassword(email: email, completion: completion)
     }
 
+    // MARK: - Apple Sign In
 
     func signInWithApple(
         presentingVC: UIViewController,
@@ -79,6 +83,13 @@ final class AuthManager {
         }
     }
 
+    // MARK: - Google Sign In (SDK əlavə olunanda aktiv et)
+
+    func signInWithGoogle(completion: @escaping (Result<Void, Error>) -> Void) {
+        completion(.failure(AuthError.unknown))
+    }
+
+    // MARK: - Logout
 
     func logout() {
         try? service.signOut()
