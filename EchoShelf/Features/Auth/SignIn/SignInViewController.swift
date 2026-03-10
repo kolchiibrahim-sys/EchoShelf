@@ -402,13 +402,14 @@ final class SignInViewController: UIViewController {
 
     @objc private func appleSignInTapped() {
         AuthService.shared.signInWithApple(presentingVC: self) { [weak self] result in
-            if case .success = result {
-                DispatchQueue.main.async {
-//                    self?.onLoginSuccess?()
-                    let scenes = UIApplication.shared.connectedScenes
-                    if let delegate = scenes.first?.delegate as? SceneDelegate {
-                        delegate.makeTabbarControllerRoot()
-                    }
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.onLoginSuccess?()
+                case .failure(let error):
+                    let alert = UIAlertController(title: "Xəta", message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self?.present(alert, animated: true)
                 }
             }
         }
@@ -416,9 +417,14 @@ final class SignInViewController: UIViewController {
 
     @objc private func googleSignInTapped() {
         AuthManager.shared.signInWithGoogle(presentingVC: self) { [weak self] result in
-            if case .success = result {
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
                     self?.onLoginSuccess?()
+                case .failure(let error):
+                    let alert = UIAlertController(title: "Xəta", message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self?.present(alert, animated: true)
                 }
             }
         }
