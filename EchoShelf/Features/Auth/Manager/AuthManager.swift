@@ -1,9 +1,6 @@
-//
-//  AuthManager.swift
-//  EchoShelf
-//
 
 import UIKit
+import AuthenticationServices
 import FirebaseAuth
 
 final class AuthManager {
@@ -75,7 +72,7 @@ final class AuthManager {
     // MARK: - Apple Sign In
 
     func signInWithApple(
-        presentingVC: UIViewController,
+        presentingVC: ASAuthorizationControllerPresentationContextProviding,
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
         service.signInWithApple(presentingVC: presentingVC) { result in
@@ -83,10 +80,15 @@ final class AuthManager {
         }
     }
 
-    // MARK: - Google Sign In (SDK əlavə olunanda aktiv et)
+    // MARK: - Google Sign In
 
-    func signInWithGoogle(completion: @escaping (Result<Void, Error>) -> Void) {
-        completion(.failure(AuthError.unknown))
+    func signInWithGoogle(
+        presentingVC: UIViewController,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        service.signInWithGoogle(presentingVC: presentingVC) { result in
+            completion(result.map { _ in () })
+        }
     }
 
     // MARK: - Logout

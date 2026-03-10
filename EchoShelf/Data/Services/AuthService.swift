@@ -4,11 +4,12 @@
 //
 //  Created by Ibrahim Kolchi on 26.02.26.
 //
-
 import Foundation
 import FirebaseAuth
 import AuthenticationServices
 import CryptoKit
+import GoogleSignIn
+import FirebaseCore
 
 final class AuthService: NSObject {
 
@@ -50,7 +51,50 @@ final class AuthService: NSObject {
         }
     }
 
+    func signInWithGoogle(
+        presentingVC: UIViewController,
+        completion: @escaping (Result<FirebaseAuth.User, Error>) -> Void
+    ) {
+        guard let clientID = FirebaseApp.app()?.options.clientID else {
+            completion(.failure(AuthError.unknown)); return
+        }
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+
+        GIDSignIn.sharedInstance.signIn(withPresenting: presentingVC) { result, error in
+            if let error {
+                completion(.failure(error)); return
+            }
+            guard
+                let user = result?.user,
+                let idToken = user.idToken?.tokenString
+            else {
+                completion(.failure(AuthError.unknown)); return
+            }
+            let credential = GoogleAuthProvider.credential(
+                withIDToken: idToken,
+                accessToken: user.accessToken.tokenString
+            )
+            Auth.auth().signIn(with: credential) { authResult, error in
+                if let error {
+                    completion(.failure(error)); return
+                }
+                guard let firebaseUser = authResult?.user else {
+                    completion(.failure(AuthError.unknown)); return
+                }
+                // Firestore-da profil yarat (yeni user üçün)
+                FirebaseManager.shared.createUserProfile(
+                    uid: firebaseUser.uid,
+                    name: firebaseUser.displayName ?? "",
+                    email: firebaseUser.email ?? ""
+                )
+                completion(.success(firebaseUser))
+            }
+        }
+    }
+
     func signOut() throws {
+        GIDSignIn.sharedInstance.signOut()
         try Auth.auth().signOut()
     }
 
@@ -60,7 +104,7 @@ final class AuthService: NSObject {
     private var appleCompletion: ((Result<FirebaseAuth.User, Error>) -> Void)?
 
     func signInWithApple(
-        presentingVC: UIViewController,
+        presentingVC: ASAuthorizationControllerPresentationContextProviding,
         completion: @escaping (Result<FirebaseAuth.User, Error>) -> Void
     ) {
         let nonce = randomNonceString()
@@ -73,7 +117,7 @@ final class AuthService: NSObject {
 
         let controller = ASAuthorizationController(authorizationRequests: [request])
         controller.delegate = self
-        controller.presentationContextProvider = presentingVC as? ASAuthorizationControllerPresentationContextProviding
+        controller.presentationContextProvider = presentingVC
         controller.performRequests()
     }
 

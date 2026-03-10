@@ -33,6 +33,8 @@
 		86601CC22F5C28E50008EEAE /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 86601CC12F5C28E50008EEAE /* FirebaseStorageCombine-Community */; };
 		86601CC52F5C29B60008EEAE /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 86601CC42F5C29B60008EEAE /* Lottie */; };
 		8660C1BB2F493018003E8EFD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C1BA2F493018003E8EFD /* Alamofire */; };
+		8665D4212F6052FC007B3479 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 8665D4202F6052FC007B3479 /* GoogleSignIn */; };
+		8665D4232F6052FC007B3479 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8665D4222F6052FC007B3479 /* GoogleSignInSwift */; };
 		86C006452F4B2B2000123293 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 86C006442F4B2B2000123293 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
@@ -73,12 +75,14 @@
 				86601C962F5C28E40008EEAE /* FirebaseAILogic in Frameworks */,
 				86601C9A2F5C28E40008EEAE /* FirebaseAnalyticsCore in Frameworks */,
 				86C006452F4B2B2000123293 /* Kingfisher in Frameworks */,
+				8665D4232F6052FC007B3479 /* GoogleSignInSwift in Frameworks */,
 				86601CB82F5C28E50008EEAE /* FirebaseMLModelDownloader in Frameworks */,
 				86601C9C2F5C28E40008EEAE /* FirebaseAnalyticsIdentitySupport in Frameworks */,
 				86601CA42F5C28E40008EEAE /* FirebaseAuthCombine-Community in Frameworks */,
 				8660C1BB2F493018003E8EFD /* Alamofire in Frameworks */,
 				86601CAC2F5C28E50008EEAE /* FirebaseFirestore in Frameworks */,
 				86601CAE2F5C28E50008EEAE /* FirebaseFirestoreCombine-Community in Frameworks */,
+				8665D4212F6052FC007B3479 /* GoogleSignIn in Frameworks */,
 				86601CB42F5C28E50008EEAE /* FirebaseInAppMessaging-Beta in Frameworks */,
 				86601CB22F5C28E50008EEAE /* FirebaseFunctionsCombine-Community in Frameworks */,
 				86601C982F5C28E40008EEAE /* FirebaseAnalytics in Frameworks */,
@@ -170,6 +174,8 @@
 				86601CBF2F5C28E50008EEAE /* FirebaseStorage */,
 				86601CC12F5C28E50008EEAE /* FirebaseStorageCombine-Community */,
 				86601CC42F5C29B60008EEAE /* Lottie */,
+				8665D4202F6052FC007B3479 /* GoogleSignIn */,
+				8665D4222F6052FC007B3479 /* GoogleSignInSwift */,
 			);
 			productName = EchoShelf;
 			productReference = 8660C15E2F48F2DC003E8EFD /* EchoShelf.app */;
@@ -204,6 +210,7 @@
 				86C006432F4B2B2000123293 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				86601C922F5C28E40008EEAE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				86601CC32F5C29B60008EEAE /* XCRemoteSwiftPackageReference "lottie-spm" */,
+				8665D41F2F6052FC007B3479 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8660C15F2F48F2DC003E8EFD /* Products */;
@@ -473,6 +480,14 @@
 				minimumVersion = 5.11.1;
 			};
 		};
+		8665D41F2F6052FC007B3479 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.0;
+			};
+		};
 		86C006432F4B2B2000123293 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -613,6 +628,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8660C1B92F493018003E8EFD /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		8665D4202F6052FC007B3479 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8665D41F2F6052FC007B3479 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		8665D4222F6052FC007B3479 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8665D41F2F6052FC007B3479 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 		86C006442F4B2B2000123293 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

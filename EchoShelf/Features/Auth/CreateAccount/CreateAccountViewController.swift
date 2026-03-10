@@ -5,6 +5,7 @@
 //  Created by Ibrahim Kolchi on 26.02.26.
 //
 import UIKit
+import AuthenticationServices
 
 final class CreateAccountViewController: UIViewController {
 
@@ -402,7 +403,7 @@ final class CreateAccountViewController: UIViewController {
     }
 
     @objc private func googleSignInTapped() {
-        AuthManager.shared.signInWithGoogle { [weak self] result in
+        AuthManager.shared.signInWithGoogle(presentingVC: self) { [weak self] result in
             if case .success = result {
                 DispatchQueue.main.async { self?.onCreateSuccess?() }
             }
@@ -423,5 +424,13 @@ final class CreateAccountViewController: UIViewController {
 
     @objc private func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+// MARK: - ASAuthorizationControllerPresentationContextProviding
+
+extension CreateAccountViewController: @retroactive ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return view.window ?? UIWindow()
     }
 }
