@@ -35,11 +35,14 @@
 		8660C1BB2F493018003E8EFD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8660C1BA2F493018003E8EFD /* Alamofire */; };
 		8665D4212F6052FC007B3479 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 8665D4202F6052FC007B3479 /* GoogleSignIn */; };
 		8665D4232F6052FC007B3479 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8665D4222F6052FC007B3479 /* GoogleSignInSwift */; };
+		869176D52F631A11006A159C /* FavoritesCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8691764A2F631A11006A159C /* FavoritesCells.swift */; };
 		86C006452F4B2B2000123293 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 86C006442F4B2B2000123293 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8660C15E2F48F2DC003E8EFD /* EchoShelf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EchoShelf.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8691764A2F631A11006A159C /* FavoritesCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCells.swift; sourceTree = "<group>"; };
+		869177132F631A26006A159C /* EchoShelf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = EchoShelf.xcodeproj; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -106,6 +109,8 @@
 		8660C1552F48F2DC003E8EFD = {
 			isa = PBXGroup;
 			children = (
+				869177132F631A26006A159C /* EchoShelf.xcodeproj */,
+				8691764A2F631A11006A159C /* FavoritesCells.swift */,
 				8660C1602F48F2DC003E8EFD /* EchoShelf */,
 				8660C1BE2F493050003E8EFD /* Frameworks */,
 				8660C15F2F48F2DC003E8EFD /* Products */,
@@ -125,6 +130,11 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		866612D52F631A8F00884E1E /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,6 +225,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8660C15F2F48F2DC003E8EFD /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 866612D52F631A8F00884E1E /* Products */;
+					ProjectRef = 869177132F631A26006A159C /* EchoShelf.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8660C15D2F48F2DC003E8EFD /* EchoShelf */,
@@ -237,6 +253,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				869176D52F631A11006A159C /* FavoritesCells.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
