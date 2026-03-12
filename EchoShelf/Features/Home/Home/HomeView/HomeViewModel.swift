@@ -17,14 +17,15 @@ final class HomeViewModel {
     private let audiobookService: AudiobookServiceProtocol
     private let ebookService: EbookServiceProtocol
 
+    private(set) var state: ViewState<Void> = .idle {
+        didSet { onStateChanged?(state) }
+    }
+
     private(set) var audiobooks: [Audiobook] = []
-
     private(set) var ebooks: [Ebook] = []
-
     private(set) var kidsEbooks: [Ebook] = []
 
-    var onDataUpdated: (() -> Void)?
-    var onError: ((String) -> Void)?
+    var onStateChanged: ((ViewState<Void>) -> Void)?
 
     var books: [Audiobook] { audiobooks }
 
@@ -36,9 +37,8 @@ final class HomeViewModel {
         self.ebookService = ebookService
     }
 
-    
-
     func fetchBooks() {
+        state = .loading
         fetchAudiobooks()
         fetchEbooks()
         fetchKidsEbooks()
@@ -47,15 +47,13 @@ final class HomeViewModel {
     func fetchAudiobooks() {
         audiobookService.fetchAudiobooks(page: 1) { [weak self] result in
             guard let self else { return }
-            switch result {
-            case .success(let books):
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let books):
                     self.audiobooks = books
-                    self.onDataUpdated?()
-                }
-            case .failure:
-                DispatchQueue.main.async {
-                    self.onError?("Failed to load audiobooks")
+                    self.state = .success(())
+                case .failure(let error):
+                    self.state = .failure(error)
                 }
             }
         }
@@ -64,15 +62,13 @@ final class HomeViewModel {
     func fetchEbooks() {
         ebookService.fetchEbooksBySubject(subject: "fiction", page: 0) { [weak self] result in
             guard let self else { return }
-            switch result {
-            case .success(let books):
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let books):
                     self.ebooks = books
-                    self.onDataUpdated?()
-                }
-            case .failure:
-                DispatchQueue.main.async {
-                    self.onError?("Failed to load books")
+                    self.state = .success(())
+                case .failure(let error):
+                    self.state = .failure(error)
                 }
             }
         }
@@ -81,21 +77,17 @@ final class HomeViewModel {
     func fetchKidsEbooks() {
         ebookService.fetchEbooksBySubject(subject: "children", page: 0) { [weak self] result in
             guard let self else { return }
-            switch result {
-            case .success(let books):
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let books):
                     self.kidsEbooks = books
-                    self.onDataUpdated?()
-                }
-            case .failure:
-                DispatchQueue.main.async {
-                    self.onError?("Failed to load kids books")
+                    self.state = .success(())
+                case .failure(let error):
+                    self.state = .failure(error)
                 }
             }
         }
     }
-
-    
 
     var trendingAudiobooks: [Audiobook] { Array(audiobooks.prefix(10)) }
     var recommendedAudiobooks: [Audiobook] { Array(audiobooks.dropFirst(10).prefix(10)) }
