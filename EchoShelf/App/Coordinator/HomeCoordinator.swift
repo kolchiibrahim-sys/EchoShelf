@@ -1,14 +1,17 @@
+//
+//  HomeCoordinator.swift
+//  EchoShelf
+//
+//  Created by Ibrahim Kolchi on 21.02.26.
+//
 import UIKit
 
 final class HomeCoordinator: Coordinator {
 
     var navigationController: UINavigationController
-    private let favoritesViewModel: FavoritesViewModel
 
-    init(navigationController: UINavigationController,
-         favoritesViewModel: FavoritesViewModel) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.favoritesViewModel = favoritesViewModel
     }
 
     func start() {
@@ -32,12 +35,12 @@ final class HomeCoordinator: Coordinator {
     }
 
     func showBookDetail(book: Audiobook) {
-        let vc = BookDetailViewController(book: book, favoritesViewModel: favoritesViewModel)
+        let vc = BookDetailViewController(book: book)
         navigationController.pushViewController(vc, animated: true)
     }
 
     func showEbookDetail(ebook: Ebook) {
-        let vc = BookDetailViewController(ebook: ebook, favoritesViewModel: favoritesViewModel)
+        let vc = BookDetailViewController(ebook: ebook)
         navigationController.pushViewController(vc, animated: true)
     }
 }

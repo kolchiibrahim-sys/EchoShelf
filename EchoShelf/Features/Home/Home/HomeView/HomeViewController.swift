@@ -13,6 +13,7 @@ enum HomeSection: Int, CaseIterable {
     case trending
     case recommended
 }
+
 final class HomeViewController: UIViewController {
 
     weak var coordinator: HomeCoordinator?
@@ -20,8 +21,6 @@ final class HomeViewController: UIViewController {
     private let viewModel = HomeViewModel()
 
     private var collectionView: UICollectionView!
-
-    
 
     private var selectedTab: HomeTab = .audiobooks {
         didSet {
@@ -85,7 +84,6 @@ final class HomeViewController: UIViewController {
         "Sci-Fi", "History", "Adventure", "Kids"
     ]
 
-    
     private var trendingItems: Int {
         switch selectedTab {
         case .audiobooks: return viewModel.trendingAudiobooks.count
@@ -102,8 +100,6 @@ final class HomeViewController: UIViewController {
         }
     }
 
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
@@ -117,14 +113,12 @@ final class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-
         greetingView.configure()
     }
 }
 
-
-
 private extension HomeViewController {
+
     func setupGreeting() {
         greetingView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(greetingView)
@@ -136,17 +130,9 @@ private extension HomeViewController {
         ])
         greetingView.configure()
     }
-}
-
-
-
-private extension HomeViewController {
 
     func setupTopTab() {
-
         view.addSubview(tabContainer)
-
-        
         tabContainer.addSubview(tabIndicator)
         tabContainer.addSubview(audiobooksTabButton)
         tabContainer.addSubview(booksTabButton)
@@ -158,7 +144,6 @@ private extension HomeViewController {
         )
 
         NSLayoutConstraint.activate([
-
             tabContainer.topAnchor.constraint(equalTo: greetingView.bottomAnchor, constant: 8),
             tabContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tabContainer.widthAnchor.constraint(equalToConstant: 320),
@@ -190,6 +175,7 @@ private extension HomeViewController {
         booksTabButton.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
         kidsTabButton.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
     }
+
     @objc func tabTapped(_ sender: UIButton) {
         let newTab: HomeTab
         switch sender.tag {
@@ -219,17 +205,9 @@ private extension HomeViewController {
         booksTabButton.tintColor      = selectedTab == .books       ? .white : UIColor.white.withAlphaComponent(0.5)
         kidsTabButton.tintColor       = selectedTab == .kids        ? .white : UIColor.white.withAlphaComponent(0.5)
     }
-}
-
-
-
-private extension HomeViewController {
 
     func setupCollectionView() {
-        collectionView = UICollectionView(
-            frame: .zero,
-            collectionViewLayout: createLayout()
-        )
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
@@ -243,8 +221,8 @@ private extension HomeViewController {
         collectionView.register(GenreCell.self,               forCellWithReuseIdentifier: GenreCell.identifier)
         collectionView.register(RecommendedBookCell.self,     forCellWithReuseIdentifier: RecommendedBookCell.identifier)
         collectionView.register(EbookRecommendedCell.self,    forCellWithReuseIdentifier: EbookRecommendedCell.identifier)
-        collectionView.register(KidsTrendingCell.self,         forCellWithReuseIdentifier: KidsTrendingCell.identifier)
-        collectionView.register(KidsRecommendedCell.self,      forCellWithReuseIdentifier: KidsRecommendedCell.identifier)
+        collectionView.register(KidsTrendingCell.self,        forCellWithReuseIdentifier: KidsTrendingCell.identifier)
+        collectionView.register(KidsRecommendedCell.self,     forCellWithReuseIdentifier: KidsRecommendedCell.identifier)
 
         collectionView.register(
             HomeSectionHeaderView.self,
@@ -263,8 +241,18 @@ private extension HomeViewController {
     }
 
     func bindViewModel() {
-        viewModel.onDataUpdated = { [weak self] in
-            self?.collectionView.reloadData()
+        viewModel.onStateChanged = { [weak self] state in
+            guard let self else { return }
+            switch state {
+            case .loading:
+                break
+            case .success:
+                self.collectionView.reloadData()
+            case .failure(let error):
+                print("Home error:", error)
+            case .idle:
+                break
+            }
         }
     }
 
@@ -286,8 +274,6 @@ private extension HomeViewController {
     }
 }
 
-
-
 extension HomeViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -302,7 +288,6 @@ extension HomeViewController: UICollectionViewDataSource {
         case .genres:            return genres.count
         case .trending:          return trendingItems
         case .recommended:       return recommendedItems
-        
         }
     }
 
@@ -332,44 +317,46 @@ extension HomeViewController: UICollectionViewDataSource {
             return cell
 
         case .trending:
-            if selectedTab == .kids {
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: KidsTrendingCell.identifier, for: indexPath
-                ) as! KidsTrendingCell
-                cell.configure(with: viewModel.trendingKidsEbooks[indexPath.item])
-                return cell
-            } else if selectedTab == .audiobooks {
+            switch selectedTab {
+            case .audiobooks:
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: TrendingBookCell.identifier, for: indexPath
                 ) as! TrendingBookCell
                 cell.configure(with: viewModel.trendingAudiobooks[indexPath.item])
                 return cell
-            } else {
+            case .books:
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: EbookTrendingCell.identifier, for: indexPath
                 ) as! EbookTrendingCell
                 cell.configure(with: viewModel.trendingEbooks[indexPath.item])
                 return cell
+            case .kids:
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: KidsTrendingCell.identifier, for: indexPath
+                ) as! KidsTrendingCell
+                cell.configure(with: viewModel.trendingKidsEbooks[indexPath.item])
+                return cell
             }
 
         case .recommended:
-            if selectedTab == .kids {
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: KidsRecommendedCell.identifier, for: indexPath
-                ) as! KidsRecommendedCell
-                cell.configure(with: viewModel.recommendedKidsEbooks[indexPath.item])
-                return cell
-            } else if selectedTab == .audiobooks {
+            switch selectedTab {
+            case .audiobooks:
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: RecommendedBookCell.identifier, for: indexPath
                 ) as! RecommendedBookCell
                 cell.configure(with: viewModel.recommendedAudiobooks[indexPath.item])
                 return cell
-            } else {
+            case .books:
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: EbookRecommendedCell.identifier, for: indexPath
                 ) as! EbookRecommendedCell
                 cell.configure(with: viewModel.recommendedEbooks[indexPath.item])
+                return cell
+            case .kids:
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: KidsRecommendedCell.identifier, for: indexPath
+                ) as! KidsRecommendedCell
+                cell.configure(with: viewModel.recommendedKidsEbooks[indexPath.item])
                 return cell
             }
         }
@@ -408,57 +395,34 @@ extension HomeViewController: UICollectionViewDataSource {
     }
 }
 
-
 extension HomeViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-
         switch HomeSection(rawValue: indexPath.section)! {
 
         case .trending:
             switch selectedTab {
-            case .audiobooks:
-                coordinator?.showBookDetail(
-                    book: viewModel.trendingAudiobooks[indexPath.item]
-                )
-            case .books:
-                coordinator?.showEbookDetail(
-                    ebook: viewModel.trendingEbooks[indexPath.item]
-                )
-            case .kids:
-                coordinator?.showEbookDetail(
-                    ebook: viewModel.trendingKidsEbooks[indexPath.item]
-                )
+            case .audiobooks: coordinator?.showBookDetail(book: viewModel.trendingAudiobooks[indexPath.item])
+            case .books:      coordinator?.showEbookDetail(ebook: viewModel.trendingEbooks[indexPath.item])
+            case .kids:       coordinator?.showEbookDetail(ebook: viewModel.trendingKidsEbooks[indexPath.item])
             }
 
         case .recommended:
             switch selectedTab {
-            case .audiobooks:
-                coordinator?.showBookDetail(
-                    book: viewModel.recommendedAudiobooks[indexPath.item]
-                )
-            case .books:
-                coordinator?.showEbookDetail(
-                    ebook: viewModel.recommendedEbooks[indexPath.item]
-                )
-            case .kids:
-                coordinator?.showEbookDetail(
-                    ebook: viewModel.recommendedKidsEbooks[indexPath.item]
-                )
+            case .audiobooks: coordinator?.showBookDetail(book: viewModel.recommendedAudiobooks[indexPath.item])
+            case .books:      coordinator?.showEbookDetail(ebook: viewModel.recommendedEbooks[indexPath.item])
+            case .kids:       coordinator?.showEbookDetail(ebook: viewModel.recommendedKidsEbooks[indexPath.item])
             }
 
         case .genres:
-            coordinator?.showGenreSearch(
-                genre: genres[indexPath.item]
-            )
+            coordinator?.showGenreSearch(genre: genres[indexPath.item])
 
         default:
             break
         }
     }
 }
-
 
 private extension HomeViewController {
 
@@ -476,8 +440,7 @@ private extension HomeViewController {
 
     func makeHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: .init(widthDimension: .fractionalWidth(1),
-                              heightDimension: .absolute(40)),
+            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40)),
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )

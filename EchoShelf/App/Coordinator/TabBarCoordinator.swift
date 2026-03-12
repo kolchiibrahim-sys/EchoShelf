@@ -10,8 +10,6 @@ final class TabBarCoordinator: Coordinator {
 
     var navigationController: UINavigationController
 
-    let favoritesViewModel = FavoritesViewModel()
-
     private let tabBarController: MainTabBarController
 
     init(navigationController: UINavigationController) {
