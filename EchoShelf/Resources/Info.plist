@@ -12,7 +12,17 @@
             <key>CFBundleURLName</key>
             <string>google</string>
         </dict>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>com.googleusercontent.apps.76351634807-g4k28nrl628ji3s7bdgk5bgsra67vai8</string>
+            </array>
+            <key>CFBundleURLName</key>
+            <string>google-firebase</string>
+        </dict>
     </array>
+    <key>GIDClientID</key>
+    <string>508402959146-jstpufsiks33c5eopbtf5g1td31l50kk.apps.googleusercontent.com</string>
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>

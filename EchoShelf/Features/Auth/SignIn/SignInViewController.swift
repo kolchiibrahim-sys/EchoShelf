@@ -435,3 +435,4 @@ extension SignInViewController: @retroactive ASAuthorizationControllerPresentati
         return view.window ?? UIWindow()
     }
 }
+
