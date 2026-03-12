@@ -10,19 +10,25 @@ final class BookDetailViewModel {
 
     private let service: AudiobookServiceProtocol
     private(set) var book: Audiobook
+    private let favoritesViewModel = FavoritesViewModel()
+
+    private(set) var state: ViewState<Void> = .idle {
+        didSet { onStateChanged?(state) }
+    }
 
     private(set) var aiSummary: [String] = []
 
-    var onDataUpdated: (() -> Void)?
-    var onError: ((String) -> Void)?
+    var onStateChanged: ((ViewState<Void>) -> Void)?
 
-    init(book: Audiobook,
-         service: AudiobookServiceProtocol = AudiobookService()) {
+    var isFavorited: Bool { favoritesViewModel.isBookFavorited(book) }
+
+    init(book: Audiobook, service: AudiobookServiceProtocol = AudiobookService()) {
         self.book = book
         self.service = service
     }
 
     func fetchDetail() {
+        state = .loading
         service.fetchAudiobookDetail(id: book.id.value) { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
@@ -30,12 +36,16 @@ final class BookDetailViewModel {
                 case .success(let updatedBook):
                     self.book = updatedBook
                     self.generatePlaceholderSummary()
-                    self.onDataUpdated?()
-                case .failure:
-                    self.onError?("Failed to load book detail")
+                    self.state = .success(())
+                case .failure(let error):
+                    self.state = .failure(error)
                 }
             }
         }
+    }
+
+    func toggleFavorite() {
+        favoritesViewModel.toggleBook(book)
     }
 
     var durationText: String {
@@ -43,8 +53,10 @@ final class BookDetailViewModel {
         return "\(sections) ch."
     }
 
-    var languageText: String { "English" }
-    var ratingText: String { "4.8" }
+    var languageText: String {"English"
+    }
+    var ratingText: String {"4.8"
+    }
 }
 
 private extension BookDetailViewModel {
@@ -62,14 +74,22 @@ private extension BookDetailViewModel {
 final class EbookDetailViewModel {
 
     let ebook: Ebook
+    private let favoritesViewModel = FavoritesViewModel()
+
     private(set) var aiSummary: [String] = []
     private(set) var description: String = ""
 
     var onDataUpdated: (() -> Void)?
 
+    var isFavorited: Bool { favoritesViewModel.isEbookFavorited(ebook) }
+
     init(ebook: Ebook) {
         self.ebook = ebook
         buildContent()
+    }
+
+    func toggleFavorite() {
+        favoritesViewModel.toggleEbook(ebook)
     }
 
     private func buildContent() {
@@ -80,36 +100,29 @@ final class EbookDetailViewModel {
 
     private func buildDescription() -> String {
         var parts: [String] = []
-
         if let subject = ebook.subject {
             parts.append("Genre: \(subject.capitalized)")
         }
-
         parts.append("\"\(ebook.title)\" is a classic work by \(ebook.authorName), available as a free ebook from Project Gutenberg.")
-
         if ebook.downloadCount > 0 {
             let formatted = formatDownloadCount(ebook.downloadCount)
             parts.append("This book has been downloaded \(formatted) times, making it one of the most popular titles in the public domain.")
         }
-
         return parts.joined(separator: "\n\n")
     }
 
     private func buildAISummary() -> [String] {
         let title  = ebook.title
         let author = ebook.authorName
-
         var points = [
             "Written by \(author), \"\(title)\" is a timeless classic that has captivated readers for generations.",
-            "Freely available in the public domain — read it anytime, anywhere within the app.",
+            "Freely available in the public domain — read it anytime, anywhere within the app."
         ]
-
         if let subject = ebook.subject {
             points.append("Categorized under \(subject.capitalized) — perfect for fans of the genre.")
         } else {
             points.append("A landmark work of literature that continues to inspire readers worldwide.")
         }
-
         return points
     }
 
@@ -121,4 +134,3 @@ final class EbookDetailViewModel {
         }
     }
 }
-

@@ -8,15 +8,7 @@ import UIKit
 
 final class FavoritesViewController: UIViewController {
 
-
-    private let viewModel: FavoritesViewModel
-
-    init(viewModel: FavoritesViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) { fatalError() }
+    private let viewModel = FavoritesViewModel()
 
     private var collectionView: UICollectionView!
 
@@ -50,7 +42,6 @@ final class FavoritesViewController: UIViewController {
         }
     }
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
@@ -62,7 +53,6 @@ final class FavoritesViewController: UIViewController {
         updateEmptyState()
     }
 }
-
 
 private extension FavoritesViewController {
 
@@ -133,7 +123,6 @@ private extension FavoritesViewController {
     }
 }
 
-
 private extension FavoritesViewController {
 
     func createLayout() -> UICollectionViewLayout {
@@ -141,8 +130,8 @@ private extension FavoritesViewController {
             guard let self else { return nil }
             switch self.selectedSection {
             case .books, .audiobooks, .kids: return self.bookGridSection()
-            case .authors:            return self.authorListSection()
-            case .genres:             return self.genreGridSection()
+            case .authors:                   return self.authorListSection()
+            case .genres:                    return self.genreGridSection()
             }
         }
     }
@@ -203,8 +192,7 @@ extension FavoritesViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: FavoriteBookCell.identifier, for: indexPath
             ) as! FavoriteBookCell
-            let ebook = viewModel.favoriteEbooks[indexPath.item]
-            cell.configureEbook(with: ebook)
+            cell.configureEbook(with: viewModel.favoriteEbooks[indexPath.item])
             return cell
 
         case .audiobooks:
@@ -246,17 +234,17 @@ extension FavoritesViewController: UICollectionViewDelegate {
         case .books:
             let ebook = viewModel.favoriteEbooks[indexPath.item]
             navigationController?.pushViewController(
-                BookDetailViewController(ebook: ebook, favoritesViewModel: viewModel), animated: true
+                BookDetailViewController(ebook: ebook), animated: true
             )
         case .audiobooks:
             let book = viewModel.favoriteBooks[indexPath.item]
             navigationController?.pushViewController(
-                BookDetailViewController(book: book, favoritesViewModel: viewModel), animated: true
+                BookDetailViewController(book: book), animated: true
             )
         case .kids:
             let ebook = viewModel.favoriteKidsBooks[indexPath.item]
             navigationController?.pushViewController(
-                BookDetailViewController(ebook: ebook, favoritesViewModel: viewModel), animated: true
+                BookDetailViewController(ebook: ebook), animated: true
             )
         default:
             break
