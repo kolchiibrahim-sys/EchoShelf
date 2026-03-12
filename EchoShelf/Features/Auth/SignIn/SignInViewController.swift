@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//  SignInViewController.swift
 //  EchoShelf
 //
 //  Created by Ibrahim Kolchi on 21.02.26.
@@ -24,7 +24,7 @@ final class SignInViewController: UIViewController {
 
     private let logoContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(red: 0.42, green: 0.38, blue: 0.93, alpha: 1.0)
+        view.backgroundColor = UIColor(named: "PrimaryGradientStart")
         view.layer.cornerRadius = 20
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -32,7 +32,7 @@ final class SignInViewController: UIViewController {
 
     private let logoImageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(systemName: "book.fill")
+        iv.image = UIImage(named: "EchoLogo")
         iv.tintColor = .white
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +74,7 @@ final class SignInViewController: UIViewController {
             attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.5)]
         )
         tf.textColor = .white
-        tf.backgroundColor = UIColor(red: 0.16, green: 0.17, blue: 0.24, alpha: 1.0)
+        tf.backgroundColor = UIColor(named: "TextFieldBackground")
         tf.layer.cornerRadius = 16
         tf.keyboardType = .emailAddress
         tf.autocapitalizationType = .none
@@ -95,7 +95,7 @@ final class SignInViewController: UIViewController {
             attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.5)]
         )
         tf.textColor = .white
-        tf.backgroundColor = UIColor(red: 0.16, green: 0.17, blue: 0.24, alpha: 1.0)
+        tf.backgroundColor = UIColor(named: "TextFieldBackground")
         tf.layer.cornerRadius = 16
         tf.isSecureTextEntry = true
         tf.leftViewMode = .always
@@ -129,7 +129,7 @@ final class SignInViewController: UIViewController {
         btn.setTitle("Sign In →", for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
-        btn.backgroundColor = UIColor(red: 0.42, green: 0.38, blue: 0.93, alpha: 1.0)
+        btn.backgroundColor = UIColor(named: "PrimaryGradientStart")
         btn.layer.cornerRadius = 28
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -191,7 +191,7 @@ final class SignInViewController: UIViewController {
         let gLabel = UILabel()
         gLabel.text = "G"
         gLabel.font = .systemFont(ofSize: 18, weight: .bold)
-        gLabel.textColor = UIColor(red: 0.26, green: 0.52, blue: 0.96, alpha: 1)
+        gLabel.textColor = UIColor(named: "AccentColor") ?? .systemBlue
         gLabel.translatesAutoresizingMaskIntoConstraints = false
         btn.addSubview(gLabel)
         NSLayoutConstraint.activate([
@@ -226,7 +226,7 @@ final class SignInViewController: UIViewController {
                 .foregroundColor: UIColor.white.withAlphaComponent(0.5)
             ]
         )
-        let purple = UIColor(red: 0.42, green: 0.38, blue: 0.93, alpha: 1.0)
+        let purple = UIColor(named: "PrimaryGradientStart") ?? .systemPurple
         if let tosRange = fullText.range(of: "Terms of Service") {
             attributed.addAttribute(.foregroundColor, value: purple, range: NSRange(tosRange, in: fullText))
         }
@@ -268,7 +268,7 @@ final class SignInViewController: UIViewController {
     }
 
     private func setupUI() {
-        view.backgroundColor = UIColor(red: 0.09, green: 0.10, blue: 0.16, alpha: 1.0)
+        view.backgroundColor = UIColor(named: "AppBackground")
 
         view.addSubview(logoContainerView)
         logoContainerView.addSubview(logoImageView)
@@ -289,93 +289,76 @@ final class SignInViewController: UIViewController {
         view.addSubview(termsLabel)
 
         NSLayoutConstraint.activate([
-            // Logo container
-            logoContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 4),
+            logoContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             logoContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -50),
             logoContainerView.widthAnchor.constraint(equalToConstant: 40),
             logoContainerView.heightAnchor.constraint(equalToConstant: 40),
 
-            // Logo image
             logoImageView.centerXAnchor.constraint(equalTo: logoContainerView.centerXAnchor),
             logoImageView.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor),
             logoImageView.widthAnchor.constraint(equalToConstant: 22),
             logoImageView.heightAnchor.constraint(equalToConstant: 22),
 
-            // App name
             appNameLabel.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor),
             appNameLabel.leadingAnchor.constraint(equalTo: logoContainerView.trailingAnchor, constant: 8),
 
-            // Welcome
-            welcomeLabel.topAnchor.constraint(equalTo: logoContainerView.bottomAnchor, constant: 32),
+            welcomeLabel.topAnchor.constraint(equalTo: logoContainerView.bottomAnchor, constant: 28),
             welcomeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
 
-            // Subtitle
             subtitleLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 8),
             subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             subtitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
 
-            // Email field
             emailTextField.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 28),
             emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             emailTextField.heightAnchor.constraint(equalToConstant: 58),
 
-            // Password field
             passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 14),
             passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             passwordTextField.heightAnchor.constraint(equalToConstant: 58),
 
-            // Forgot password
             forgotPasswordButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 10),
             forgotPasswordButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
 
-            // Sign in button
             signInButton.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 20),
             signInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             signInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             signInButton.heightAnchor.constraint(equalToConstant: 58),
 
-            // Activity indicator
             activityIndicator.centerXAnchor.constraint(equalTo: signInButton.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: signInButton.centerYAnchor),
 
-            // Left divider
             leftDivider.centerYAnchor.constraint(equalTo: orLabel.centerYAnchor),
             leftDivider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             leftDivider.trailingAnchor.constraint(equalTo: orLabel.leadingAnchor, constant: -12),
             leftDivider.heightAnchor.constraint(equalToConstant: 1),
 
-            // OR label
             orLabel.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 24),
             orLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            // Right divider
             rightDivider.centerYAnchor.constraint(equalTo: orLabel.centerYAnchor),
             rightDivider.leadingAnchor.constraint(equalTo: orLabel.trailingAnchor, constant: 12),
             rightDivider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             rightDivider.heightAnchor.constraint(equalToConstant: 1),
 
-            // Apple button
             appleButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 20),
             appleButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             appleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             appleButton.heightAnchor.constraint(equalToConstant: 58),
 
-            // Google button
-            googleButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: 14),
+            googleButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: 12),
             googleButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             googleButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             googleButton.heightAnchor.constraint(equalToConstant: 58),
 
-            // Create account button
-            createAccountButton.topAnchor.constraint(equalTo: googleButton.bottomAnchor, constant: 14),
+            createAccountButton.topAnchor.constraint(equalTo: googleButton.bottomAnchor, constant: 12),
             createAccountButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             createAccountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             createAccountButton.heightAnchor.constraint(equalToConstant: 58),
 
-            // Terms label
-            termsLabel.topAnchor.constraint(equalTo: createAccountButton.bottomAnchor, constant: 20),
+            termsLabel.topAnchor.constraint(equalTo: createAccountButton.bottomAnchor, constant: 16),
             termsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             termsLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             termsLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
@@ -446,8 +429,6 @@ final class SignInViewController: UIViewController {
         view.endEditing(true)
     }
 }
-
-// MARK: - ASAuthorizationControllerPresentationContextProviding
 
 extension SignInViewController: @retroactive ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
