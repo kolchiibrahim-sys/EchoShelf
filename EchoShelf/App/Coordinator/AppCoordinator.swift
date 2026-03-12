@@ -3,21 +3,29 @@
 //  EchoShelf
 //
 //  Created by Ibrahim Kolchi on 21.02.26.
+//
 import UIKit
+import FirebaseAuth
 
 final class AppCoordinator: Coordinator {
+
     var navigationController: UINavigationController
     private var authCoordinator: AuthCoordinator?
+    private var authListenerHandle: AuthStateDidChangeListenerHandle?
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
 
     func start() {
-        if AuthManager.shared.isLoggedIn {
-            showMainApp()
-        } else {
-            showAuth()
+        authListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
+            DispatchQueue.main.async {
+                if user != nil {
+                    self?.showMainApp()
+                } else {
+                    self?.showAuth()
+                }
+            }
         }
     }
 
@@ -27,6 +35,10 @@ final class AppCoordinator: Coordinator {
     }
 
     private func showMainApp() {
+        if let handle = authListenerHandle {
+            Auth.auth().removeStateDidChangeListener(handle)
+            authListenerHandle = nil
+        }
         let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
         tabBarCoordinator.start()
     }
