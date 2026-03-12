@@ -12,7 +12,6 @@ final class MainTabBarController: UITabBarController {
 
     private var homeCoordinator: HomeCoordinator?
     private var libraryCoordinator: LibraryCoordinator?
-    private let favoritesViewModel = FavoritesViewModel()
 
     private let miniPlayerContainer: UIView = {
         let v = UIView()
@@ -34,33 +33,25 @@ final class MainTabBarController: UITabBarController {
     }
 
     private func setupTabs() {
-        // Home
         let homeNav = UINavigationController()
         homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
-        homeCoordinator = HomeCoordinator(navigationController: homeNav, favoritesViewModel: favoritesViewModel)
+        homeCoordinator = HomeCoordinator(navigationController: homeNav)
         homeCoordinator?.start()
 
-        // Search
         let search = UINavigationController(rootViewController: SearchViewController())
         search.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
 
-        // Library
         let libraryNav = UINavigationController()
         libraryNav.tabBarItem = UITabBarItem(title: "Library", image: UIImage(systemName: "books.vertical.fill"), tag: 2)
         libraryCoordinator = LibraryCoordinator(navigationController: libraryNav)
         libraryCoordinator?.start()
 
-        // Favorites
-        let favoritesVC = FavoritesViewController(viewModel: favoritesViewModel)
-        let favorites = UINavigationController(rootViewController: favoritesVC)
+        let favorites = UINavigationController(rootViewController: FavoritesViewController())
         favorites.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "heart.fill"), tag: 3)
 
-        // Profile
         let profileVM = ProfileViewModel()
         let profileVC = ProfileViewController(viewModel: profileVM)
-        profileVC.onLogout = { [weak self] in
-            self?.onLogout?()
-        }
+        profileVC.onLogout = { [weak self] in self?.onLogout?() }
         let profile = UINavigationController(rootViewController: profileVC)
         profile.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 4)
 
