@@ -9,8 +9,8 @@ import UIKit
 struct TrendingCategory {
     let title: String
     let icon: String
-    let colors: [UIColor]
-    let query: String       
+    let colorName: String
+    let query: String
     let subject: String
 }
 
@@ -71,6 +71,9 @@ final class TrendingCategoryCell: UICollectionViewCell {
     func configure(with category: TrendingCategory) {
         titleLabel.text = category.title
         iconLabel.text = category.icon
-        gradientLayer.colors = category.colors.map { $0.cgColor }
+
+        let base = UIColor(named: category.colorName) ?? .systemPurple
+        let light = base.withAlphaComponent(0.7)
+        gradientLayer.colors = [base.cgColor, light.cgColor]
     }
 }

@@ -9,7 +9,6 @@ import UIKit
 final class SearchViewController: UIViewController {
 
     weak var coordinator: HomeCoordinator?
-    var favoritesViewModel: FavoritesViewModel?
 
     var preselectedGenre: String? {
         didSet {
@@ -27,22 +26,21 @@ final class SearchViewController: UIViewController {
     }
     private var isSearching = false
 
-    
-
     private let viewModel = SearchViewModel()
 
     private let trendingCategories: [TrendingCategory] = [
-        TrendingCategory(title: "AI Picks",    icon: "🤖", colors: [UIColor(hex: "#6C5CE7"), UIColor(hex: "#4834D4")], query: "science",         subject: "Science Fiction"),
-        TrendingCategory(title: "Bestsellers", icon: "🔥", colors: [UIColor(hex: "#E55039"), UIColor(hex: "#E74C3C")], query: "adventure",       subject: "Adventure"),
-        TrendingCategory(title: "Sci-Fi",      icon: "🚀", colors: [UIColor(hex: "#00B894"), UIColor(hex: "#00897B")], query: "science fiction", subject: "Science Fiction"),
-        TrendingCategory(title: "Thriller",    icon: "👁",  colors: [UIColor(hex: "#F39C12"), UIColor(hex: "#E67E22")], query: "mystery",         subject: "Mystery & Detective Stories"),
-        TrendingCategory(title: "Classics",    icon: "📖", colors: [UIColor(hex: "#A855F7"), UIColor(hex: "#7C3AED")], query: "classic",         subject: "General Fiction"),
-        TrendingCategory(title: "Narrators",   icon: "🎙", colors: [UIColor(hex: "#3B82F6"), UIColor(hex: "#2563EB")], query: "drama",           subject: "Plays")
+        TrendingCategory(title: "AI Picks",    icon: "🤖", colorName: "TrendingAIPicks",    query: "science",         subject: "Science Fiction"),
+        TrendingCategory(title: "Bestsellers", icon: "🔥", colorName: "TrendingBestsellers", query: "adventure",       subject: "Adventure"),
+        TrendingCategory(title: "Sci-Fi",      icon: "🚀", colorName: "TrendingSciFi",       query: "science fiction", subject: "Science Fiction"),
+        TrendingCategory(title: "Thriller",    icon: "👁",  colorName: "TrendingThriller",    query: "mystery",         subject: "Mystery & Detective Stories"),
+        TrendingCategory(title: "Classics",    icon: "📖", colorName: "TrendingClassics",    query: "classic",         subject: "General Fiction"),
+        TrendingCategory(title: "Narrators",   icon: "🎙", colorName: "TrendingNarrators",   query: "drama",           subject: "Plays")
     ]
 
     private var recentSearches: [String] { viewModel.recentSearches }
     private var collectionView: UICollectionView!
     private let searchBarView = SearchBarView()
+
     private let tabContainer: UIView = {
         let v = UIView()
         v.backgroundColor = UIColor.white.withAlphaComponent(0.06)
@@ -143,9 +141,7 @@ private extension SearchViewController {
     }
 
     func setupTabBar() {
-
         view.addSubview(tabContainer)
-
         tabContainer.addSubview(tabIndicator)
         tabContainer.addSubview(audiobooksTabBtn)
         tabContainer.addSubview(booksTabBtn)
@@ -157,7 +153,6 @@ private extension SearchViewController {
         )
 
         NSLayoutConstraint.activate([
-
             tabContainer.topAnchor.constraint(equalTo: searchBarView.bottomAnchor, constant: 4),
             tabContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tabContainer.widthAnchor.constraint(equalToConstant: 300),
@@ -199,20 +194,15 @@ private extension SearchViewController {
         collectionView.keyboardDismissMode = .onDrag
         collectionView.showsVerticalScrollIndicator = false
 
-        // Audiobook cells
         collectionView.register(RecentSearchCell.self,      forCellWithReuseIdentifier: RecentSearchCell.identifier)
         collectionView.register(TrendingCategoryCell.self,  forCellWithReuseIdentifier: TrendingCategoryCell.identifier)
         collectionView.register(TrendingBookCell.self,      forCellWithReuseIdentifier: TrendingBookCell.identifier)
         collectionView.register(TopResultCell.self,         forCellWithReuseIdentifier: TopResultCell.identifier)
         collectionView.register(OtherVersionCell.self,      forCellWithReuseIdentifier: OtherVersionCell.identifier)
         collectionView.register(RelatedAuthorCell.self,     forCellWithReuseIdentifier: RelatedAuthorCell.identifier)
-
-        // Ebook cells
         collectionView.register(EbookTopResultCell.self,    forCellWithReuseIdentifier: EbookTopResultCell.identifier)
         collectionView.register(EbookOtherResultCell.self,  forCellWithReuseIdentifier: EbookOtherResultCell.identifier)
         collectionView.register(EbookYouMightLikeCell.self, forCellWithReuseIdentifier: EbookYouMightLikeCell.identifier)
-
-        // Kids cells
         collectionView.register(KidsTrendingCell.self,      forCellWithReuseIdentifier: KidsTrendingCell.identifier)
         collectionView.register(KidsRecommendedCell.self,   forCellWithReuseIdentifier: KidsRecommendedCell.identifier)
 
@@ -315,15 +305,15 @@ private extension SearchViewController {
     }
 
     func openAudiobookDetail(_ book: Audiobook) {
-        guard let fvm = favoritesViewModel else { return }
-        let vc = BookDetailViewController(book: book, favoritesViewModel: fvm)
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(
+            BookDetailViewController(book: book), animated: true
+        )
     }
 
     func openEbookDetail(_ ebook: Ebook) {
-        guard let fvm = favoritesViewModel else { return }
-        let vc = BookDetailViewController(ebook: ebook, favoritesViewModel: fvm)
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(
+            BookDetailViewController(ebook: ebook), animated: true
+        )
     }
 
     @objc func tabTapped(_ sender: UIButton) {
@@ -350,26 +340,26 @@ extension SearchViewController: UICollectionViewDataSource {
             case .trending:     return trendingCategories.count
             case .youMightLike:
                 switch selectedTab {
-                    case .audiobooks: return viewModel.youMightLike.count
-                    case .books:      return viewModel.youMightLikeEbooks.count
-                    case .kids:       return viewModel.youMightLikeKids.count
-                    }
+                case .audiobooks: return viewModel.youMightLike.count
+                case .books:      return viewModel.youMightLikeEbooks.count
+                case .kids:       return viewModel.youMightLikeKids.count
+                }
             case .none: return 0
             }
         } else {
             switch section {
             case 0:
                 switch selectedTab {
-                    case .audiobooks: return viewModel.topResult != nil ? 1 : 0
-                    case .books:      return viewModel.topEbookResult != nil ? 1 : 0
-                    case .kids:       return viewModel.topKidsResult != nil ? 1 : 0
-                    }
+                case .audiobooks: return viewModel.topResult != nil ? 1 : 0
+                case .books:      return viewModel.topEbookResult != nil ? 1 : 0
+                case .kids:       return viewModel.topKidsResult != nil ? 1 : 0
+                }
             case 1:
                 switch selectedTab {
-                    case .audiobooks: return viewModel.otherVersions.count
-                    case .books:      return viewModel.otherEbooks.count
-                    case .kids:       return viewModel.otherKidsBooks.count
-                    }
+                case .audiobooks: return viewModel.otherVersions.count
+                case .books:      return viewModel.otherEbooks.count
+                case .kids:       return viewModel.otherKidsBooks.count
+                }
             case 2:
                 return selectedTab == .audiobooks ? viewModel.relatedAuthors.count : 0
             default: return 0
@@ -400,15 +390,16 @@ extension SearchViewController: UICollectionViewDataSource {
             return cell
 
         case .youMightLike:
-            if selectedTab == .audiobooks {
+            switch selectedTab {
+            case .audiobooks:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrendingBookCell.identifier, for: indexPath) as! TrendingBookCell
                 cell.configure(with: viewModel.youMightLike[indexPath.item])
                 return cell
-            } else if selectedTab == .books {
+            case .books:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EbookYouMightLikeCell.identifier, for: indexPath) as! EbookYouMightLikeCell
                 cell.configure(with: viewModel.youMightLikeEbooks[indexPath.item])
                 return cell
-            } else {
+            case .kids:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: KidsTrendingCell.identifier, for: indexPath) as! KidsTrendingCell
                 cell.configure(with: viewModel.youMightLikeKids[indexPath.item])
                 return cell
@@ -494,8 +485,7 @@ extension SearchViewController: UICollectionViewDelegate {
         if !isSearching {
             switch HomeSection(rawValue: indexPath.section) {
             case .recents:
-                let query = recentSearches[indexPath.item]
-                searchBarView.onSearch?(query)
+                searchBarView.onSearch?(recentSearches[indexPath.item])
 
             case .trending:
                 let category = trendingCategories[indexPath.item]
@@ -548,7 +538,6 @@ private extension SearchViewController {
     func createLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
             guard let self else { return nil }
-
             if self.isSearching {
                 switch sectionIndex {
                 case 0:
