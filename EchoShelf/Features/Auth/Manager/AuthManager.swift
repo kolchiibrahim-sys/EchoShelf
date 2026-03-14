@@ -9,7 +9,6 @@ final class AuthManager {
     private let service = AuthService.shared
     private init() {}
 
-    // MARK: - Current User
 
     var currentUser: FirebaseAuth.User? {
         Auth.auth().currentUser

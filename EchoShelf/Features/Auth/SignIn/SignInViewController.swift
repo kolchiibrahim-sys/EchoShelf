@@ -1,14 +1,7 @@
-//
-//  SignInViewController.swift
-//  EchoShelf
-//
-//  Created by Ibrahim Kolchi on 21.02.26.
-//
 import UIKit
 import AuthenticationServices
 
 final class SignInViewController: UIViewController {
-
 
     var onLoginSuccess: (() -> Void)?
     var onCreateAccount: (() -> Void)?
@@ -260,7 +253,7 @@ final class SignInViewController: UIViewController {
         let lbl = UILabel()
         lbl.numberOfLines = 0
         lbl.textAlignment = .center
-        let fullText = "By signing in, you agree to our Terms of Service and\nPrivacy Policy."
+        let fullText = "By signing in, you agree to our Terms of Service and Privacy Policy."
         let attributed = NSMutableAttributedString(
             string: fullText,
             attributes: [
@@ -276,11 +269,10 @@ final class SignInViewController: UIViewController {
             attributed.addAttribute(.foregroundColor, value: purple, range: NSRange(ppRange, in: fullText))
         }
         lbl.attributedText = attributed
+        lbl.isUserInteractionEnabled = true
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
-
-    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -288,8 +280,6 @@ final class SignInViewController: UIViewController {
         setupActions()
         bindViewModel()
     }
-
-    // MARK: - Setup
 
     private func setupUI() {
         view.backgroundColor = UIColor(named: "AppBackground")
@@ -409,6 +399,8 @@ final class SignInViewController: UIViewController {
         appleButton.addTarget(self, action: #selector(appleSignInTapped), for: .touchUpInside)
         googleButton.addTarget(self, action: #selector(googleSignInTapped), for: .touchUpInside)
         createAccountButton.addTarget(self, action: #selector(createAccountTapped), for: .touchUpInside)
+        let termsTap = UITapGestureRecognizer(target: self, action: #selector(termsLabelTapped(_:)))
+        termsLabel.addGestureRecognizer(termsTap)
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
     }
@@ -432,8 +424,6 @@ final class SignInViewController: UIViewController {
             }
         }
     }
-
-    // MARK: - Actions
 
     @objc private func signInTapped() {
         viewModel.login(email: emailTextField.text, password: passwordTextField.text)
@@ -477,6 +467,38 @@ final class SignInViewController: UIViewController {
         onCreateAccount?()
     }
 
+    @objc private func termsLabelTapped(_ gesture: UITapGestureRecognizer) {
+        guard let label = gesture.view as? UILabel,
+              let text = label.attributedText?.string else { return }
+        let point = gesture.location(in: label)
+        let tosRange = (text as NSString).range(of: "Terms of Service")
+        let ppRange = (text as NSString).range(of: "Privacy Policy")
+        if isTapped(in: label, at: point, range: tosRange) {
+            openURL("https://kolchiibrahim-sys.github.io/EchoShelf/terms")
+        } else if isTapped(in: label, at: point, range: ppRange) {
+            openURL("https://kolchiibrahim-sys.github.io/EchoShelf/privacy")
+        }
+    }
+
+    private func isTapped(in label: UILabel, at point: CGPoint, range: NSRange) -> Bool {
+        guard let attributed = label.attributedText else { return false }
+        let layoutManager = NSLayoutManager()
+        let textContainer = NSTextContainer(size: label.bounds.size)
+        let textStorage = NSTextStorage(attributedString: attributed)
+        textContainer.lineFragmentPadding = 0
+        textContainer.maximumNumberOfLines = label.numberOfLines
+        textContainer.lineBreakMode = label.lineBreakMode
+        layoutManager.addTextContainer(textContainer)
+        textStorage.addLayoutManager(layoutManager)
+        let index = layoutManager.characterIndex(for: point, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        return NSLocationInRange(index, range)
+    }
+
+    private func openURL(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        UIApplication.shared.open(url)
+    }
+
     @objc private func togglePasswordVisibility() {
         passwordTextField.isSecureTextEntry.toggle()
         if let eyeButton = passwordTextField.rightView as? UIButton {
@@ -489,7 +511,6 @@ final class SignInViewController: UIViewController {
         view.endEditing(true)
     }
 }
-
 
 extension SignInViewController: @retroactive ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {

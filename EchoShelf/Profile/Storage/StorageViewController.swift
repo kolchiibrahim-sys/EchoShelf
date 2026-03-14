@@ -11,8 +11,6 @@ final class StorageCacheViewController: UIViewController {
 
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-
-    // Mock data - real data LibraryManager-dan gələcək
     private let totalGB: Double = 128
     private let usedGB: Double = 85.5
     private let appGB: Double = 32
@@ -26,7 +24,7 @@ final class StorageCacheViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hex: "#0D1117")
-        title = "Yaddaş və Keş"
+        title = "Memory and Cache"
         navigationController?.navigationBar.tintColor = UIColor(hex: "#4A90E2")
         setupScrollView()
         buildUI()
