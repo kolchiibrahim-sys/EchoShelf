@@ -9,13 +9,10 @@ import AuthenticationServices
 
 final class SignInViewController: UIViewController {
 
-    // MARK: - Callbacks
 
     var onLoginSuccess: (() -> Void)?
     var onCreateAccount: (() -> Void)?
     var onForgotPassword: (() -> Void)?
-
-    // MARK: - Properties
 
     private let viewModel: SignInViewModel
 
@@ -25,8 +22,6 @@ final class SignInViewController: UIViewController {
     }
 
     required init?(coder: NSCoder) { fatalError() }
-
-    // MARK: - UI Elements
 
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
@@ -495,7 +490,6 @@ final class SignInViewController: UIViewController {
     }
 }
 
-// MARK: - ASAuthorizationControllerPresentationContextProviding
 
 extension SignInViewController: @retroactive ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {

@@ -8,7 +8,6 @@ import Foundation
 
 struct FlexibleInt: Codable {
     let value: Int
-
     init(from value: Int) {
         self.value = value
     }
