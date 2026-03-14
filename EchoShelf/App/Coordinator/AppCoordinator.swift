@@ -12,18 +12,22 @@ final class AppCoordinator: Coordinator {
     var navigationController: UINavigationController
     private var authCoordinator: AuthCoordinator?
     private var authListenerHandle: AuthStateDidChangeListenerHandle?
+    private var hasRouted = false
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
 
     func start() {
+        try? Auth.auth().signOut()
         authListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
+            guard let self, !self.hasRouted else { return }
+            self.hasRouted = true
             DispatchQueue.main.async {
                 if user != nil {
-                    self?.showMainApp()
+                    self.showMainApp()
                 } else {
-                    self?.showAuth()
+                    self.showAuth()
                 }
             }
         }
