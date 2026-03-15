@@ -16,17 +16,9 @@ final class AuthCoordinator: Coordinator {
 
     func start() {
         let vc = SignInViewController(viewModel: .init())
-
-        vc.onLoginSuccess = { [weak self] in
-            self?.showMainApp()
-        }
-        vc.onCreateAccount = { [weak self] in
-            self?.showCreateAccount()
-        }
-        vc.onForgotPassword = { [weak self] in
-            self?.showForgotPassword()
-        }
-
+        vc.onLoginSuccess = { [weak self] in self?.showMainApp() }
+        vc.onCreateAccount = { [weak self] in self?.showCreateAccount() }
+        vc.onForgotPassword = { [weak self] in self?.showForgotPassword() }
         navigationController.setViewControllers([vc], animated: false)
     }
 
@@ -34,26 +26,18 @@ final class AuthCoordinator: Coordinator {
         let tabBarCoordinator = TabBarCoordinator(navigationController: navigationController)
         tabBarCoordinator.start()
     }
+
     private func showCreateAccount() {
+        print("showCreateAccount called, nav: \(navigationController), stack: \(navigationController.viewControllers)")
         let vc = CreateAccountViewController(viewModel: .init())
-
-        vc.onCreateSuccess = { [weak self] in
-            self?.showMainApp()
-        }
-        vc.onSignIn = { [weak self] in
-            self?.navigationController.popViewController(animated: true)
-        }
-
+        vc.onCreateSuccess = { [weak self] in self?.showMainApp() }
+        vc.onSignIn = { [weak self] in self?.navigationController.popViewController(animated: true) }
         navigationController.pushViewController(vc, animated: true)
     }
 
     private func showForgotPassword() {
         let vc = ForgotPasswordViewController(viewModel: .init())
-
-        vc.onBackToSignIn = { [weak self] in
-            self?.navigationController.popViewController(animated: true)
-        }
-
+        vc.onBackToSignIn = { [weak self] in self?.navigationController.popViewController(animated: true) }
         navigationController.pushViewController(vc, animated: true)
     }
 }

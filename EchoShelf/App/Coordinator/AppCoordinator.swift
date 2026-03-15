@@ -37,12 +37,16 @@ final class AppCoordinator: Coordinator {
     }
 
     private func showOnboarding() {
-        onboardingCoordinator = OnboardingCoordinator(navigationController: navigationController)
-        onboardingCoordinator?.start()
+        let coordinator = OnboardingCoordinator(navigationController: navigationController)
+        coordinator.onCompleted = { [weak self] in
+            self?.onboardingCoordinator = nil
+            self?.showAuth()
+        }
+        onboardingCoordinator = coordinator
+        coordinator.start()
     }
 
     private func showAuth() {
-        onboardingCoordinator = nil
         authCoordinator = AuthCoordinator(navigationController: navigationController)
         authCoordinator?.start()
     }

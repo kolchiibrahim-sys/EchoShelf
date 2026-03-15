@@ -9,6 +9,7 @@ import UIKit
 final class OnboardingCoordinator: Coordinator {
 
     var navigationController: UINavigationController
+    var onCompleted: (() -> Void)?
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -17,27 +18,13 @@ final class OnboardingCoordinator: Coordinator {
     func start() {
         let vc = OnboardingViewController()
         vc.onFinish = { [weak self] in
-            self?.finishOnboarding()
+            UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
+            self?.onCompleted?()
         }
         vc.onSignIn = { [weak self] in
-            self?.finishOnboarding()
-            self?.showSignIn()
+            UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
+            self?.onCompleted?()
         }
         navigationController.setViewControllers([vc], animated: false)
-    }
-
-    private func finishOnboarding() {
-        UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
-        showAuth()
-    }
-
-    private func showAuth() {
-        let authCoordinator = AuthCoordinator(navigationController: navigationController)
-        authCoordinator.start()
-    }
-
-    private func showSignIn() {
-        let authCoordinator = AuthCoordinator(navigationController: navigationController)
-        authCoordinator.start()
     }
 }
