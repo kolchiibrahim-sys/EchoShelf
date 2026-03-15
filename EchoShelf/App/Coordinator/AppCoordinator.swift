@@ -11,6 +11,8 @@ final class AppCoordinator: Coordinator {
 
     var navigationController: UINavigationController
     private var authListenerHandle: AuthStateDidChangeListenerHandle?
+    private var onboardingCoordinator: OnboardingCoordinator?
+    private var authCoordinator: AuthCoordinator?
     private var hasRouted = false
 
     init(navigationController: UINavigationController) {
@@ -34,13 +36,14 @@ final class AppCoordinator: Coordinator {
     }
 
     private func showOnboarding() {
-        let coordinator = OnboardingCoordinator(navigationController: navigationController)
-        coordinator.start()
+        onboardingCoordinator = OnboardingCoordinator(navigationController: navigationController)
+        onboardingCoordinator?.start()
     }
 
     private func showAuth() {
-        let coordinator = AuthCoordinator(navigationController: navigationController)
-        coordinator.start()
+        onboardingCoordinator = nil
+        authCoordinator = AuthCoordinator(navigationController: navigationController)
+        authCoordinator?.start()
     }
 
     private func showMainApp() {
@@ -48,6 +51,8 @@ final class AppCoordinator: Coordinator {
             Auth.auth().removeStateDidChangeListener(handle)
             authListenerHandle = nil
         }
+        onboardingCoordinator = nil
+        authCoordinator = nil
         let coordinator = TabBarCoordinator(navigationController: navigationController)
         coordinator.start()
     }
