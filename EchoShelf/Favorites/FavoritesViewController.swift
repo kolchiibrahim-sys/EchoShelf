@@ -9,7 +9,6 @@ import UIKit
 final class FavoritesViewController: UIViewController {
 
     private let viewModel = FavoritesViewModel()
-
     private var collectionView: UICollectionView!
 
     private let headerLabel: UILabel = {
@@ -42,6 +41,8 @@ final class FavoritesViewController: UIViewController {
         }
     }
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
@@ -52,6 +53,10 @@ final class FavoritesViewController: UIViewController {
         setupBindings()
         updateEmptyState()
     }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 private extension FavoritesViewController {
@@ -59,9 +64,22 @@ private extension FavoritesViewController {
     func setupBindings() {
         viewModel.onDataUpdated = { [weak self] in
             guard let self else { return }
-            self.collectionView.reloadData()
-            self.updateEmptyState()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.updateEmptyState()
+            }
         }
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(favoritesChanged),
+            name: .favoritesDidChange,
+            object: nil
+        )
+    }
+
+    @objc func favoritesChanged() {
+        viewModel.syncFromFirebase()
     }
 
     func setupHeader() {

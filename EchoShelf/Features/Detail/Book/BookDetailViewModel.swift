@@ -6,6 +6,10 @@
 //
 import Foundation
 
+extension Notification.Name {
+    static let favoritesDidChange = Notification.Name("favoritesDidChange")
+}
+
 final class BookDetailViewModel {
 
     private let service: AudiobookServiceProtocol
@@ -53,6 +57,7 @@ final class BookDetailViewModel {
                 favoritesViewModel.toggleEbook(ebook)
             }
         }
+        NotificationCenter.default.post(name: .favoritesDidChange, object: nil)
     }
 
     func isFavorited(bookType: BookDetailType) -> Bool {

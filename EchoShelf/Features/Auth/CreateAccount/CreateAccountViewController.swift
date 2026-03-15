@@ -156,10 +156,10 @@ final class CreateAccountViewController: UIViewController {
     }()
 
     private let createAccountButton: UIButton = {
-        var config = UIButton.Configuration.filled()
+        var config = UIButton.Configuration.filled()  
         config.title = "Create Account →"
         config.baseForegroundColor = .white
-        config.baseBackgroundColor = UIColor(named: "PrimaryGradientStart")
+        config.baseBackgroundColor = .clear
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs
             a.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
@@ -167,6 +167,8 @@ final class CreateAccountViewController: UIViewController {
         }
         config.cornerStyle = .capsule
         let btn = UIButton(configuration: config)
+        btn.layer.borderWidth = 1
+        btn.layer.borderColor = UIColor.white.withAlphaComponent(0.25).cgColor
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
