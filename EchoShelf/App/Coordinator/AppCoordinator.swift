@@ -20,6 +20,7 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
+        UserDefaults.standard.removeObject(forKey: "hasSeenOnboarding")
         authListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
             guard let self, !self.hasRouted else { return }
             self.hasRouted = true
