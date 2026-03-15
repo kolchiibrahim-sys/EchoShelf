@@ -1,3 +1,9 @@
+//
+//  SignInViewController.swift
+//  EchoShelf
+//
+//  Created by Ibrahim Kolchi on 21.02.26.
+//
 import UIKit
 import AuthenticationServices
 
@@ -15,6 +21,8 @@ final class SignInViewController: UIViewController {
     }
 
     required init?(coder: NSCoder) { fatalError() }
+
+    // MARK: - UI Elements
 
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
@@ -233,14 +241,16 @@ final class SignInViewController: UIViewController {
     }()
 
     private let createAccountButton: UIButton = {
-        var config = UIButton.Configuration.plain()
+        var config = UIButton.Configuration.filled()
         config.title = "Create Account"
         config.baseForegroundColor = .white
+        config.baseBackgroundColor = UIColor.white.withAlphaComponent(0.05)
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs
             a.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
             return a
         }
+        config.cornerStyle = .capsule
         let btn = UIButton(configuration: config)
         btn.layer.cornerRadius = 28
         btn.layer.borderWidth = 1
@@ -274,12 +284,16 @@ final class SignInViewController: UIViewController {
         return lbl
     }()
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupActions()
         bindViewModel()
     }
+
+    // MARK: - Setup
 
     private func setupUI() {
         view.backgroundColor = UIColor(named: "AppBackground")
@@ -425,6 +439,8 @@ final class SignInViewController: UIViewController {
         }
     }
 
+    // MARK: - Actions
+
     @objc private func signInTapped() {
         viewModel.login(email: emailTextField.text, password: passwordTextField.text)
     }
@@ -511,6 +527,8 @@ final class SignInViewController: UIViewController {
         view.endEditing(true)
     }
 }
+
+// MARK: - ASAuthorizationControllerPresentationContextProviding
 
 extension SignInViewController: @retroactive ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
