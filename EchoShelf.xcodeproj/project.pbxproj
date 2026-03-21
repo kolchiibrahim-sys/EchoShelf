@@ -40,15 +40,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		864E07F12F6EBF7000C9BE1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8660C15E2F48F2DC003E8EFD /* EchoShelf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EchoShelf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		866612DF2F633DBC00884E1E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		869177132F631A26006A159C /* EchoShelf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = EchoShelf.xcodeproj; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		864E08822F6ED36500C9BE1F /* Exceptions for "EchoShelf" folder in "EchoShelf" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/Info.plist,
+			);
+			target = 8660C15D2F48F2DC003E8EFD /* EchoShelf */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8660C1602F48F2DC003E8EFD /* EchoShelf */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				864E08822F6ED36500C9BE1F /* Exceptions for "EchoShelf" folder in "EchoShelf" target */,
+			);
 			path = EchoShelf;
 			sourceTree = "<group>";
 		};
@@ -97,7 +109,6 @@
 		8660C1552F48F2DC003E8EFD = {
 			isa = PBXGroup;
 			children = (
-				864E07F12F6EBF7000C9BE1F /* Info.plist */,
 				869177132F631A26006A159C /* EchoShelf.xcodeproj */,
 				8660C1602F48F2DC003E8EFD /* EchoShelf */,
 				8660C1BE2F493050003E8EFD /* Frameworks */,
