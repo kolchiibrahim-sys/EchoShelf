@@ -36,14 +36,12 @@
 		8665D4212F6052FC007B3479 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 8665D4202F6052FC007B3479 /* GoogleSignIn */; };
 		8665D4232F6052FC007B3479 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8665D4222F6052FC007B3479 /* GoogleSignInSwift */; };
 		866612E02F633DBC00884E1E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 866612DF2F633DBC00884E1E /* GoogleService-Info.plist */; };
-		869176D52F631A11006A159C /* FavoritesCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8691764A2F631A11006A159C /* FavoritesCells.swift */; };
 		86C006452F4B2B2000123293 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 86C006442F4B2B2000123293 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8660C15E2F48F2DC003E8EFD /* EchoShelf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EchoShelf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		866612DF2F633DBC00884E1E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		8691764A2F631A11006A159C /* FavoritesCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCells.swift; sourceTree = "<group>"; };
 		869177132F631A26006A159C /* EchoShelf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = EchoShelf.xcodeproj; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -112,7 +110,6 @@
 			isa = PBXGroup;
 			children = (
 				869177132F631A26006A159C /* EchoShelf.xcodeproj */,
-				8691764A2F631A11006A159C /* FavoritesCells.swift */,
 				8660C1602F48F2DC003E8EFD /* EchoShelf */,
 				8660C1BE2F493050003E8EFD /* Frameworks */,
 				8660C15F2F48F2DC003E8EFD /* Products */,
@@ -257,7 +254,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				869176D52F631A11006A159C /* FavoritesCells.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -35,7 +35,7 @@ final class HomeViewController: UIViewController {
     }()
 
     private lazy var segmentControl: UISegmentedControl = {
-        let sc = UISegmentedControl(items: ["Audiobooks", "Books", "Kids"])
+        let sc = UISegmentedControl(items: ["Audiobooks", "Books", "Kids", "Genres"])
         sc.selectedSegmentIndex = 0
         sc.selectedSegmentTintColor = .systemPurple
         sc.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
@@ -44,7 +44,6 @@ final class HomeViewController: UIViewController {
         sc.translatesAutoresizingMaskIntoConstraints = false
         return sc
     }()
-
     private let genres = [
         "Fantasy", "Drama", "Romance", "Mystery",
         "Sci-Fi", "History", "Adventure", "Kids"
