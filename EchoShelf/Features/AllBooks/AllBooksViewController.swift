@@ -24,7 +24,7 @@ final class AllBooksViewController: UIViewController {
 
     private let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(style: .large)
-        ai.color = AppColor.accentPurple
+        ai.color = UIColor(named: "PrimaryGradientStart")!
         ai.translatesAutoresizingMaskIntoConstraints = false
         ai.hidesWhenStopped = true
         return ai
@@ -51,14 +51,14 @@ final class AllBooksViewController: UIViewController {
     }
 
     private func setupNavigationBar() {
-        navigationController?.navigationBar.tintColor = AppColor.accentPurple
+        navigationController?.navigationBar.tintColor = UIColor(named: "PrimaryGradientStart")!
         navigationController?.navigationBar.titleTextAttributes = [
-            .foregroundColor: UIColor.white
+            .foregroundColor: UIColor(named: "OnDarkTextPrimary")!
         ]
     }
 
     private func setupUI() {
-        view.backgroundColor = UIColor(named: "AppBackground")
+        view.backgroundColor = UIColor(named: "AppBackground")!
         title = viewModel.type.title
         
         view.addSubview(collectionView)
@@ -180,7 +180,7 @@ final class LoadingFooterView: UICollectionReusableView {
 
     private let spinner: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(style: .medium)
-        ai.color = AppColor.accentPurple
+        ai.color = UIColor(named: "PrimaryGradientStart")!
         ai.translatesAutoresizingMaskIntoConstraints = false
         ai.hidesWhenStopped = true
         return ai

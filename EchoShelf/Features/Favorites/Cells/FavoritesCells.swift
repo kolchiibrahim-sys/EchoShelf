@@ -17,7 +17,7 @@ final class FavoriteBookCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 16
-        iv.backgroundColor = UIColor.white.withAlphaComponent(0.06)
+        iv.backgroundColor = UIColor(named: "FillGlass")!
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -25,7 +25,7 @@ final class FavoriteBookCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 13, weight: .semibold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.numberOfLines = 2
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -34,7 +34,7 @@ final class FavoriteBookCell: UICollectionViewCell {
     private let authorLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 11)
-        lbl.textColor = UIColor.white.withAlphaComponent(0.5)
+        lbl.textColor = UIColor(named: "TabTextInactive")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -95,7 +95,7 @@ final class FavoriteBookCell: UICollectionViewCell {
         if let url = ebook.coverURL {
             coverImageView.kf.setImage(with: url)
         }
-        authorLabel.textColor = UIColor.systemYellow.withAlphaComponent(0.8)
+        authorLabel.textColor = UIColor(named: "RatingStarYellow")!.withAlphaComponent(0.8)
     }
 }
 
@@ -106,7 +106,7 @@ final class FavoriteAuthorCell: UICollectionViewCell {
 
     private let avatarView: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.3)
+        v.backgroundColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.3)
         v.layer.cornerRadius = 28
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -115,7 +115,7 @@ final class FavoriteAuthorCell: UICollectionViewCell {
     private let initialsLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20, weight: .bold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.textAlignment = .center
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -124,7 +124,7 @@ final class FavoriteAuthorCell: UICollectionViewCell {
     private let nameLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 15, weight: .semibold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -133,7 +133,7 @@ final class FavoriteAuthorCell: UICollectionViewCell {
         let lbl = UILabel()
         lbl.text = "Author"
         lbl.font = .systemFont(ofSize: 12)
-        lbl.textColor = UIColor.white.withAlphaComponent(0.4)
+        lbl.textColor = UIColor(named: "OnDarkTextCaption")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -146,7 +146,7 @@ final class FavoriteAuthorCell: UICollectionViewCell {
     required init?(coder: NSCoder) { fatalError() }
 
     private func setupUI() {
-        contentView.backgroundColor = UIColor.white.withAlphaComponent(0.04)
+        contentView.backgroundColor = UIColor(named: "FillGlass")!.withAlphaComponent(2.0 / 3.0)
         contentView.layer.cornerRadius = 16
 
         avatarView.addSubview(initialsLabel)
@@ -193,7 +193,7 @@ final class FavoriteGenreCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 15, weight: .bold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()

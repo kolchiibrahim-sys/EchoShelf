@@ -5,6 +5,7 @@
 //  Created by Ibrahim Kolchi on 20.02.26.
 //
 import UIKit
+import GoogleSignIn
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -25,6 +26,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+    }
+
+    /// Google Sign-In URL callback (replaces deprecated `application(_:open:options:)` on iOS 26+).
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else { return }
+        _ = GIDSignIn.sharedInstance.handle(url)
     }
 
     func makeTabbarControllerRoot() {

@@ -43,7 +43,7 @@ final class SearchViewController: UIViewController {
 
     private let tabContainer: UIView = {
         let v = UIView()
-        v.backgroundColor = AppColor.fillGlass
+        v.backgroundColor = UIColor(named: "FillGlass")!
         v.layer.cornerRadius = 14
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -51,7 +51,7 @@ final class SearchViewController: UIViewController {
 
     private let tabIndicator: UIView = {
         let v = UIView()
-        v.backgroundColor = AppColor.accentPurple
+        v.backgroundColor = UIColor(named: "PrimaryGradientStart")!
         v.layer.cornerRadius = 11
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -61,7 +61,7 @@ final class SearchViewController: UIViewController {
         let btn = UIButton(type: .system)
         btn.setTitle("Audiobooks", for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
-        btn.tintColor = AppColor.onDarkPrimary
+        btn.tintColor = UIColor(named: "OnDarkTextPrimary")!
         btn.tag = 0
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -71,7 +71,7 @@ final class SearchViewController: UIViewController {
         let btn = UIButton(type: .system)
         btn.setTitle("Books", for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
-        btn.tintColor = AppColor.tabTextInactive
+        btn.tintColor = UIColor(named: "TabTextInactive")!
         btn.tag = 1
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -81,7 +81,7 @@ final class SearchViewController: UIViewController {
         let btn = UIButton(type: .system)
         btn.setTitle("Kids", for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
-        btn.tintColor = AppColor.tabTextInactive
+        btn.tintColor = UIColor(named: "TabTextInactive")!
         btn.tag = 2
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -92,7 +92,7 @@ final class SearchViewController: UIViewController {
     private let emptyLabel: UILabel = {
         let label = UILabel()
         label.text = "No results found"
-        label.textColor = AppColor.onDarkSecondary
+        label.textColor = UIColor(named: "OnDarkTextSecondary")!
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.isHidden = true
@@ -108,7 +108,7 @@ final class SearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "AppBackground")
+        view.backgroundColor = UIColor(named: "AppBackground")!
         setupSearchBar()
         setupTabBar()
         setupCollectionView()
@@ -261,9 +261,9 @@ private extension SearchViewController {
             self.indicatorLeading.constant = offset
             self.tabContainer.layoutIfNeeded()
         }
-        audiobooksTabBtn.tintColor = selectedTab == .audiobooks ? AppColor.onDarkPrimary : AppColor.tabTextInactive
-        booksTabBtn.tintColor      = selectedTab == .books       ? AppColor.onDarkPrimary : AppColor.tabTextInactive
-        kidsTabBtn.tintColor       = selectedTab == .kids        ? AppColor.onDarkPrimary : AppColor.tabTextInactive
+        audiobooksTabBtn.tintColor = selectedTab == .audiobooks ? UIColor(named: "OnDarkTextPrimary")! : UIColor(named: "TabTextInactive")!
+        booksTabBtn.tintColor      = selectedTab == .books       ? UIColor(named: "OnDarkTextPrimary")! : UIColor(named: "TabTextInactive")!
+        kidsTabBtn.tintColor       = selectedTab == .kids        ? UIColor(named: "OnDarkTextPrimary")! : UIColor(named: "TabTextInactive")!
     }
 
     func updateEmptyState() {

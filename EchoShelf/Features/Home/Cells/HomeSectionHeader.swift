@@ -17,7 +17,7 @@ final class HomeSectionHeaderView: UICollectionReusableView {
     private let actionButton: UIButton = {
         let b = UIButton(type: .system)
         b.setTitle("View all", for: .normal)
-        b.setTitleColor(.systemPurple, for: .normal)
+        b.setTitleColor(UIColor(named: "PrimaryGradientStart")!, for: .normal)
         b.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b

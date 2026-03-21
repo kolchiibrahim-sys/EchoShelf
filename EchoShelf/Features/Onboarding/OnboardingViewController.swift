@@ -19,8 +19,8 @@ final class OnboardingViewController: UIViewController {
 
     private let pageControl: UIPageControl = {
         let pc = UIPageControl()
-        pc.currentPageIndicatorTintColor = UIColor(named: "PrimaryGradientStart")
-        pc.pageIndicatorTintColor = AppColor.onDarkChevron
+        pc.currentPageIndicatorTintColor = UIColor(named: "PrimaryGradientStart")!
+        pc.pageIndicatorTintColor = UIColor(named: "OnDarkChevron")!
         pc.translatesAutoresizingMaskIntoConstraints = false
         return pc
     }()
@@ -28,7 +28,7 @@ final class OnboardingViewController: UIViewController {
     private let skipButton: UIButton = {
         var config = UIButton.Configuration.plain()
         config.title = "Skip"
-        config.baseForegroundColor = AppColor.onDarkSecondary
+        config.baseForegroundColor = UIColor(named: "OnDarkTextSecondary")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs
             a.font = UIFont.systemFont(ofSize: 15, weight: .medium)

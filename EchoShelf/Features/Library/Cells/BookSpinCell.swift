@@ -68,6 +68,7 @@ final class BookSpineCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        contentView.layer.rasterizationScale = traitCollection.displayScale
         gradientLayer.frame    = spineView.bounds
         innerShadowLayer.frame = CGRect(x: 0, y: 0, width: 10, height: spineView.bounds.height)
         topEdgeLayer.frame     = CGRect(x: 0, y: 0, width: spineView.bounds.width, height: 2)
@@ -79,8 +80,7 @@ final class BookSpineCell: UICollectionViewCell {
         contentView.layer.shadowOpacity = 0.55
         contentView.layer.shadowRadius  = 5
         contentView.layer.shadowOffset  = CGSize(width: 4, height: 3)
-        contentView.layer.shouldRasterize      = true
-        contentView.layer.rasterizationScale   = UIScreen.main.scale
+        contentView.layer.shouldRasterize = true
 
         spineView.layer.cornerRadius   = 2
         spineView.layer.maskedCorners  = [.layerMinXMinYCorner, .layerMinXMaxYCorner]

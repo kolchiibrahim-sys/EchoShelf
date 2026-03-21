@@ -23,7 +23,7 @@ final class SearchSectionHeaderView: UICollectionReusableView {
     private let clearAllButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Clear All", for: .normal)
-        btn.setTitleColor(UIColor.systemPurple, for: .normal)
+        btn.setTitleColor(UIColor(named: "PrimaryGradientStart")!, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
         btn.isHidden = true
         btn.translatesAutoresizingMaskIntoConstraints = false

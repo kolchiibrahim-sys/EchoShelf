@@ -42,7 +42,7 @@ final class SearchBarView: UIView {
     private let cancelButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Cancel", for: .normal)
-        btn.setTitleColor(UIColor.systemPurple, for: .normal)
+        btn.setTitleColor(UIColor(named: "PrimaryGradientStart")!, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
         btn.alpha = 0
         btn.translatesAutoresizingMaskIntoConstraints = false

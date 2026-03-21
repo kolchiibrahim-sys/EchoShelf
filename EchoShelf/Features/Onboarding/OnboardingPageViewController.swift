@@ -34,8 +34,8 @@ final class OnboardingPageViewController: UIViewController {
     private let badgeLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 11, weight: .bold)
-        lbl.textColor = AppColor.accentPurple
-        lbl.backgroundColor = AppColor.accentPurple.withAlphaComponent(0.15)
+        lbl.textColor = UIColor(named: "PrimaryGradientStart")!
+        lbl.backgroundColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.15)
         lbl.layer.cornerRadius = 10
         lbl.clipsToBounds = true
         lbl.textAlignment = .center
@@ -46,7 +46,7 @@ final class OnboardingPageViewController: UIViewController {
     private let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 32, weight: .bold)
-        lbl.textColor = AppColor.onDarkPrimary
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.numberOfLines = 0
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -55,7 +55,7 @@ final class OnboardingPageViewController: UIViewController {
     private let subtitleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 16, weight: .regular)
-        lbl.textColor = UIColor(named: "OnboardingSubtitle") ?? AppColor.onDarkSecondary
+        lbl.textColor = UIColor(named: "OnboardingSubtitle")!
         lbl.numberOfLines = 0
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -63,8 +63,8 @@ final class OnboardingPageViewController: UIViewController {
 
     private lazy var primaryButton: UIButton = {
         var config = UIButton.Configuration.filled()
-        config.baseForegroundColor = AppColor.onDarkPrimary
-        config.baseBackgroundColor = AppColor.accentPurple
+        config.baseForegroundColor = UIColor(named: "OnDarkTextPrimary")!
+        config.baseBackgroundColor = UIColor(named: "PrimaryGradientStart")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs
             a.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
@@ -78,7 +78,7 @@ final class OnboardingPageViewController: UIViewController {
 
     private lazy var secondaryButton: UIButton = {
         var config = UIButton.Configuration.plain()
-        config.baseForegroundColor = AppColor.onDarkSecondary
+        config.baseForegroundColor = UIColor(named: "OnDarkTextSecondary")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs
             a.font = UIFont.systemFont(ofSize: 15, weight: .medium)
@@ -105,7 +105,7 @@ final class OnboardingPageViewController: UIViewController {
     }
 
     private func setupUI() {
-        view.backgroundColor = UIColor(named: "AppBackground")
+        view.backgroundColor = UIColor(named: "AppBackground")!
 
         view.addSubview(imageView)
         view.addSubview(gradientOverlay)
@@ -196,7 +196,7 @@ final class OnboardingPageViewController: UIViewController {
         gradient.frame = gradientOverlay.bounds
         gradient.colors = [
             UIColor.clear.cgColor,
-            UIColor(named: "AppBackground")?.cgColor ?? UIColor.black.cgColor
+            UIColor(named: "AppBackground")!.cgColor
         ]
         gradient.locations = [0.3, 1.0]
         gradientOverlay.layer.addSublayer(gradient)
@@ -207,10 +207,10 @@ final class OnboardingPageViewController: UIViewController {
             string: full,
             attributes: [
                 .font: UIFont.systemFont(ofSize: 32, weight: .bold),
-                .foregroundColor: AppColor.onDarkPrimary
+                .foregroundColor: UIColor(named: "OnDarkTextPrimary")!
             ]
         )
-        let purple = AppColor.accentPurple
+        let purple = UIColor(named: "PrimaryGradientStart")!
         if let range = full.range(of: highlighted) {
             attributed.addAttributes([
                 .foregroundColor: purple,

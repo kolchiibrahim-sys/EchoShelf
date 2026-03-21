@@ -18,7 +18,7 @@ final class GenreBookCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 16
-        iv.backgroundColor = UIColor.white.withAlphaComponent(0.06)
+        iv.backgroundColor = UIColor(named: "FillGlass")!
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -26,7 +26,7 @@ final class GenreBookCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 13, weight: .semibold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.numberOfLines = 2
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -35,14 +35,14 @@ final class GenreBookCell: UICollectionViewCell {
     private let authorLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 11)
-        lbl.textColor = UIColor.white.withAlphaComponent(0.5)
+        lbl.textColor = UIColor(named: "TabTextInactive")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
 
     private let headphoneIcon: UIImageView = {
         let iv = UIImageView(image: UIImage(systemName: "headphones"))
-        iv.tintColor = .systemPurple
+        iv.tintColor = UIColor(named: "PrimaryGradientStart")!
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -107,7 +107,7 @@ final class GenreEbookCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 16
-        iv.backgroundColor = UIColor.white.withAlphaComponent(0.06)
+        iv.backgroundColor = UIColor(named: "FillGlass")!
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -115,7 +115,7 @@ final class GenreEbookCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 13, weight: .semibold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.numberOfLines = 2
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -124,14 +124,14 @@ final class GenreEbookCell: UICollectionViewCell {
     private let authorLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 11)
-        lbl.textColor = UIColor.white.withAlphaComponent(0.5)
+        lbl.textColor = UIColor(named: "TabTextInactive")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
 
     private let bookIcon: UIImageView = {
         let iv = UIImageView(image: UIImage(systemName: "book.fill"))
-        iv.tintColor = .systemBlue
+        iv.tintColor = UIColor(named: "LanguageIconBlue")!
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -193,7 +193,7 @@ final class GenreLoadingCell: UICollectionViewCell {
 
     private let spinner: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(style: .medium)
-        ai.color = .systemPurple
+        ai.color = UIColor(named: "PrimaryGradientStart")!
         ai.translatesAutoresizingMaskIntoConstraints = false
         return ai
     }()

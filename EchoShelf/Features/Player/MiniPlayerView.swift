@@ -20,7 +20,7 @@ final class MiniPlayerView: UIView {
 
     private func setupUI() {
 
-        backgroundColor = UIColor(named: "AppBackground")
+        backgroundColor = UIColor(named: "AppBackground")!
 
         titleLabel.text = "Now Playing"
         titleLabel.textColor = .white

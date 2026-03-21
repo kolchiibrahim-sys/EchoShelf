@@ -6,7 +6,6 @@
 //
 import UIKit
 import FirebaseCore
-import GoogleSignIn
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,15 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         FirebaseApp.configure()
         return true
-    }
-
-    // Google Sign In callback URL handle
-    func application(
-        _ app: UIApplication,
-        open url: URL,
-        options: [UIApplication.OpenURLOptionsKey: Any] = [:]
-    ) -> Bool {
-        return GIDSignIn.sharedInstance.handle(url)
     }
 
     func application(

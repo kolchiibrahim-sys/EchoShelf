@@ -15,7 +15,7 @@ final class EbookReaderViewController: UIViewController {
 
     private let loadingContainer: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor(named: "AppBackground")
+        v.backgroundColor = UIColor(named: "AppBackground")!
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -46,7 +46,7 @@ final class EbookReaderViewController: UIViewController {
     private let loadingAuthorLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 14)
-        lbl.textColor = AppColor.tabTextInactive
+        lbl.textColor = UIColor(named: "TabTextInactive")!
         lbl.textAlignment = .center
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -54,8 +54,8 @@ final class EbookReaderViewController: UIViewController {
 
     private let progressBar: UIProgressView = {
         let pv = UIProgressView(progressViewStyle: .default)
-        pv.progressTintColor = AppColor.accentPurple
-        pv.trackTintColor = AppColor.fillGlassStrong
+        pv.progressTintColor = UIColor(named: "PrimaryGradientStart")!
+        pv.trackTintColor = UIColor(named: "FillGlassStrong")!
         pv.layer.cornerRadius = 3
         pv.clipsToBounds = true
         pv.translatesAutoresizingMaskIntoConstraints = false
@@ -66,7 +66,7 @@ final class EbookReaderViewController: UIViewController {
         let lbl = UILabel()
         lbl.text = "Preparing your book..."
         lbl.font = .systemFont(ofSize: 13)
-        lbl.textColor = AppColor.tabTextInactive
+        lbl.textColor = UIColor(named: "TabTextInactive")!
         lbl.textAlignment = .center
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -81,7 +81,7 @@ final class EbookReaderViewController: UIViewController {
 
     private let errorIcon: UIImageView = {
         let iv = UIImageView(image: UIImage(systemName: "exclamationmark.circle"))
-        iv.tintColor = AppColor.onDarkChevron
+        iv.tintColor = UIColor(named: "OnDarkChevron")!
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -90,7 +90,7 @@ final class EbookReaderViewController: UIViewController {
     private let errorLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 15)
-        lbl.textColor = AppColor.onDarkSecondary
+        lbl.textColor = UIColor(named: "OnDarkTextSecondary")!
         lbl.textAlignment = .center
         lbl.numberOfLines = 0
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -100,7 +100,7 @@ final class EbookReaderViewController: UIViewController {
     private let retryButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.title = "Try Again"
-        config.baseBackgroundColor = AppColor.accentPurple
+        config.baseBackgroundColor = UIColor(named: "PrimaryGradientStart")!
         config.cornerStyle = .capsule
         let btn = UIButton(configuration: config)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -110,7 +110,7 @@ final class EbookReaderViewController: UIViewController {
     private let pageLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 12, weight: .medium)
-        lbl.textColor = AppColor.onDarkDetail
+        lbl.textColor = UIColor(named: "OnDarkTextDetail")!
         lbl.textAlignment = .center
         lbl.isHidden = true
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -126,7 +126,7 @@ final class EbookReaderViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "AppBackground")
+        view.backgroundColor = UIColor(named: "AppBackground")!
         setupNavBar()
         setupPDFView()
         setupLoadingView()
@@ -238,15 +238,15 @@ private extension EbookReaderViewController {
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(named: "AppBackground")
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.backgroundColor = UIColor(named: "AppBackground")!
+        appearance.titleTextAttributes = [.foregroundColor: UIColor(named: "OnDarkTextPrimary")!]
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 
     func setupPDFView() {
         pdfView = PDFView(frame: .zero)
-        pdfView.backgroundColor = UIColor(named: "AppBackground") ?? .black
+        pdfView.backgroundColor = UIColor(named: "AppBackground")!
         pdfView.autoScales = true
         pdfView.displayMode = .singlePageContinuous
         pdfView.displayDirection = .vertical

@@ -14,7 +14,7 @@ final class KidsTrendingCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 16
-        iv.backgroundColor = UIColor.systemYellow.withAlphaComponent(0.15)
+        iv.backgroundColor = UIColor(named: "RatingStarYellow")!.withAlphaComponent(0.15)
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -23,8 +23,8 @@ final class KidsTrendingCell: UICollectionViewCell {
         let lbl = UILabel()
         lbl.text = "⭐ KIDS"
         lbl.font = .systemFont(ofSize: 9, weight: .bold)
-        lbl.textColor = .black
-        lbl.backgroundColor = UIColor.systemYellow
+        lbl.textColor = UIColor(named: "PureBlack")!
+        lbl.backgroundColor = UIColor(named: "RatingStarYellow")!
         lbl.layer.cornerRadius = 6
         lbl.clipsToBounds = true
         lbl.textAlignment = .center
@@ -35,7 +35,7 @@ final class KidsTrendingCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 13, weight: .semibold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.numberOfLines = 2
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -44,7 +44,7 @@ final class KidsTrendingCell: UICollectionViewCell {
     private let authorLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 11)
-        lbl.textColor = UIColor.systemYellow.withAlphaComponent(0.8)
+        lbl.textColor = UIColor(named: "RatingStarYellow")!.withAlphaComponent(0.8)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -101,10 +101,10 @@ final class KidsRecommendedCell: UICollectionViewCell {
 
     private let container: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor.systemYellow.withAlphaComponent(0.07)
+        v.backgroundColor = UIColor(named: "RatingStarYellow")!.withAlphaComponent(0.07)
         v.layer.cornerRadius = 18
         v.layer.borderWidth = 0.5
-        v.layer.borderColor = UIColor.systemYellow.withAlphaComponent(0.2).cgColor
+        v.layer.borderColor = UIColor(named: "RatingStarYellow")!.withAlphaComponent(0.2).cgColor
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -114,7 +114,7 @@ final class KidsRecommendedCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 12
-        iv.backgroundColor = UIColor.systemYellow.withAlphaComponent(0.15)
+        iv.backgroundColor = UIColor(named: "RatingStarYellow")!.withAlphaComponent(0.15)
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -122,7 +122,7 @@ final class KidsRecommendedCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 13, weight: .bold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.numberOfLines = 2
         return lbl
     }()
@@ -130,7 +130,7 @@ final class KidsRecommendedCell: UICollectionViewCell {
     private let authorLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 11, weight: .medium)
-        lbl.textColor = UIColor.systemYellow.withAlphaComponent(0.8)
+        lbl.textColor = UIColor(named: "RatingStarYellow")!.withAlphaComponent(0.8)
         return lbl
     }()
 

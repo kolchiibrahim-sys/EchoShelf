@@ -17,9 +17,9 @@ final class SettingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = AppColor.screenBackground
+        view.backgroundColor = UIColor(named: "SettingsBackground")!
         title = "Tənzimləmələr"
-        navigationController?.navigationBar.tintColor = AppColor.accentBlue
+        navigationController?.navigationBar.tintColor = UIColor(named: "PrimaryAccent")!
         setupScrollView()
         setupSections()
         setupFooter()
@@ -137,7 +137,7 @@ final class SettingsViewController: UIViewController {
         let footerLbl = UILabel()
         footerLbl.text = "Daxil olunub: \(email)"
         footerLbl.font = .systemFont(ofSize: 12)
-        footerLbl.textColor = AppColor.onDarkFooter
+        footerLbl.textColor = UIColor(named: "OnDarkTextFooter")!
         footerLbl.textAlignment = .center
         footerLbl.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(footerLbl)
@@ -159,7 +159,7 @@ final class SettingsViewController: UIViewController {
         let iconBgView = makeIconBg(icon: icon, iconTintAsset: iconBg)
         let titleLbl = makeRowTitle(title)
         let chevron = UIImageView(image: UIImage(systemName: "chevron.right"))
-        chevron.tintColor = AppColor.onDarkChevron
+        chevron.tintColor = UIColor(named: "OnDarkChevron")!
         chevron.contentMode = .scaleAspectFit
         chevron.translatesAutoresizingMaskIntoConstraints = false
 
@@ -184,7 +184,7 @@ final class SettingsViewController: UIViewController {
             let detailLbl = UILabel()
             detailLbl.text = detail
             detailLbl.font = .systemFont(ofSize: 13)
-            detailLbl.textColor = AppColor.onDarkDetail
+            detailLbl.textColor = UIColor(named: "OnDarkTextDetail")!
             detailLbl.translatesAutoresizingMaskIntoConstraints = false
             container.addSubview(detailLbl)
             NSLayoutConstraint.activate([
@@ -203,7 +203,7 @@ final class SettingsViewController: UIViewController {
         let titleLbl = makeRowTitle(title)
         let toggle = UISwitch()
         toggle.isOn = isOn
-        toggle.onTintColor = AppColor.accentBlue
+        toggle.onTintColor = UIColor(named: "PrimaryAccent")!
         toggle.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         toggle.translatesAutoresizingMaskIntoConstraints = false
         toggle.addAction(UIAction { _ in onChange(toggle.isOn) }, for: .valueChanged)
@@ -229,11 +229,11 @@ final class SettingsViewController: UIViewController {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
         let titleLbl = makeRowTitle(title)
-        titleLbl.textColor = AppColor.onDarkSecondary
+        titleLbl.textColor = UIColor(named: "OnDarkTextSecondary")!
         let detailLbl = UILabel()
         detailLbl.text = detail
         detailLbl.font = .systemFont(ofSize: 14)
-        detailLbl.textColor = AppColor.onDarkDetail
+        detailLbl.textColor = UIColor(named: "OnDarkTextDetail")!
         detailLbl.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(titleLbl)
         container.addSubview(detailLbl)
@@ -250,7 +250,7 @@ final class SettingsViewController: UIViewController {
 
     private func makeIconBg(icon: String, iconTintAsset: String) -> UIView {
         let bg = UIView()
-        let base = UIColor(named: iconTintAsset) ?? AppColor.accentBlue
+        let base = UIColor(named: iconTintAsset) ?? UIColor(named: "PrimaryAccent")!
         bg.backgroundColor = base.withAlphaComponent(0.2)
         bg.layer.cornerRadius = 8
         bg.translatesAutoresizingMaskIntoConstraints = false
@@ -272,7 +272,7 @@ final class SettingsViewController: UIViewController {
         let l = UILabel()
         l.text = text
         l.font = .systemFont(ofSize: 15)
-        l.textColor = AppColor.onDarkPrimary
+        l.textColor = UIColor(named: "OnDarkTextPrimary")!
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }
@@ -281,24 +281,24 @@ final class SettingsViewController: UIViewController {
         let l = UILabel()
         l.text = text
         l.font = .systemFont(ofSize: 11, weight: .semibold)
-        l.textColor = AppColor.onDarkCaption
+        l.textColor = UIColor(named: "OnDarkTextCaption")!
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }
 
     private func makeCard() -> UIView {
         let v = UIView()
-        v.backgroundColor = AppColor.elevatedSurface
+        v.backgroundColor = UIColor(named: "ElevatedSurface")!
         v.layer.cornerRadius = 14
         v.layer.borderWidth = 0.5
-        v.layer.borderColor = AppColor.borderHairline.cgColor
+        v.layer.borderColor = UIColor(named: "BorderHairline")!.cgColor
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }
 
     private func makeDivider() -> UIView {
         let v = UIView()
-        v.backgroundColor = AppColor.dividerRow
+        v.backgroundColor = UIColor(named: "DividerRow")!
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }

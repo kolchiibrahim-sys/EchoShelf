@@ -37,10 +37,10 @@ final class HomeViewController: UIViewController {
     private lazy var segmentControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Audiobooks", "Books", "Kids", "Genres"])
         sc.selectedSegmentIndex = 0
-        sc.selectedSegmentTintColor = AppColor.accentPurple
-        sc.setTitleTextAttributes([.foregroundColor: AppColor.onDarkPrimary], for: .selected)
-        sc.setTitleTextAttributes([.foregroundColor: AppColor.onDarkSecondary], for: .normal)
-        sc.backgroundColor = AppColor.fillGlass
+        sc.selectedSegmentTintColor = UIColor(named: "PrimaryGradientStart")!
+        sc.setTitleTextAttributes([.foregroundColor: UIColor(named: "OnDarkTextPrimary")!], for: .selected)
+        sc.setTitleTextAttributes([.foregroundColor: UIColor(named: "OnDarkTextSecondary")!], for: .normal)
+        sc.backgroundColor = UIColor(named: "FillGlass")!
         sc.translatesAutoresizingMaskIntoConstraints = false
         return sc
     }()
@@ -67,7 +67,7 @@ final class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "AppBackground")
+        view.backgroundColor = UIColor(named: "AppBackground")!
         setupGreeting()
         setupSegmentControl()
         setupCollectionView()

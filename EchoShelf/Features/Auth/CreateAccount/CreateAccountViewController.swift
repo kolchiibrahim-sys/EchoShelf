@@ -36,7 +36,7 @@ final class CreateAccountViewController: UIViewController {
 
     private lazy var logoContainerView: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor(named: "PrimaryGradientStart")
+        v.backgroundColor = UIColor(named: "PrimaryGradientStart")!
         v.layer.cornerRadius = 20
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -45,7 +45,7 @@ final class CreateAccountViewController: UIViewController {
     private lazy var logoImageView: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(named: "EchoLogo")
-        iv.tintColor = .white
+        iv.tintColor = UIColor(named: "OnDarkTextPrimary")!
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -55,7 +55,7 @@ final class CreateAccountViewController: UIViewController {
         let lbl = UILabel()
         lbl.text = "EchoShelf"
         lbl.font = .systemFont(ofSize: 22, weight: .bold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -64,7 +64,7 @@ final class CreateAccountViewController: UIViewController {
         let lbl = UILabel()
         lbl.text = "Create Account"
         lbl.font = .systemFont(ofSize: 34, weight: .bold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -73,7 +73,7 @@ final class CreateAccountViewController: UIViewController {
         let lbl = UILabel()
         lbl.text = "Start your listening journey today."
         lbl.font = .systemFont(ofSize: 16)
-        lbl.textColor = AppColor.onDarkSecondary
+        lbl.textColor = UIColor(named: "OnDarkTextSecondary")!
         lbl.numberOfLines = 0
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -83,17 +83,17 @@ final class CreateAccountViewController: UIViewController {
         let tf = UITextField()
         tf.attributedPlaceholder = NSAttributedString(
             string: "Full Name",
-            attributes: [.foregroundColor: AppColor.tabTextInactive]
+            attributes: [.foregroundColor: UIColor(named: "TabTextInactive")!]
         )
-        tf.textColor = .white
-        tf.backgroundColor = UIColor(named: "TextFieldBackground")
+        tf.textColor = UIColor(named: "OnDarkTextPrimary")!
+        tf.backgroundColor = UIColor(named: "TextFieldBackground")!
         tf.layer.cornerRadius = 16
         tf.autocapitalizationType = .words
         tf.leftViewMode = .always
         tf.translatesAutoresizingMaskIntoConstraints = false
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 52, height: 24))
         let icon = UIImageView(image: UIImage(systemName: "person"))
-        icon.tintColor = AppColor.tabTextInactive
+        icon.tintColor = UIColor(named: "TabTextInactive")!
         icon.frame = CGRect(x: 16, y: 0, width: 22, height: 24)
         icon.contentMode = .scaleAspectFit
         container.addSubview(icon)
@@ -105,10 +105,10 @@ final class CreateAccountViewController: UIViewController {
         let tf = UITextField()
         tf.attributedPlaceholder = NSAttributedString(
             string: "Email Address",
-            attributes: [.foregroundColor: AppColor.tabTextInactive]
+            attributes: [.foregroundColor: UIColor(named: "TabTextInactive")!]
         )
-        tf.textColor = .white
-        tf.backgroundColor = UIColor(named: "TextFieldBackground")
+        tf.textColor = UIColor(named: "OnDarkTextPrimary")!
+        tf.backgroundColor = UIColor(named: "TextFieldBackground")!
         tf.layer.cornerRadius = 16
         tf.keyboardType = .emailAddress
         tf.autocapitalizationType = .none
@@ -116,7 +116,7 @@ final class CreateAccountViewController: UIViewController {
         tf.translatesAutoresizingMaskIntoConstraints = false
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 52, height: 24))
         let icon = UIImageView(image: UIImage(systemName: "envelope"))
-        icon.tintColor = AppColor.tabTextInactive
+        icon.tintColor = UIColor(named: "TabTextInactive")!
         icon.frame = CGRect(x: 16, y: 0, width: 22, height: 24)
         icon.contentMode = .scaleAspectFit
         container.addSubview(icon)
@@ -128,10 +128,10 @@ final class CreateAccountViewController: UIViewController {
         let tf = UITextField()
         tf.attributedPlaceholder = NSAttributedString(
             string: "Password",
-            attributes: [.foregroundColor: AppColor.tabTextInactive]
+            attributes: [.foregroundColor: UIColor(named: "TabTextInactive")!]
         )
-        tf.textColor = .white
-        tf.backgroundColor = UIColor(named: "TextFieldBackground")
+        tf.textColor = UIColor(named: "OnDarkTextPrimary")!
+        tf.backgroundColor = UIColor(named: "TextFieldBackground")!
         tf.layer.cornerRadius = 16
         tf.isSecureTextEntry = true
         tf.leftViewMode = .always
@@ -139,14 +139,14 @@ final class CreateAccountViewController: UIViewController {
         tf.translatesAutoresizingMaskIntoConstraints = false
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 52, height: 24))
         let lockIcon = UIImageView(image: UIImage(systemName: "lock"))
-        lockIcon.tintColor = AppColor.tabTextInactive
+        lockIcon.tintColor = UIColor(named: "TabTextInactive")!
         lockIcon.frame = CGRect(x: 16, y: 0, width: 22, height: 24)
         lockIcon.contentMode = .scaleAspectFit
         container.addSubview(lockIcon)
         tf.leftView = container
         let eyeButton = UIButton(type: .system)
         eyeButton.setImage(UIImage(systemName: "eye"), for: .normal)
-        eyeButton.tintColor = AppColor.tabTextInactive
+        eyeButton.tintColor = UIColor(named: "TabTextInactive")!
         eyeButton.frame = CGRect(x: 0, y: 0, width: 48, height: 24)
         eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         tf.rightView = eyeButton
@@ -156,8 +156,8 @@ final class CreateAccountViewController: UIViewController {
     private lazy var createAccountButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.title = "Create Account →"
-        config.baseForegroundColor = .white
-        config.baseBackgroundColor = UIColor(named: "PrimaryGradientStart")
+        config.baseForegroundColor = UIColor(named: "OnDarkTextPrimary")!
+        config.baseBackgroundColor = UIColor(named: "PrimaryGradientStart")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs; a.font = UIFont.systemFont(ofSize: 18, weight: .semibold); return a
         }
@@ -169,7 +169,7 @@ final class CreateAccountViewController: UIViewController {
 
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(style: .medium)
-        ai.color = .white
+        ai.color = UIColor(named: "OnDarkTextPrimary")!
         ai.hidesWhenStopped = true
         ai.translatesAutoresizingMaskIntoConstraints = false
         return ai
@@ -179,7 +179,7 @@ final class CreateAccountViewController: UIViewController {
         let lbl = UILabel()
         lbl.text = "OR"
         lbl.font = .systemFont(ofSize: 13, weight: .medium)
-        lbl.textColor = AppColor.onDarkDetail
+        lbl.textColor = UIColor(named: "OnDarkTextDetail")!
         lbl.textAlignment = .center
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -187,14 +187,14 @@ final class CreateAccountViewController: UIViewController {
 
     private lazy var leftDivider: UIView = {
         let v = UIView()
-        v.backgroundColor = AppColor.glassPanel
+        v.backgroundColor = UIColor(named: "GlassPanel")!
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
 
     private lazy var rightDivider: UIView = {
         let v = UIView()
-        v.backgroundColor = AppColor.glassPanel
+        v.backgroundColor = UIColor(named: "GlassPanel")!
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -204,8 +204,8 @@ final class CreateAccountViewController: UIViewController {
         config.title = "Continue with Apple"
         config.image = UIImage(systemName: "apple.logo")
         config.imagePadding = 8
-        config.baseForegroundColor = .white
-        config.baseBackgroundColor = .black
+        config.baseForegroundColor = UIColor(named: "OnDarkTextPrimary")!
+        config.baseBackgroundColor = UIColor(named: "PureBlack")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs; a.font = UIFont.systemFont(ofSize: 17, weight: .semibold); return a
         }
@@ -218,8 +218,8 @@ final class CreateAccountViewController: UIViewController {
     private lazy var googleButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.title = "Continue with Google"
-        config.baseForegroundColor = .black
-        config.baseBackgroundColor = .white
+        config.baseForegroundColor = UIColor(named: "PureBlack")!
+        config.baseBackgroundColor = UIColor(named: "OnDarkTextPrimary")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs; a.font = UIFont.systemFont(ofSize: 17, weight: .semibold); return a
         }
@@ -229,7 +229,7 @@ final class CreateAccountViewController: UIViewController {
         let gLabel = UILabel()
         gLabel.text = "G"
         gLabel.font = .systemFont(ofSize: 18, weight: .bold)
-        gLabel.textColor = UIColor(named: "AccentColor") ?? .systemBlue
+        gLabel.textColor = UIColor(named: "AccentColor")!
         gLabel.translatesAutoresizingMaskIntoConstraints = false
         btn.addSubview(gLabel)
         NSLayoutConstraint.activate([
@@ -246,10 +246,10 @@ final class CreateAccountViewController: UIViewController {
             string: fullText,
             attributes: [
                 .font: UIFont.systemFont(ofSize: 14),
-                .foregroundColor: AppColor.tabTextInactive
+                .foregroundColor: UIColor(named: "TabTextInactive")!
             ]
         )
-        let purple = AppColor.accentPurple
+        let purple = UIColor(named: "PrimaryGradientStart")!
         if let r = fullText.range(of: "Sign In") {
             attributed.addAttribute(.foregroundColor, value: purple, range: NSRange(r, in: fullText))
         }
@@ -271,10 +271,10 @@ final class CreateAccountViewController: UIViewController {
             string: fullText,
             attributes: [
                 .font: UIFont.systemFont(ofSize: 13),
-                .foregroundColor: AppColor.tabTextInactive
+                .foregroundColor: UIColor(named: "TabTextInactive")!
             ]
         )
-        let purple = AppColor.accentPurple
+        let purple = UIColor(named: "PrimaryGradientStart")!
         if let r = fullText.range(of: "Terms of Service") {
             attributed.addAttribute(.foregroundColor, value: purple, range: NSRange(r, in: fullText))
         }
@@ -293,7 +293,7 @@ final class CreateAccountViewController: UIViewController {
     }
 
     private func setupUI() {
-        view.backgroundColor = UIColor(named: "AppBackground")
+        view.backgroundColor = UIColor(named: "AppBackground")!
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(logoContainerView)
@@ -493,8 +493,12 @@ final class CreateAccountViewController: UIViewController {
     }
 }
 
-extension CreateAccountViewController: @retroactive ASAuthorizationControllerPresentationContextProviding {
+extension CreateAccountViewController: ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        view.window ?? UIWindow()
+        if let window = view.window { return window }
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            return scene.windows.first { $0.isKeyWindow } ?? scene.windows.first!
+        }
+        fatalError("No UIWindowScene for Apple Sign In presentation")
     }
 }

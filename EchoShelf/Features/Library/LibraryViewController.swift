@@ -23,7 +23,7 @@ final class LibraryViewController: UIViewController {
 
     private let lampGlow: UIView = {
         let v = UIView()
-        v.backgroundColor = AppColor.libraryAccentOrange.withAlphaComponent(0.07)
+        v.backgroundColor = UIColor(named: "LibraryAccentOrange")!.withAlphaComponent(0.07)
         v.layer.cornerRadius = 120
         v.translatesAutoresizingMaskIntoConstraints = false
         v.isUserInteractionEnabled = false
@@ -32,7 +32,7 @@ final class LibraryViewController: UIViewController {
 
     private let lampIcon: UIImageView = {
         let iv = UIImageView(image: UIImage(systemName: "lamp.desk.fill"))
-        iv.tintColor   = AppColor.libraryAccentOrange.withAlphaComponent(0.45)
+        iv.tintColor   = UIColor(named: "LibraryAccentOrange")!.withAlphaComponent(0.45)
         iv.contentMode = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.isUserInteractionEnabled = false
@@ -71,12 +71,12 @@ final class LibraryViewController: UIViewController {
 private extension LibraryViewController {
 
     func setupBackground() {
-        view.backgroundColor = UIColor(named: "AppBackground")
+        view.backgroundColor = UIColor(named: "AppBackground")!
 
         wallGradient.colors = [
-            AppColor.libraryShelfGradientStart.cgColor,
-            AppColor.libraryShelfGradientMid.cgColor,
-            AppColor.libraryShelfGradientStart.cgColor,
+            UIColor(named: "LibraryShelfGradientStart")!.cgColor,
+            UIColor(named: "LibraryShelfGradientMid")!.cgColor,
+            UIColor(named: "LibraryShelfGradientStart")!.cgColor,
         ]
         wallGradient.locations = [0, 0.5, 1]
         wallGradient.startPoint = CGPoint(x: 0, y: 0)
@@ -145,7 +145,7 @@ private extension LibraryViewController {
         let titleLabel = UILabel()
         titleLabel.text      = "My Library"
         titleLabel.font      = .systemFont(ofSize: 28, weight: .bold)
-        titleLabel.textColor = AppColor.libraryTitleGold
+        titleLabel.textColor = UIColor(named: "LibraryTitleGold")!
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
 

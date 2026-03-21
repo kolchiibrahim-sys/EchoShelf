@@ -23,9 +23,9 @@ final class StorageCacheViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = AppColor.screenBackground
+        view.backgroundColor = UIColor(named: "SettingsBackground")!
         title = "Memory and Cache"
-        navigationController?.navigationBar.tintColor = AppColor.accentBlue
+        navigationController?.navigationBar.tintColor = UIColor(named: "PrimaryAccent")!
         setupScrollView()
         buildUI()
     }
@@ -87,7 +87,7 @@ final class StorageCacheViewController: UIViewController {
             ])
             if i < books.count - 1 {
                 let div = UIView()
-                div.backgroundColor = AppColor.dividerRow
+                div.backgroundColor = UIColor(named: "DividerRow")!
                 div.translatesAutoresizingMaskIntoConstraints = false
                 booksCard.addSubview(div)
                 NSLayoutConstraint.activate([
@@ -125,33 +125,33 @@ final class StorageCacheViewController: UIViewController {
         totalLabel.translatesAutoresizingMaskIntoConstraints = false
         let totalAttr = NSMutableAttributedString(
             string: "\(Int(totalGB)) GB ",
-            attributes: [.font: UIFont.systemFont(ofSize: 26, weight: .bold), .foregroundColor: AppColor.onDarkPrimary]
+            attributes: [.font: UIFont.systemFont(ofSize: 26, weight: .bold), .foregroundColor: UIColor(named: "OnDarkTextPrimary")!]
         )
         totalAttr.append(NSAttributedString(
             string: "Toplam",
-            attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: AppColor.onDarkTertiary]
+            attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor(named: "OnDarkTextTertiary")!]
         ))
         totalLabel.attributedText = totalAttr
 
         let freeLabel = UILabel()
         freeLabel.text = "\(String(format: "%.1f", totalGB - usedGB)) GB Boş"
         freeLabel.font = .systemFont(ofSize: 15, weight: .semibold)
-        freeLabel.textColor = AppColor.accentBlue
+        freeLabel.textColor = UIColor(named: "PrimaryAccent")!
         freeLabel.translatesAutoresizingMaskIntoConstraints = false
 
         // Progress bar
         let barBg = UIView()
-        barBg.backgroundColor = AppColor.fillGlassStrong
+        barBg.backgroundColor = UIColor(named: "FillGlassStrong")!
         barBg.layer.cornerRadius = 4
         barBg.translatesAutoresizingMaskIntoConstraints = false
 
         let appFill = UIView()
-        appFill.backgroundColor = AppColor.accentBlue
+        appFill.backgroundColor = UIColor(named: "PrimaryAccent")!
         appFill.layer.cornerRadius = 4
         appFill.translatesAutoresizingMaskIntoConstraints = false
 
         let otherFill = UIView()
-        otherFill.backgroundColor = AppColor.storageSecondaryBar
+        otherFill.backgroundColor = UIColor(named: "StorageSecondaryBar")!
         otherFill.layer.cornerRadius = 4
         otherFill.translatesAutoresizingMaskIntoConstraints = false
 
@@ -209,9 +209,9 @@ final class StorageCacheViewController: UIViewController {
         stack.translatesAutoresizingMaskIntoConstraints = false
 
         let items: [(color: UIColor, label: String)] = [
-            (AppColor.accentBlue, "EchoShelf (\(Int(appGB)) GB)"),
-            (AppColor.storageChartOther, "Digər (\(String(format: "%.1f", usedGB - appGB)) GB)"),
-            (AppColor.storageChartEmpty, "Boş (\(String(format: "%.1f", totalGB - usedGB)) GB)")
+            (UIColor(named: "PrimaryAccent")!, "EchoShelf (\(Int(appGB)) GB)"),
+            (UIColor(named: "StorageChartOther")!, "Digər (\(String(format: "%.1f", usedGB - appGB)) GB)"),
+            (UIColor(named: "StorageChartEmpty")!, "Boş (\(String(format: "%.1f", totalGB - usedGB)) GB)")
         ]
         for item in items {
             let dot = UIView()
@@ -224,7 +224,7 @@ final class StorageCacheViewController: UIViewController {
             let lbl = UILabel()
             lbl.text = item.label
             lbl.font = .systemFont(ofSize: 11)
-            lbl.textColor = AppColor.tabTextInactive
+            lbl.textColor = UIColor(named: "TabTextInactive")!
 
             let h = UIStackView(arrangedSubviews: [dot, lbl])
             h.axis = .horizontal
@@ -242,30 +242,30 @@ final class StorageCacheViewController: UIViewController {
         container.translatesAutoresizingMaskIntoConstraints = false
 
         let coverBg = UIView()
-        coverBg.backgroundColor = AppColor.fillGlassMedium
+        coverBg.backgroundColor = UIColor(named: "FillGlassMedium")!
         coverBg.layer.cornerRadius = 6
         coverBg.translatesAutoresizingMaskIntoConstraints = false
 
         let coverIcon = UIImageView(image: UIImage(systemName: "book.fill"))
-        coverIcon.tintColor = AppColor.onDarkChevron
+        coverIcon.tintColor = UIColor(named: "OnDarkChevron")!
         coverIcon.contentMode = .scaleAspectFit
         coverIcon.translatesAutoresizingMaskIntoConstraints = false
 
         let titleLbl = UILabel()
         titleLbl.text = book.title
         titleLbl.font = .systemFont(ofSize: 14, weight: .medium)
-        titleLbl.textColor = AppColor.onDarkPrimary
+        titleLbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         titleLbl.translatesAutoresizingMaskIntoConstraints = false
 
         let detailLbl = UILabel()
         detailLbl.text = "\(book.size) • \(book.quality)"
         detailLbl.font = .systemFont(ofSize: 12)
-        detailLbl.textColor = AppColor.onDarkDetail
+        detailLbl.textColor = UIColor(named: "OnDarkTextDetail")!
         detailLbl.translatesAutoresizingMaskIntoConstraints = false
 
         let deleteBtn = UIButton(type: .system)
         deleteBtn.setImage(UIImage(systemName: "trash"), for: .normal)
-        deleteBtn.tintColor = AppColor.iconRed
+        deleteBtn.tintColor = UIColor(named: "IconRed")!
         deleteBtn.translatesAutoresizingMaskIntoConstraints = false
         deleteBtn.tag = index
         deleteBtn.addTarget(self, action: #selector(deleteBook(_:)), for: .touchUpInside)
@@ -312,11 +312,11 @@ final class StorageCacheViewController: UIViewController {
         cacheLabel.translatesAutoresizingMaskIntoConstraints = false
         let attr = NSMutableAttributedString(
             string: "MÜVƏQQƏTİ KEŞ\n",
-            attributes: [.font: UIFont.systemFont(ofSize: 10, weight: .semibold), .foregroundColor: AppColor.onDarkCaption]
+            attributes: [.font: UIFont.systemFont(ofSize: 10, weight: .semibold), .foregroundColor: UIColor(named: "OnDarkTextCaption")!]
         )
         attr.append(NSAttributedString(
             string: "2.4 GB",
-            attributes: [.font: UIFont.systemFont(ofSize: 20, weight: .bold), .foregroundColor: AppColor.onDarkPrimary]
+            attributes: [.font: UIFont.systemFont(ofSize: 20, weight: .bold), .foregroundColor: UIColor(named: "OnDarkTextPrimary")!]
         ))
         cacheLabel.attributedText = attr
         cacheLabel.numberOfLines = 2
@@ -324,8 +324,8 @@ final class StorageCacheViewController: UIViewController {
         let clearBtn = UIButton(type: .system)
         clearBtn.setTitle("KEŞİ TƏMİZLƏ", for: .normal)
         clearBtn.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
-        clearBtn.backgroundColor = AppColor.accentBlue
-        clearBtn.setTitleColor(AppColor.onDarkPrimary, for: .normal)
+        clearBtn.backgroundColor = UIColor(named: "PrimaryAccent")!
+        clearBtn.setTitleColor(UIColor(named: "OnDarkTextPrimary")!, for: .normal)
         clearBtn.layer.cornerRadius = 20
         clearBtn.translatesAutoresizingMaskIntoConstraints = false
         clearBtn.addTarget(self, action: #selector(clearCacheTapped), for: .touchUpInside)
@@ -349,10 +349,10 @@ final class StorageCacheViewController: UIViewController {
 
     private func makeCard() -> UIView {
         let v = UIView()
-        v.backgroundColor = AppColor.elevatedSurface
+        v.backgroundColor = UIColor(named: "ElevatedSurface")!
         v.layer.cornerRadius = 14
         v.layer.borderWidth = 0.5
-        v.layer.borderColor = AppColor.borderHairline.cgColor
+        v.layer.borderColor = UIColor(named: "BorderHairline")!.cgColor
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }
@@ -361,7 +361,7 @@ final class StorageCacheViewController: UIViewController {
         let l = UILabel()
         l.text = text
         l.font = .systemFont(ofSize: 10, weight: .semibold)
-        l.textColor = AppColor.onDarkCaption
+        l.textColor = UIColor(named: "OnDarkTextCaption")!
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }

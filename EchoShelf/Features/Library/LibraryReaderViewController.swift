@@ -22,7 +22,7 @@ final class LibraryReaderViewController: UIViewController {
 
     private let errorIcon: UIImageView = {
         let iv = UIImageView(image: UIImage(systemName: "exclamationmark.circle"))
-        iv.tintColor    = AppColor.onDarkChevron
+        iv.tintColor    = UIColor(named: "OnDarkChevron")!
         iv.contentMode  = .scaleAspectFit
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -31,7 +31,7 @@ final class LibraryReaderViewController: UIViewController {
     private let errorLabel: UILabel = {
         let lbl = UILabel()
         lbl.font          = .systemFont(ofSize: 15)
-        lbl.textColor     = AppColor.onDarkSecondary
+        lbl.textColor     = UIColor(named: "OnDarkTextSecondary")!
         lbl.textAlignment = .center
         lbl.numberOfLines = 0
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,7 @@ final class LibraryReaderViewController: UIViewController {
     private let pageLabel: UILabel = {
         let lbl = UILabel()
         lbl.font          = .systemFont(ofSize: 12, weight: .medium)
-        lbl.textColor     = AppColor.onDarkDetail
+        lbl.textColor     = UIColor(named: "OnDarkTextDetail")!
         lbl.textAlignment = .center
         lbl.isHidden      = true
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +50,7 @@ final class LibraryReaderViewController: UIViewController {
 
     private let loadingIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(style: .medium)
-        ai.color = AppColor.tabTextInactive
+        ai.color = UIColor(named: "TabTextInactive")!
         ai.translatesAutoresizingMaskIntoConstraints = false
         return ai
     }()
@@ -64,7 +64,7 @@ final class LibraryReaderViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "AppBackground")
+        view.backgroundColor = UIColor(named: "AppBackground")!
         setupNavBar()
         setupPDFView()
         setupErrorView()
@@ -168,15 +168,15 @@ private extension LibraryReaderViewController {
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor     = UIColor(named: "AppBackground")
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.backgroundColor     = UIColor(named: "AppBackground")!
+        appearance.titleTextAttributes = [.foregroundColor: UIColor(named: "OnDarkTextPrimary")!]
         navigationController?.navigationBar.standardAppearance   = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 
     func setupPDFView() {
         pdfView = PDFView(frame: .zero)
-        pdfView.backgroundColor    = UIColor(named: "AppBackground") ?? .black
+        pdfView.backgroundColor    = UIColor(named: "AppBackground")!
         pdfView.autoScales         = true
         pdfView.displayMode        = .singlePageContinuous
         pdfView.displayDirection   = .vertical

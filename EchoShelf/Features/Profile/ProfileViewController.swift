@@ -34,10 +34,10 @@ final class ProfileViewController: UIViewController {
 
     private let avatarContainer: UIView = {
         let v = UIView()
-        v.backgroundColor = AppColor.profileAvatarBackground
+        v.backgroundColor = UIColor(named: "ProfileAvatarBackground")!
         v.layer.cornerRadius = 40
         v.layer.borderWidth = 2
-        v.layer.borderColor = AppColor.accentBlue.withAlphaComponent(0.5).cgColor
+        v.layer.borderColor = UIColor(named: "PrimaryAccent")!.withAlphaComponent(0.5).cgColor
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -45,7 +45,7 @@ final class ProfileViewController: UIViewController {
     private let initialsLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 26, weight: .bold)
-        l.textColor = AppColor.accentBlue
+        l.textColor = UIColor(named: "PrimaryAccent")!
         l.textAlignment = .center
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
@@ -54,7 +54,7 @@ final class ProfileViewController: UIViewController {
     private let nameLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 20, weight: .bold)
-        l.textColor = AppColor.onDarkPrimary
+        l.textColor = UIColor(named: "OnDarkTextPrimary")!
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
@@ -62,7 +62,7 @@ final class ProfileViewController: UIViewController {
     private let emailLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 13)
-        l.textColor = AppColor.tabTextInactive
+        l.textColor = UIColor(named: "TabTextInactive")!
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
@@ -71,7 +71,7 @@ final class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = AppColor.screenBackground
+        view.backgroundColor = UIColor(named: "SettingsBackground")!
         title = "Profil"
         navigationController?.navigationBar.prefersLargeTitles = false
         setupScrollView()
@@ -213,17 +213,17 @@ final class ProfileViewController: UIViewController {
         let l = UILabel()
         l.text = text
         l.font = .systemFont(ofSize: 11, weight: .semibold)
-        l.textColor = AppColor.onDarkCaption
+        l.textColor = UIColor(named: "OnDarkTextCaption")!
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }
 
     private func makeCard() -> UIView {
         let v = UIView()
-        v.backgroundColor = AppColor.elevatedSurface
+        v.backgroundColor = UIColor(named: "ElevatedSurface")!
         v.layer.cornerRadius = 14
         v.layer.borderWidth = 0.5
-        v.layer.borderColor = AppColor.borderHairline.cgColor
+        v.layer.borderColor = UIColor(named: "BorderHairline")!.cgColor
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }
@@ -237,12 +237,12 @@ final class ProfileViewController: UIViewController {
         container.addTarget(self, action: #selector(rowUnhighlight(_:)), for: [.touchUpInside, .touchUpOutside, .touchCancel])
 
         let iconBg2 = UIView()
-        iconBg2.backgroundColor = (UIColor(named: iconBg) ?? AppColor.accentBlue).withAlphaComponent(0.2)
+        iconBg2.backgroundColor = (UIColor(named: iconBg) ?? UIColor(named: "PrimaryAccent")!).withAlphaComponent(0.2)
         iconBg2.layer.cornerRadius = 8
         iconBg2.translatesAutoresizingMaskIntoConstraints = false
 
         let iconImg = UIImageView(image: UIImage(systemName: icon))
-        iconImg.tintColor = UIColor(named: iconBg) ?? AppColor.accentBlue
+        iconImg.tintColor = UIColor(named: iconBg) ?? UIColor(named: "PrimaryAccent")!
         iconImg.contentMode = .scaleAspectFit
         iconImg.translatesAutoresizingMaskIntoConstraints = false
 
@@ -253,7 +253,7 @@ final class ProfileViewController: UIViewController {
         titleLbl.translatesAutoresizingMaskIntoConstraints = false
 
         let chevron = UIImageView(image: UIImage(systemName: "chevron.right"))
-        chevron.tintColor = AppColor.onDarkChevron
+        chevron.tintColor = UIColor(named: "OnDarkChevron")!
         chevron.contentMode = .scaleAspectFit
         chevron.translatesAutoresizingMaskIntoConstraints = false
 
@@ -286,7 +286,7 @@ final class ProfileViewController: UIViewController {
             let detailLbl = UILabel()
             detailLbl.text = detail
             detailLbl.font = .systemFont(ofSize: 13)
-            detailLbl.textColor = AppColor.onDarkDetail
+            detailLbl.textColor = UIColor(named: "OnDarkTextDetail")!
             detailLbl.translatesAutoresizingMaskIntoConstraints = false
             container.addSubview(detailLbl)
             NSLayoutConstraint.activate([
@@ -297,7 +297,7 @@ final class ProfileViewController: UIViewController {
 
         if showDivider {
             let div = UIView()
-            div.backgroundColor = AppColor.dividerRow
+            div.backgroundColor = UIColor(named: "DividerRow")!
             div.translatesAutoresizingMaskIntoConstraints = false
             container.addSubview(div)
             NSLayoutConstraint.activate([
@@ -316,12 +316,12 @@ final class ProfileViewController: UIViewController {
         config.title = "Çıxış"
         config.image = UIImage(systemName: "rectangle.portrait.and.arrow.right")
         config.imagePadding = 8
-        config.baseBackgroundColor = AppColor.iconRed.withAlphaComponent(0.1)
-        config.baseForegroundColor = AppColor.iconRed
+        config.baseBackgroundColor = UIColor(named: "IconRed")!.withAlphaComponent(0.1)
+        config.baseForegroundColor = UIColor(named: "IconRed")!
         config.cornerStyle = .large
         let btn = UIButton(configuration: config)
         btn.layer.borderWidth = 0.5
-        btn.layer.borderColor = AppColor.iconRed.withAlphaComponent(0.3).cgColor
+        btn.layer.borderColor = UIColor(named: "IconRed")!.withAlphaComponent(0.3).cgColor
         btn.layer.cornerRadius = 14
         btn.layer.masksToBounds = true
         btn.translatesAutoresizingMaskIntoConstraints = false

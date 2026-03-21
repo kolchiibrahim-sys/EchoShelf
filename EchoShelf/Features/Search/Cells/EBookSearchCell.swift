@@ -51,12 +51,12 @@ final class EbookTopResultCell: UICollectionViewCell {
         coverImage.layer.cornerRadius = 16
         coverImage.clipsToBounds = true
         coverImage.contentMode = .scaleAspectFill
-        coverImage.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.2)
+        coverImage.backgroundColor = UIColor(named: "PrimaryAccent")!.withAlphaComponent(0.2)
         coverImage.translatesAutoresizingMaskIntoConstraints = false
 
         genreBadge.font = .systemFont(ofSize: 10, weight: .semibold)
-        genreBadge.textColor = UIColor.systemBlue
-        genreBadge.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.15)
+        genreBadge.textColor = UIColor(named: "PrimaryAccent")!
+        genreBadge.backgroundColor = UIColor(named: "PrimaryAccent")!.withAlphaComponent(0.15)
         genreBadge.layer.cornerRadius = 8
         genreBadge.clipsToBounds = true
         genreBadge.textAlignment = .center
@@ -67,7 +67,7 @@ final class EbookTopResultCell: UICollectionViewCell {
         titleLabel.numberOfLines = 2
 
         authorLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        authorLabel.textColor = UIColor.systemBlue
+        authorLabel.textColor = UIColor(named: "PrimaryAccent")!
 
         sourceLabel.font = .systemFont(ofSize: 12)
         sourceLabel.textColor = UIColor.white.withAlphaComponent(0.5)
@@ -83,7 +83,7 @@ final class EbookTopResultCell: UICollectionViewCell {
         metaStack.addArrangedSubview(downloadLabel)
 
         var config = UIButton.Configuration.filled()
-        config.baseBackgroundColor = .systemBlue
+        config.baseBackgroundColor = UIColor(named: "PrimaryAccent")!
         config.baseForegroundColor = .white
         config.cornerStyle = .capsule
         config.image = UIImage(systemName: "book.fill")
@@ -181,7 +181,7 @@ final class EbookOtherResultCell: UICollectionViewCell {
         coverImage.layer.cornerRadius = 10
         coverImage.clipsToBounds = true
         coverImage.contentMode = .scaleAspectFill
-        coverImage.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.15)
+        coverImage.backgroundColor = UIColor(named: "PrimaryAccent")!.withAlphaComponent(0.15)
         coverImage.translatesAutoresizingMaskIntoConstraints = false
 
         titleLabel.font = .systemFont(ofSize: 15, weight: .bold)
@@ -189,7 +189,7 @@ final class EbookOtherResultCell: UICollectionViewCell {
         titleLabel.numberOfLines = 2
 
         authorLabel.font = .systemFont(ofSize: 13, weight: .medium)
-        authorLabel.textColor = UIColor.systemBlue
+        authorLabel.textColor = UIColor(named: "PrimaryAccent")!
 
         downloadLabel.font = .systemFont(ofSize: 12)
         downloadLabel.textColor = UIColor.white.withAlphaComponent(0.5)
@@ -259,13 +259,13 @@ final class EbookYouMightLikeCell: UICollectionViewCell {
         coverImage.layer.cornerRadius = 14
         coverImage.clipsToBounds = true
         coverImage.contentMode = .scaleAspectFill
-        coverImage.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.15)
+        coverImage.backgroundColor = UIColor(named: "PrimaryAccent")!.withAlphaComponent(0.15)
         coverImage.translatesAutoresizingMaskIntoConstraints = false
 
         badgeLabel.text = "BOOK"
         badgeLabel.font = .systemFont(ofSize: 9, weight: .bold)
         badgeLabel.textColor = .white
-        badgeLabel.backgroundColor = UIColor.systemBlue
+        badgeLabel.backgroundColor = UIColor(named: "PrimaryAccent")!
         badgeLabel.layer.cornerRadius = 6
         badgeLabel.clipsToBounds = true
         badgeLabel.textAlignment = .center
@@ -277,7 +277,7 @@ final class EbookYouMightLikeCell: UICollectionViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         authorLabel.font = .systemFont(ofSize: 11)
-        authorLabel.textColor = UIColor.systemBlue
+        authorLabel.textColor = UIColor(named: "PrimaryAccent")!
         authorLabel.translatesAutoresizingMaskIntoConstraints = false
 
         contentView.addSubview(coverImage)

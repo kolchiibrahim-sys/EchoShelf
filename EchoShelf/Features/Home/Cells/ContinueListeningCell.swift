@@ -39,7 +39,7 @@ final class ContinueListeningCell: UICollectionViewCell {
         authorLabel.font = .systemFont(ofSize: 14)
         authorLabel.textColor = UIColor.white.withAlphaComponent(0.7)
 
-        progressView.progressTintColor = .systemPurple
+        progressView.progressTintColor = UIColor(named: "PrimaryGradientStart")!
         progressView.trackTintColor = UIColor.white.withAlphaComponent(0.2)
 
         let stack = UIStackView(arrangedSubviews: [titleLabel, authorLabel, progressView])

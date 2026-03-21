@@ -12,7 +12,7 @@ final class HomeHeaderCell: UICollectionViewCell {
 
     private let greetingLabel: UILabel = {
         let lbl = UILabel()
-        lbl.textColor = UIColor.white.withAlphaComponent(0.6)
+        lbl.textColor = UIColor(named: "OnDarkTextSecondary")!
         lbl.font = .systemFont(ofSize: 13, weight: .medium)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -20,7 +20,7 @@ final class HomeHeaderCell: UICollectionViewCell {
 
     private let nameLabel: UILabel = {
         let lbl = UILabel()
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.font = .systemFont(ofSize: 28, weight: .bold)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -28,7 +28,7 @@ final class HomeHeaderCell: UICollectionViewCell {
 
     private let avatarView: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor.systemOrange.withAlphaComponent(0.2)
+        v.backgroundColor = UIColor(named: "LibraryAccentOrange")!.withAlphaComponent(0.2)
         v.layer.cornerRadius = 24
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -36,7 +36,7 @@ final class HomeHeaderCell: UICollectionViewCell {
 
     private let avatarIcon: UIImageView = {
         let iv = UIImageView(image: UIImage(systemName: "person.fill"))
-        iv.tintColor = .systemOrange
+        iv.tintColor = UIColor(named: "LibraryAccentOrange")!
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()

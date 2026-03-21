@@ -40,7 +40,7 @@ final class EbookTrendingCell: UICollectionViewCell {
 
     private let bookBadge: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.85)
+        v.backgroundColor = UIColor(named: "PrimaryAccent")!.withAlphaComponent(0.85)
         v.layer.cornerRadius = 8
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -142,7 +142,7 @@ final class EbookRecommendedCell: UICollectionViewCell {
         let lbl = UILabel()
         lbl.text = "📖 Book"
         lbl.font = .systemFont(ofSize: 11, weight: .medium)
-        lbl.textColor = UIColor.systemBlue
+        lbl.textColor = UIColor(named: "PrimaryAccent")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -152,7 +152,7 @@ final class EbookRecommendedCell: UICollectionViewCell {
         btn.setTitle("Read", for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 12, weight: .semibold)
         btn.tintColor = .white
-        btn.backgroundColor = .systemBlue
+        btn.backgroundColor = UIColor(named: "PrimaryAccent")!
         btn.layer.cornerRadius = 14
         btn.isUserInteractionEnabled = false
         btn.translatesAutoresizingMaskIntoConstraints = false

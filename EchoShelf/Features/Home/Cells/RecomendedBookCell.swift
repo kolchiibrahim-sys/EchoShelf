@@ -13,7 +13,7 @@ final class RecommendedBookCell: UICollectionViewCell {
 
     private let containerView: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor.white.withAlphaComponent(0.06)
+        v.backgroundColor = UIColor(named: "FillGlass")!
         v.layer.cornerRadius = 20
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -25,14 +25,14 @@ final class RecommendedBookCell: UICollectionViewCell {
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFill
         iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.2)
+        iv.backgroundColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.2)
         return iv
     }()
 
     private let titleLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 15, weight: .semibold)
-        l.textColor = .white
+        l.textColor = UIColor(named: "OnDarkTextPrimary")!
         l.numberOfLines = 2
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
@@ -41,7 +41,7 @@ final class RecommendedBookCell: UICollectionViewCell {
     private let authorLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 13)
-        l.textColor = UIColor.white.withAlphaComponent(0.5)
+        l.textColor = UIColor(named: "TabTextInactive")!
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
@@ -49,7 +49,7 @@ final class RecommendedBookCell: UICollectionViewCell {
     private let chapterLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 12)
-        l.textColor = UIColor.systemPurple.withAlphaComponent(0.8)
+        l.textColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.8)
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()

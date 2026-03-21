@@ -44,14 +44,14 @@ final class AudioDiskCell: UICollectionViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4)
         ])
-        contentView.layer.shouldRasterize    = true
-        contentView.layer.rasterizationScale = UIScreen.main.scale
+        contentView.layer.shouldRasterize = true
     }
 
     required init?(coder: NSCoder) { fatalError() }
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        contentView.layer.rasterizationScale = traitCollection.displayScale
         buildDisk()
     }
 

@@ -48,7 +48,7 @@ final class ContinueListeningCard: UIView {
         authorLabel.textColor = UIColor.white.withAlphaComponent(0.7)
 
         progressView.progress = 0.65
-        progressView.tintColor = .systemPurple
+        progressView.tintColor = UIColor(named: "PrimaryGradientStart")!
 
         let textStack = UIStackView(arrangedSubviews: [titleLabel, authorLabel, progressView])
         textStack.axis = .vertical

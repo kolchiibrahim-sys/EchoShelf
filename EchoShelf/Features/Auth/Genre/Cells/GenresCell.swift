@@ -46,7 +46,7 @@ final class GenreCell: UICollectionViewCell {
 
     private func updateSelectionUI() {
         if isSelected {
-            contentView.backgroundColor = UIColor.systemPurple
+            contentView.backgroundColor = UIColor(named: "PrimaryGradientStart")!
         } else {
             contentView.backgroundColor = UIColor.white.withAlphaComponent(0.06)
         }

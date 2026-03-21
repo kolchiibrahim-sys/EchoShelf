@@ -46,7 +46,7 @@ final class SearchResultCell: UICollectionViewCell {
         titleLabel.numberOfLines = 2
 
         authorLabel.font = .systemFont(ofSize: 13, weight: .medium)
-        authorLabel.textColor = UIColor.systemPurple
+        authorLabel.textColor = UIColor(named: "PrimaryGradientStart")!
 
         narratorLabel.font = .systemFont(ofSize: 12)
         narratorLabel.textColor = UIColor.white.withAlphaComponent(0.6)

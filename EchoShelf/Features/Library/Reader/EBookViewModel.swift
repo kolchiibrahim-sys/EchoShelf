@@ -102,7 +102,7 @@ final class EbookReaderViewModel {
 
                 self.totalPages = document.pageCount
 
-                try? LibraryManager.shared.saveBook(from: self.ebook, pdfData: data)
+                _ = try? LibraryManager.shared.saveBook(from: self.ebook, pdfData: data)
 
                 self.setState(.loaded(document))
                 self.onProgressChanged?(0, document.pageCount)

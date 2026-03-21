@@ -30,7 +30,7 @@ final class TrendingCategoryCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 18, weight: .bold)
-        lbl.textColor = .white
+        lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -72,7 +72,7 @@ final class TrendingCategoryCell: UICollectionViewCell {
         titleLabel.text = category.title
         iconLabel.text = category.icon
 
-        let base = UIColor(named: category.colorName) ?? .systemPurple
+        let base = UIColor(named: category.colorName) ?? UIColor(named: "PrimaryGradientStart")!
         let light = base.withAlphaComponent(0.7)
         gradientLayer.colors = [base.cgColor, light.cgColor]
     }

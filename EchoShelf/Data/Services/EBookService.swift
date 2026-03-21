@@ -7,6 +7,13 @@
 import Foundation
 import Alamofire
 
+/// Swift 6: JSON decode for Alamofire's nonisolated `responseData` callback (avoids main-actor `Decodable` isolation issues).
+private enum GutendexHTTPDecoding {
+    nonisolated static func decodeResponse(_ data: Data) throws -> GutendexResponse {
+        try JSONDecoder().decode(GutendexResponse.self, from: data)
+    }
+}
+
 protocol EbookServiceProtocol {
     func searchEbooks(query: String, completion: @escaping (Result<[Ebook], APIError>) -> Void)
     func fetchEbooksBySubject(subject: String, page: Int, completion: @escaping (Result<[Ebook], APIError>) -> Void)
@@ -31,7 +38,7 @@ final class EbookService: EbookServiceProtocol {
                 switch response.result {
                 case .success(let data):
                     do {
-                        let result = try JSONDecoder().decode(GutendexResponse.self, from: data)
+                        let result = try GutendexHTTPDecoding.decodeResponse(data)
                         let ebooks = result.results
                             .filter { $0.pdfURL != nil }
                             .map { Ebook(from: $0) }
@@ -59,7 +66,7 @@ final class EbookService: EbookServiceProtocol {
                 switch response.result {
                 case .success(let data):
                     do {
-                        let result = try JSONDecoder().decode(GutendexResponse.self, from: data)
+                        let result = try GutendexHTTPDecoding.decodeResponse(data)
                         let ebooks = result.results
                             .filter { $0.pdfURL != nil }
                             .map { Ebook(from: $0) }

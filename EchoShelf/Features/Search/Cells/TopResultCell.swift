@@ -39,10 +39,10 @@ final class TopResultCell: UICollectionViewCell {
 
     private func setupUI() {
 
-        container.backgroundColor = UIColor.white.withAlphaComponent(0.07)
+        container.backgroundColor = UIColor(named: "FillGlassStrong")!
         container.layer.cornerRadius = 24
         container.layer.borderWidth = 0.5
-        container.layer.borderColor = UIColor.white.withAlphaComponent(0.1).cgColor
+        container.layer.borderColor = UIColor(named: "BorderHairline")!.cgColor
         container.translatesAutoresizingMaskIntoConstraints = false
 
         coverShadow.layer.shadowColor = UIColor.black.cgColor
@@ -54,12 +54,12 @@ final class TopResultCell: UICollectionViewCell {
         coverImage.layer.cornerRadius = 16
         coverImage.clipsToBounds = true
         coverImage.contentMode = .scaleAspectFill
-        coverImage.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.2)
+        coverImage.backgroundColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.2)
         coverImage.translatesAutoresizingMaskIntoConstraints = false
 
         genreBadge.font = .systemFont(ofSize: 10, weight: .semibold)
-        genreBadge.textColor = UIColor.systemPurple
-        genreBadge.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.15)
+        genreBadge.textColor = UIColor(named: "PrimaryGradientStart")!
+        genreBadge.backgroundColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.15)
         genreBadge.layer.cornerRadius = 8
         genreBadge.clipsToBounds = true
         genreBadge.textAlignment = .center
@@ -67,21 +67,21 @@ final class TopResultCell: UICollectionViewCell {
         genreBadge.translatesAutoresizingMaskIntoConstraints = false
 
         titleLabel.font = .systemFont(ofSize: 17, weight: .bold)
-        titleLabel.textColor = .white
+        titleLabel.textColor = UIColor(named: "OnDarkTextPrimary")!
         titleLabel.numberOfLines = 2
 
         authorLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        authorLabel.textColor = UIColor.systemPurple
+        authorLabel.textColor = UIColor(named: "PrimaryGradientStart")!
 
         narratorLabel.font = .systemFont(ofSize: 12)
-        narratorLabel.textColor = UIColor.white.withAlphaComponent(0.5)
+        narratorLabel.textColor = UIColor(named: "TabTextInactive")!
         narratorLabel.text = "LibriVox Recording"
 
         starLabel.font = .systemFont(ofSize: 12)
-        starLabel.textColor = UIColor.systemYellow
+        starLabel.textColor = UIColor(named: "RatingStarYellow")!
 
         chapterLabel.font = .systemFont(ofSize: 12)
-        chapterLabel.textColor = UIColor.white.withAlphaComponent(0.5)
+        chapterLabel.textColor = UIColor(named: "TabTextInactive")!
 
         metaStack.axis = .horizontal
         metaStack.spacing = 10
@@ -91,8 +91,8 @@ final class TopResultCell: UICollectionViewCell {
         metaStack.addArrangedSubview(chapterLabel)
 
         var config = UIButton.Configuration.filled()
-        config.baseBackgroundColor = .systemPurple
-        config.baseForegroundColor = .white
+        config.baseBackgroundColor = UIColor(named: "PrimaryGradientStart")!
+        config.baseForegroundColor = UIColor(named: "OnDarkTextPrimary")!
         config.cornerStyle = .capsule
         config.image = UIImage(systemName: "play.fill")
         config.imagePlacement = .leading
@@ -108,7 +108,7 @@ final class TopResultCell: UICollectionViewCell {
         listenButton.addTarget(self, action: #selector(listenTapped), for: .touchUpInside)
 
         downloadButton.setImage(UIImage(systemName: "arrow.down.circle.fill"), for: .normal)
-        downloadButton.tintColor = UIColor.white.withAlphaComponent(0.7)
+        downloadButton.tintColor = UIColor(named: "OnDarkText70")!
 
         let buttonRow = UIStackView(arrangedSubviews: [listenButton, downloadButton])
         buttonRow.spacing = 12

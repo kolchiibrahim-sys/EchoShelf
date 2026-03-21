@@ -32,7 +32,7 @@ final class RelatedAuthorCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 40
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.3)
+        imageView.backgroundColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.3)
 
         initialsLabel.textColor = .white
         initialsLabel.font = .systemFont(ofSize: 28, weight: .bold)
