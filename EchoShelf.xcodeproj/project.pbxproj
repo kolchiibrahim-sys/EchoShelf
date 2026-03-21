@@ -49,7 +49,7 @@
 		8660C1A32F492A93003E8EFD /* Exceptions for "EchoShelf" folder in "EchoShelf" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Resources/Info.plist,
+				Info.plist,
 			);
 			target = 8660C15D2F48F2DC003E8EFD /* EchoShelf */;
 		};
