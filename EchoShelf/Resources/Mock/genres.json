@@ -1,0 +1,42 @@
+[
+  {
+    "id": "fantasy",
+    "name": "Fantasy",
+    "description": "Step into realms where the impossible feels inevitable. Fantasy invites you into layered worlds of magic, myth, and power - from intimate fairy tales to sweeping epics that span generations. Expect quests that test courage, courts tangled in intrigue, and lore so rich you will want to linger in the footnotes. The best titles balance wonder with weight: moral choices, sacrifice, and characters who grow as large as the kingdoms around them. Whether you crave cozy charm or dark, cinematic stakes, this is the shelf for readers who want to escape the everyday without leaving emotion behind. Discover stories that reward curiosity and leave you thinking about them long after the final page."
+  },
+  {
+    "id": "drama",
+    "name": "Drama",
+    "description": "At its heart, drama is about people under pressure - and the truths that surface when life refuses to stay neat. These stories lean into relationships, identity, family, and consequence, often in settings that feel close to home. The tension builds through conversation, memory, and the slow reveal of what characters cannot say out loud. You will find intimate portraits of marriage and ambition, stories of repair and regret, and narratives that ask what we owe to one another. The tone can be lyrical, restrained, or quietly devastating, but the focus stays human. Choose drama when you want fiction that mirrors real emotional gravity and stays with you like a conversation you cannot shake."
+  },
+  {
+    "id": "romance",
+    "name": "Romance",
+    "description": "Romance is built on connection: chemistry, vulnerability, and the belief that love can be both refuge and revelation. Follow couples who meet at the wrong time, reunite after years apart, or stumble into something real when they least expect it. From slow-burn intimacy to sweeping passion, these books celebrate emotional honesty as much as attraction. Many blend career, friendship, and family into the love story, so the relationship feels grounded in a full life. Whether you are in the mood for wit, warmth, or a guaranteed happy ending, romance delivers stories designed to be savored. It is one of the most inviting genres on the shelf - made for late nights and second cups of tea."
+  },
+  {
+    "id": "mystery",
+    "name": "Mystery",
+    "description": "Every mystery opens with a question that will not let go. Follow investigators, outsiders, and sharp-eyed amateurs as clues surface, alibis fray, and the truth hides in plain sight. The range runs from cozy whodunits with charm and cleverness to propulsive thrillers where the clock is always ticking. Expect red herrings, moral gray zones, and endings that reward readers who notice the small details. Some stories chase justice; others chase understanding - why something happened can matter as much as who did it. If you love suspense, structure, and that satisfying click when the puzzle finally fits, this genre was made for you."
+  },
+  {
+    "id": "sci-fi",
+    "name": "Sci-Fi",
+    "description": "Science fiction looks forward - to distant worlds, emerging tech, and the choices we will face on the other side of change. Explore starships and megacities, near-future labs, and societies reshaped by discovery or disaster. The genre asks big questions: what we preserve, what we invent, and what remains human when the rules of the world shift overnight. Some reads are rigorous and idea-driven; others lean into spectacle and wonder without losing a heartbeat of story. From first contact to climate futures, sci-fi pairs imagination with stakes that feel eerily relevant. Start on this shelf when you want wonder, tension, and a sharper lens on tomorrow."
+  },
+  {
+    "id": "history",
+    "name": "History",
+    "description": "History turns the past into narrative - vivid, contested, and closer than it looks on a timeline. Here you will find sweeping accounts of empires and revolutions, intimate biographies, and books that reconstruct everyday life from letters, artifacts, and voices too often left out of the textbook version. The best history reads like a great novel but grounds you in evidence, context, and the why behind the when. Use this shelf to understand how ideas travel, how power moves, and how ordinary people shape events that echo for centuries. Whether you are new to the subject or ready to go deep, these titles reward curiosity with perspective you can carry into the present."
+  },
+  {
+    "id": "adventure",
+    "name": "Adventure",
+    "description": "Adventure is momentum: danger, discovery, and the pull of the unknown on every chapter break. Chart courses across oceans, frontiers, and impossible landscapes - often alongside characters who must improvise, adapt, and bet everything on the next step. These stories celebrate nerve and curiosity, pairing high stakes with the small human details that make risk feel real. You will find survival epics, treasure hunts, and journeys where the destination matters less than who you become along the way. Tone can be cinematic, literary, or pure pulse-quickening fun. Browse this shelf when you want pace, spectacle, and the thrill of not knowing what comes next."
+  },
+  {
+    "id": "kids",
+    "name": "Kids",
+    "description": "Stories for young readers should feel generous: clear, playful, and respectful of how big feelings can be in small bodies. This shelf spans read-aloud favorites, early chapter books, and middle-grade novels full of humor, heart, and just enough challenge to grow confidence on the page. Expect heroes who sound like real kids - curious, brave, sometimes unsure - navigating friendship, family, school, and worlds only they can see. Many titles build empathy and imagination in tandem, with series that let readers follow beloved characters as they grow. Whether you are choosing for a bedtime ritual or a voracious new reader, these picks are crafted to make reading feel like a gift, not a chore."
+  }
+]
