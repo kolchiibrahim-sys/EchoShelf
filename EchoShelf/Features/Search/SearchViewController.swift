@@ -27,6 +27,7 @@ final class SearchViewController: UIViewController {
     private var isSearching = false
 
     private let viewModel = SearchViewModel()
+    private let ai = GeminiService()
 
     private let trendingCategories: [TrendingCategory] = [
         TrendingCategory(title: "AI Picks",    icon: "🤖", colorName: "TrendingAIPicks",    query: "science",         subject: "Science Fiction"),
@@ -287,9 +288,18 @@ private extension SearchViewController {
 
     func performSearch(_ query: String) {
         guard !query.isEmpty else { return }
+
         isSearching = true
         searchBarView.setText(query)
+
         viewModel.search(query: query, tab: selectedTab)
+
+        ai.ask(prompt: "Suggest books related to \(query)") { response in
+            DispatchQueue.main.async {
+                print("AI Response:", response ?? "No AI response")
+            }
+        }
+
         collectionView.setCollectionViewLayout(createLayout(), animated: false)
         updateEmptyState()
         collectionView.reloadData()

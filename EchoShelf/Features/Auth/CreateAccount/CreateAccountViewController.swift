@@ -229,7 +229,7 @@ final class CreateAccountViewController: UIViewController {
         let gLabel = UILabel()
         gLabel.text = "G"
         gLabel.font = .systemFont(ofSize: 18, weight: .bold)
-        gLabel.textColor = UIColor(named: "AccentColor")!
+        gLabel.textColor = UIColor(named: "AccentColor")
         gLabel.translatesAutoresizingMaskIntoConstraints = false
         btn.addSubview(gLabel)
         NSLayoutConstraint.activate([
