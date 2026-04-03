@@ -19,7 +19,8 @@ final class BookSpineCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 9, weight: .semibold)
+        lbl.font = .systemFont(ofSize: 9,
+                               weight: .semibold)
         lbl.textColor = UIColor.white.withAlphaComponent(0.85)
         lbl.numberOfLines = 6
         lbl.textAlignment = .center
@@ -36,26 +37,41 @@ final class BookSpineCell: UICollectionViewCell {
 
     private let progressFill: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor(red: 0.95, green: 0.75, blue: 0.3, alpha: 0.9)
+        v.backgroundColor = UIColor(red: 0.95,
+                                    green: 0.75,
+                                    blue: 0.3,
+                                    alpha: 0.9)
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
 
     private var progressFillHeight: NSLayoutConstraint!
-
+//Hamsi Assetsden
     private static let spineColors: [[(UIColor, UIColor)]] = [
-        [(.init(hex: "#7B3F00"), .init(hex: "#5C2D00"))],   // dark brown
-        [(.init(hex: "#1B3A5C"), .init(hex: "#0F2540"))],   // navy
-        [(.init(hex: "#2D5A27"), .init(hex: "#1A3A16"))],   // forest green
-        [(.init(hex: "#6B2D3E"), .init(hex: "#4A1C29"))],   // burgundy
-        [(.init(hex: "#4A3728"), .init(hex: "#2E2018"))],   // leather
-        [(.init(hex: "#1A3A4A"), .init(hex: "#0F2530"))],   // teal dark
-        [(.init(hex: "#5C3D11"), .init(hex: "#3D2808"))],   // walnut
-        [(.init(hex: "#3B2F4A"), .init(hex: "#251E30"))],   // deep purple
-        [(.init(hex: "#4A1942"), .init(hex: "#2E0F28"))],   // plum
-        [(.init(hex: "#1C3A2A"), .init(hex: "#0F2218"))],   // dark teal
-        [(.init(hex: "#5C1A1A"), .init(hex: "#3A0F0F"))],   // deep red
-        [(.init(hex: "#2A3A1C"), .init(hex: "#182210"))],   // olive
+        [(.init(hex: "#7B3F00"),
+          .init(hex: "#5C2D00"))],   // dark brown
+        [(.init(hex: "#1B3A5C"),
+          .init(hex: "#0F2540"))],   // navy
+        [(.init(hex: "#2D5A27"),
+            .init(hex: "#1A3A16"))],   // forest green
+        [(.init(hex: "#6B2D3E"),
+            .init(hex: "#4A1C29"))],   // burgundy
+        [(.init(hex: "#4A3728"),
+          .init(hex: "#2E2018"))],   // leather
+        [(.init(hex: "#1A3A4A"),
+            .init(hex: "#0F2530"))],   // teal dark
+        [(.init(hex: "#5C3D11"),
+          .init(hex: "#3D2808"))],   // walnut
+        [(.init(hex: "#3B2F4A"),
+            .init(hex: "#251E30"))],   // deep purple
+        [(.init(hex: "#4A1942"),
+            .init(hex: "#2E0F28"))],   // plum
+        [(.init(hex: "#1C3A2A"),
+            .init(hex: "#0F2218"))],   // dark teal
+        [(.init(hex: "#5C1A1A"),
+            .init(hex: "#3A0F0F"))],   // deep red
+        [(.init(hex: "#2A3A1C"),
+            .init(hex: "#182210"))],   // olive
     ]
 
     override init(frame: CGRect) {
@@ -70,27 +86,41 @@ final class BookSpineCell: UICollectionViewCell {
         super.layoutSubviews()
         contentView.layer.rasterizationScale = traitCollection.displayScale
         gradientLayer.frame    = spineView.bounds
-        innerShadowLayer.frame = CGRect(x: 0, y: 0, width: 10, height: spineView.bounds.height)
-        topEdgeLayer.frame     = CGRect(x: 0, y: 0, width: spineView.bounds.width, height: 2)
-        rightEdgeLayer.frame   = CGRect(x: spineView.bounds.width - 2, y: 0, width: 2, height: spineView.bounds.height)
+        innerShadowLayer.frame = CGRect(x: 0,
+                                        y: 0,
+                                        width: 10,
+                                        height: spineView.bounds.height)
+        topEdgeLayer.frame     = CGRect(x: 0,
+                                        y: 0,
+                                        width: spineView.bounds.width,
+                                        height: 2)
+        rightEdgeLayer.frame   = CGRect(x: spineView.bounds.width - 2,
+                                        y: 0,
+                                        width: 2,
+                                        height: spineView.bounds.height)
     }
 
     private func setupUI() {
         contentView.layer.shadowColor   = UIColor.black.cgColor
         contentView.layer.shadowOpacity = 0.55
         contentView.layer.shadowRadius  = 5
-        contentView.layer.shadowOffset  = CGSize(width: 4, height: 3)
+        contentView.layer.shadowOffset  = CGSize(width: 4,
+                                                 height: 3)
         contentView.layer.shouldRasterize = true
 
         spineView.layer.cornerRadius   = 2
         spineView.layer.maskedCorners  = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         spineView.clipsToBounds        = true
         spineView.translatesAutoresizingMaskIntoConstraints = false
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
-        gradientLayer.endPoint   = CGPoint(x: 1, y: 0.5)
+        gradientLayer.startPoint = CGPoint(x: 0,
+                                           y: 0.5)
+        gradientLayer.endPoint   = CGPoint(x: 1,
+                                           y: 0.5)
         spineView.layer.insertSublayer(gradientLayer, at: 0)
-        innerShadowLayer.startPoint = CGPoint(x: 0, y: 0.5)
-        innerShadowLayer.endPoint   = CGPoint(x: 1, y: 0.5)
+        innerShadowLayer.startPoint = CGPoint(x: 0,
+                                              y: 0.5)
+        innerShadowLayer.endPoint   = CGPoint(x: 1,
+                                              y: 0.5)
         innerShadowLayer.colors = [
             UIColor.black.withAlphaComponent(0.4).cgColor,
             UIColor.clear.cgColor
@@ -143,11 +173,14 @@ final class BookSpineCell: UICollectionViewCell {
         let progress = item.readingProgress
         progressFillHeight.constant = progress > 0 ? 4 : 0
         progressFill.alpha = progress > 0 ? 1 : 0
-
+//Assets
         if progress >= 0.99 {
             progressFill.backgroundColor = UIColor(hex: "#4CAF50").withAlphaComponent(0.9)
         } else {
-            progressFill.backgroundColor = UIColor(red: 0.95, green: 0.75, blue: 0.3, alpha: 0.9)
+            progressFill.backgroundColor = UIColor(red: 0.95,
+                                                   green: 0.75,
+                                                   blue: 0.3,
+                                                   alpha: 0.9)
         }
     }
 
@@ -159,13 +192,15 @@ final class BookSpineCell: UICollectionViewCell {
             initialSpringVelocity: 0.5,
             options: .curveEaseOut
         ) {
-            self.contentView.transform = CGAffineTransform(translationX: 0, y: -22)
+            self.contentView.transform = CGAffineTransform(translationX: 0,
+                                                           y: -22)
             self.contentView.layer.shadowRadius  = 14
             self.contentView.layer.shadowOpacity = 0.7
         } completion: { _ in
             completion()
-            UIView.animate(withDuration: 0.22, delay: 0.05) {
-                self.contentView.transform           = .identity
+            UIView.animate(withDuration: 0.22,
+                           delay: 0.05) {
+                self.contentView.transform = .identity
                 self.contentView.layer.shadowRadius  = 5
                 self.contentView.layer.shadowOpacity = 0.55
             }

@@ -24,9 +24,11 @@ final class MiniPlayerView: UIView {
 
         titleLabel.text = "Now Playing"
         titleLabel.textColor = .white
-        titleLabel.font = .systemFont(ofSize: 15, weight: .semibold)
+        titleLabel.font = .systemFont(ofSize: 15,
+                                      weight: .semibold)
 
-        playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        playPauseButton.setImage(UIImage(systemName: "pause.fill"),
+                                 for: .normal)
         playPauseButton.tintColor = .white
 
         addSubview(titleLabel)
@@ -36,20 +38,24 @@ final class MiniPlayerView: UIView {
         playPauseButton.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                constant: 16),
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            playPauseButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            playPauseButton.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                      constant: -16),
             playPauseButton.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 
     private func setupTapGesture() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(openPlayer))
+        let tap = UITapGestureRecognizer(target: self,
+                                         action: #selector(openPlayer))
         addGestureRecognizer(tap)
     }
 
     @objc private func openPlayer() {
-        NotificationCenter.default.post(name: .openFullPlayer, object: nil)
+        NotificationCenter.default.post(name: .openFullPlayer,
+                                        object: nil)
     }
 }

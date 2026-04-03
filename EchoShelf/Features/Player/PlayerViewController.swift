@@ -17,8 +17,10 @@ final class PlayerViewController: UIViewController {
     private let progressSlider = UISlider()
     private let currentTimeLabel = UILabel()
     private let durationLabel = UILabel()
-    private let playButton = UIButton(type: .system)
-    private let closeButton = UIButton(type: .system)
+    private let playButton = UIButton(type:
+            .system)
+    private let closeButton = UIButton(type:
+            .system)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,9 +39,12 @@ final class PlayerViewController: UIViewController {
             UIColor(named: "PlayerGradientTop")!.cgColor,
             UIColor(named: "PlayerGradientBottom")!.cgColor
         ]
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
-        view.layer.insertSublayer(gradientLayer, at: 0)
+        gradientLayer.startPoint = CGPoint(x: 0.5,
+                                           y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0.5,
+                                         y: 1)
+        view.layer.insertSublayer(gradientLayer,
+                                  at: 0)
     }
 
     private func setupUI() {
@@ -53,7 +58,8 @@ final class PlayerViewController: UIViewController {
         coverIcon.translatesAutoresizingMaskIntoConstraints = false
         coverView.addSubview(coverIcon)
 
-        titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: 24,
+                                      weight: .bold)
         titleLabel.textColor = UIColor(named: "OnDarkTextPrimary")!
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 2
@@ -98,10 +104,13 @@ final class PlayerViewController: UIViewController {
 
         NSLayoutConstraint.activate([
 
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                             constant: 10),
+            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                 constant: 20),
 
-            coverView.topAnchor.constraint(equalTo: view.topAnchor, constant: 120),
+            coverView.topAnchor.constraint(equalTo: view.topAnchor,
+                                           constant: 120),
             coverView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             coverView.widthAnchor.constraint(equalToConstant: 260),
             coverView.heightAnchor.constraint(equalToConstant: 340),
@@ -111,24 +120,34 @@ final class PlayerViewController: UIViewController {
             coverIcon.heightAnchor.constraint(equalToConstant: 50),
             coverIcon.widthAnchor.constraint(equalToConstant: 50),
 
-            titleLabel.topAnchor.constraint(equalTo: coverView.bottomAnchor, constant: 30),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
+            titleLabel.topAnchor.constraint(equalTo: coverView.bottomAnchor,
+                                            constant: 30),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                constant: 40),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                 constant: -40),
 
-            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 6),
+            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                             constant: 6),
             authorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            progressSlider.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 40),
-            progressSlider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            progressSlider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            progressSlider.topAnchor.constraint(equalTo: authorLabel.bottomAnchor,
+                                                constant: 40),
+            progressSlider.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                    constant: 30),
+            progressSlider.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                     constant: -30),
 
-            currentTimeLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: 4),
+            currentTimeLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor,
+                                                  constant: 4),
             currentTimeLabel.leadingAnchor.constraint(equalTo: progressSlider.leadingAnchor),
 
-            durationLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: 4),
+            durationLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor,
+                                               constant: 4),
             durationLabel.trailingAnchor.constraint(equalTo: progressSlider.trailingAnchor),
 
-            playButton.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: 50),
+            playButton.topAnchor.constraint(equalTo: progressSlider.bottomAnchor,
+                                            constant: 50),
             playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playButton.widthAnchor.constraint(equalToConstant: 70),
             playButton.heightAnchor.constraint(equalToConstant: 70)

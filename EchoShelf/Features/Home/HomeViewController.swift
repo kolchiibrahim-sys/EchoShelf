@@ -266,8 +266,10 @@ extension HomeViewController: UICollectionViewDataSource {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader
+        else { return UICollectionReusableView() }
         let section = HomeSection(rawValue: indexPath.section)!
         let header = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
@@ -275,11 +277,12 @@ extension HomeViewController: UICollectionViewDataSource {
             for: indexPath
         ) as! HomeSectionHeaderView
         let showViewAll = section == .trending || section == .recommended
-        header.configure(titleForSection(section), showViewAll: showViewAll)
+        header.configure(titleForSection(section),
+                         showViewAll: showViewAll)
         header.onViewAll = { [weak self] in
             guard let self else { return }
             switch section {
-            case .trending:    self.coordinator?.showAllBooks(type: .trending)
+            case .trending: self.coordinator?.showAllBooks(type: .trending)
             case .recommended: self.coordinator?.showAllBooks(type: .recommended)
             default: break
             }
@@ -290,7 +293,8 @@ extension HomeViewController: UICollectionViewDataSource {
 
 extension HomeViewController: UICollectionViewDelegate {
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
         switch HomeSection(rawValue: indexPath.section)! {
         case .trending:
             switch selectedTab {
@@ -304,7 +308,8 @@ extension HomeViewController: UICollectionViewDelegate {
         case .recommended:
             switch selectedTab {
             case .audiobooks: coordinator?.showBookDetail(book: viewModel.recommendedAudiobooks[indexPath.item])
-            case .books, .genres: coordinator?.showEbookDetail(ebook: viewModel.recommendedEbooks[indexPath.item])
+            case .books,
+                    .genres: coordinator?.showEbookDetail(ebook: viewModel.recommendedEbooks[indexPath.item])
             case .kids:       coordinator?.showEbookDetail(ebook: viewModel.recommendedKidsEbooks[indexPath.item])
             }
         case .genres:
@@ -334,7 +339,8 @@ private extension HomeViewController {
 
     func makeHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40)),
+            layoutSize: .init(widthDimension: .fractionalWidth(1),
+                              heightDimension: .absolute(40)),
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
@@ -342,9 +348,13 @@ private extension HomeViewController {
 
     func continueSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120)))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize,
+                                                     subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .init(top: 10, leading: 20, bottom: 0, trailing: 20)
+        section.contentInsets = .init(top: 10,
+                                      leading: 20,
+                                      bottom: 0,
+                                      trailing: 20)
         section.boundarySupplementaryItems = [makeHeader()]
         return section
     }
@@ -355,7 +365,10 @@ private extension HomeViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 20, leading: 20, bottom: 0, trailing: 20)
+        section.contentInsets = .init(top: 20,
+                                      leading: 20,
+                                      bottom: 0,
+                                      trailing: 20)
         section.boundarySupplementaryItems = [makeHeader()]
         return section
     }
@@ -369,7 +382,10 @@ private extension HomeViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 16
-        section.contentInsets = .init(top: 12, leading: 20, bottom: 8, trailing: 20)
+        section.contentInsets = .init(top: 12,
+                                      leading: 20,
+                                      bottom: 8,
+                                      trailing: 20)
         section.boundarySupplementaryItems = [makeHeader()]
         return section
     }
@@ -381,7 +397,10 @@ private extension HomeViewController {
                                                      subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 12, leading: 20, bottom: 40, trailing: 20)
+        section.contentInsets = .init(top: 12,
+                                      leading: 20,
+                                      bottom: 40,
+                                      trailing: 20)
         section.boundarySupplementaryItems = [makeHeader()]
         return section
     }

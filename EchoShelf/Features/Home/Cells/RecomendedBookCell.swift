@@ -31,7 +31,8 @@ final class RecommendedBookCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let l = UILabel()
-        l.font = .systemFont(ofSize: 15, weight: .semibold)
+        l.font = .systemFont(ofSize: 15,
+                             weight: .semibold)
         l.textColor = UIColor(named: "OnDarkTextPrimary")!
         l.numberOfLines = 2
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -80,21 +81,27 @@ final class RecommendedBookCell: UICollectionViewCell {
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
-            coverImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 14),
+            coverImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
+                                                    constant: 14),
             coverImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             coverImageView.widthAnchor.constraint(equalToConstant: 70),
             coverImageView.heightAnchor.constraint(equalToConstant: 90),
 
-            titleLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 14),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -14),
-            titleLabel.topAnchor.constraint(equalTo: coverImageView.topAnchor, constant: 6),
+            titleLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor,
+                                                constant: 14),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                 constant: -14),
+            titleLabel.topAnchor.constraint(equalTo: coverImageView.topAnchor,
+                                            constant: 6),
 
             authorLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             authorLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
+            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                             constant: 5),
 
             chapterLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            chapterLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 5)
+            chapterLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor,
+                                              constant: 5)
         ])
     }
 

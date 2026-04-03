@@ -28,14 +28,16 @@ final class EbookReaderViewController: UIViewController {
         iv.layer.shadowColor = UIColor.black.cgColor
         iv.layer.shadowOpacity = 0.5
         iv.layer.shadowRadius = 20
-        iv.layer.shadowOffset = CGSize(width: 0, height: 10)
+        iv.layer.shadowOffset = CGSize(width: 0,
+                                       height: 10)
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
 
     private let loadingTitleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 17, weight: .semibold)
+        lbl.font = .systemFont(ofSize: 17,
+                               weight: .semibold)
         lbl.textColor = .white
         lbl.textAlignment = .center
         lbl.numberOfLines = 2
@@ -119,7 +121,8 @@ final class EbookReaderViewController: UIViewController {
 
     init(ebook: Ebook) {
         self.viewModel = EbookReaderViewModel(ebook: ebook)
-        super.init(nibName: nil, bundle: nil)
+        super.init(nibName: nil,
+                   bundle: nil)
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -143,7 +146,8 @@ final class EbookReaderViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.setNavigationBarHidden(false,
+                                                     animated: false)
     }
 }
 
@@ -164,7 +168,8 @@ private extension EbookReaderViewController {
                 self.pageLabel.isHidden = true
 
                 UIView.animate(withDuration: 0.2) {
-                    self.progressBar.setProgress(progress, animated: true)
+                    self.progressBar.setProgress(progress,
+                                                 animated: true)
                 }
 
                 if progress > 0 {
@@ -213,17 +218,20 @@ private extension EbookReaderViewController {
         navigationItem.leftBarButtonItem?.tintColor = .white
 
         let fontMenu = UIMenu(title: "Text Size", children: [
-            UIAction(title: "Larger", image: UIImage(systemName: "textformat.size.larger")) { [weak self] _ in
+            UIAction(title: "Larger",
+                     image: UIImage(systemName: "textformat.size.larger")) { [weak self] _ in
                 guard let self else { return }
                 self.viewModel.increaseScale()
                 self.pdfView.scaleFactor = self.viewModel.scaleFactor
             },
-            UIAction(title: "Smaller", image: UIImage(systemName: "textformat.size.smaller")) { [weak self] _ in
+            UIAction(title: "Smaller",
+                     image: UIImage(systemName: "textformat.size.smaller")) { [weak self] _ in
                 guard let self else { return }
                 self.viewModel.decreaseScale()
                 self.pdfView.scaleFactor = self.viewModel.scaleFactor
             },
-            UIAction(title: "Reset", image: UIImage(systemName: "arrow.counterclockwise")) { [weak self] _ in
+            UIAction(title: "Reset",
+                     image: UIImage(systemName: "arrow.counterclockwise")) { [weak self] _ in
                 guard let self else { return }
                 self.viewModel.resetScale()
                 self.pdfView.scaleFactor = self.viewModel.scaleFactor
@@ -292,23 +300,32 @@ private extension EbookReaderViewController {
             loadingContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             coverImageView.centerXAnchor.constraint(equalTo: loadingContainer.centerXAnchor),
-            coverImageView.centerYAnchor.constraint(equalTo: loadingContainer.centerYAnchor, constant: -80),
+            coverImageView.centerYAnchor.constraint(equalTo: loadingContainer.centerYAnchor,
+                                                    constant: -80),
             coverImageView.widthAnchor.constraint(equalToConstant: 140),
             coverImageView.heightAnchor.constraint(equalToConstant: 200),
 
-            loadingTitleLabel.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 24),
-            loadingTitleLabel.leadingAnchor.constraint(equalTo: loadingContainer.leadingAnchor, constant: 40),
-            loadingTitleLabel.trailingAnchor.constraint(equalTo: loadingContainer.trailingAnchor, constant: -40),
+            loadingTitleLabel.topAnchor.constraint(equalTo: coverImageView.bottomAnchor,
+                                                   constant: 24),
+            loadingTitleLabel.leadingAnchor.constraint(equalTo: loadingContainer.leadingAnchor,
+                                                       constant: 40),
+            loadingTitleLabel.trailingAnchor.constraint(equalTo: loadingContainer.trailingAnchor,
+                                                        constant: -40),
 
-            loadingAuthorLabel.topAnchor.constraint(equalTo: loadingTitleLabel.bottomAnchor, constant: 6),
+            loadingAuthorLabel.topAnchor.constraint(equalTo: loadingTitleLabel.bottomAnchor,
+                                                    constant: 6),
             loadingAuthorLabel.centerXAnchor.constraint(equalTo: loadingContainer.centerXAnchor),
 
-            progressBar.topAnchor.constraint(equalTo: loadingAuthorLabel.bottomAnchor, constant: 28),
-            progressBar.leadingAnchor.constraint(equalTo: loadingContainer.leadingAnchor, constant: 40),
-            progressBar.trailingAnchor.constraint(equalTo: loadingContainer.trailingAnchor, constant: -40),
+            progressBar.topAnchor.constraint(equalTo: loadingAuthorLabel.bottomAnchor,
+                                             constant: 28),
+            progressBar.leadingAnchor.constraint(equalTo: loadingContainer.leadingAnchor,
+                                                 constant: 40),
+            progressBar.trailingAnchor.constraint(equalTo: loadingContainer.trailingAnchor,
+                                                  constant: -40),
             progressBar.heightAnchor.constraint(equalToConstant: 6),
 
-            progressLabel.topAnchor.constraint(equalTo: progressBar.bottomAnchor, constant: 12),
+            progressLabel.topAnchor.constraint(equalTo: progressBar.bottomAnchor,
+                                               constant: 12),
             progressLabel.centerXAnchor.constraint(equalTo: loadingContainer.centerXAnchor)
         ])
     }
@@ -321,19 +338,23 @@ private extension EbookReaderViewController {
         NSLayoutConstraint.activate([
             errorContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             errorContainer.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            errorContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            errorContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
+            errorContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                    constant: 40),
+            errorContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                     constant: -40),
 
             errorIcon.topAnchor.constraint(equalTo: errorContainer.topAnchor),
             errorIcon.centerXAnchor.constraint(equalTo: errorContainer.centerXAnchor),
             errorIcon.widthAnchor.constraint(equalToConstant: 52),
             errorIcon.heightAnchor.constraint(equalToConstant: 52),
 
-            errorLabel.topAnchor.constraint(equalTo: errorIcon.bottomAnchor, constant: 16),
+            errorLabel.topAnchor.constraint(equalTo: errorIcon.bottomAnchor,
+                                            constant: 16),
             errorLabel.leadingAnchor.constraint(equalTo: errorContainer.leadingAnchor),
             errorLabel.trailingAnchor.constraint(equalTo: errorContainer.trailingAnchor),
 
-            retryButton.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 24),
+            retryButton.topAnchor.constraint(equalTo: errorLabel.bottomAnchor,
+                                             constant: 24),
             retryButton.centerXAnchor.constraint(equalTo: errorContainer.centerXAnchor),
             retryButton.bottomAnchor.constraint(equalTo: errorContainer.bottomAnchor)
         ])
@@ -344,7 +365,8 @@ private extension EbookReaderViewController {
     func setupPageLabel() {
         view.addSubview(pageLabel)
         NSLayoutConstraint.activate([
-            pageLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            pageLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                              constant: -10),
             pageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }

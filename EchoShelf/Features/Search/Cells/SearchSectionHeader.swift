@@ -15,7 +15,8 @@ final class SearchSectionHeaderView: UICollectionReusableView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.font = .systemFont(ofSize: 20,
+                                 weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -23,8 +24,10 @@ final class SearchSectionHeaderView: UICollectionReusableView {
     private let clearAllButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Clear All", for: .normal)
-        btn.setTitleColor(UIColor(named: "PrimaryGradientStart")!, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
+        btn.setTitleColor(UIColor(named: "PrimaryGradientStart")!,
+                          for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 14
+                                           , weight: .medium)
         btn.isHidden = true
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -50,14 +53,17 @@ final class SearchSectionHeaderView: UICollectionReusableView {
         addSubview(clearAllButton)
 
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                constant: 20),
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            clearAllButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            clearAllButton.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                     constant: -20),
             clearAllButton.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
 
-        clearAllButton.addTarget(self, action: #selector(clearTapped), for: .touchUpInside)
+        clearAllButton.addTarget(self, action: #selector(clearTapped),
+                                 for: .touchUpInside)
     }
 
     func configure(_ title: String, showClearAll: Bool = false) {

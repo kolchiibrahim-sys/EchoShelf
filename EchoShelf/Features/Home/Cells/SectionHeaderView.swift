@@ -12,7 +12,8 @@ final class SectionHeaderView: UICollectionReusableView {
 
     private let titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 22, weight: .bold)
+        lbl.font = .systemFont(ofSize: 22,
+                               weight: .bold)
         lbl.textColor = .white
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl

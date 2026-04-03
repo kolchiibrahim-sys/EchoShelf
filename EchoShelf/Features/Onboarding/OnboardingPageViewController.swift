@@ -34,7 +34,8 @@ final class OnboardingPageViewController: UIViewController {
 
     private let badgeLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 11, weight: .bold)
+        lbl.font = .systemFont(ofSize: 11,
+                               weight: .bold)
         lbl.textColor = UIColor(named: "PrimaryGradientStart")!
         lbl.backgroundColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.15)
         lbl.layer.cornerRadius = 10
@@ -46,7 +47,8 @@ final class OnboardingPageViewController: UIViewController {
 
     private let titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 32, weight: .bold)
+        lbl.font = .systemFont(ofSize: 32,
+                               weight: .bold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.numberOfLines = 0
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +57,8 @@ final class OnboardingPageViewController: UIViewController {
 
     private let subtitleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 16, weight: .regular)
+        lbl.font = .systemFont(ofSize: 16,
+                               weight: .regular)
         lbl.textColor = UIColor(named: "OnboardingSubtitle")!
         lbl.numberOfLines = 0
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -68,7 +71,8 @@ final class OnboardingPageViewController: UIViewController {
         config.baseBackgroundColor = UIColor(named: "PrimaryGradientStart")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs
-            a.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+            a.font = UIFont.systemFont(ofSize: 17,
+                                       weight: .semibold)
             return a
         }
         config.cornerStyle = .capsule
@@ -82,7 +86,8 @@ final class OnboardingPageViewController: UIViewController {
         config.baseForegroundColor = UIColor(named: "OnDarkTextSecondary")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs
-            a.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+            a.font = UIFont.systemFont(ofSize: 15,
+                                       weight: .medium)
             return a
         }
         let btn = UIButton(configuration: config)
@@ -119,47 +124,65 @@ final class OnboardingPageViewController: UIViewController {
             imageView.topAnchor.constraint(equalTo: view.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            imageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.55),
+            imageView.heightAnchor.constraint(equalTo: view.heightAnchor,
+                                              multiplier: 0.55),
 
             gradientOverlay.topAnchor.constraint(equalTo: view.topAnchor),
             gradientOverlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             gradientOverlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            gradientOverlay.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.65),
+            gradientOverlay.heightAnchor.constraint(equalTo: view.heightAnchor,
+                                                    multiplier: 0.65),
 
-            secondaryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12),
+            secondaryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                                    constant: -12),
             secondaryButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             secondaryButton.heightAnchor.constraint(equalToConstant: 44),
 
-            primaryButton.bottomAnchor.constraint(equalTo: secondaryButton.topAnchor, constant: -8),
-            primaryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            primaryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            primaryButton.bottomAnchor.constraint(equalTo: secondaryButton.topAnchor,
+                                                  constant: -8),
+            primaryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                   constant: 24),
+            primaryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                    constant: -24),
             primaryButton.heightAnchor.constraint(equalToConstant: 58),
 
-            subtitleLabel.bottomAnchor.constraint(equalTo: primaryButton.topAnchor, constant: -24),
-            subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            subtitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            subtitleLabel.bottomAnchor.constraint(equalTo: primaryButton.topAnchor,
+                                                  constant: -24),
+            subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                   constant: 24),
+            subtitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                    constant: -24),
 
-            titleLabel.bottomAnchor.constraint(equalTo: subtitleLabel.topAnchor, constant: -12),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            titleLabel.bottomAnchor.constraint(equalTo: subtitleLabel.topAnchor,
+                                               constant: -12),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                constant: 24),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                 constant: -24),
 
-            badgeLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor, constant: -12),
-            badgeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            badgeLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor,
+                                               constant: -12),
+            badgeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                constant: 24),
             badgeLabel.heightAnchor.constraint(equalToConstant: 24),
             badgeLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 80)
         ])
     }
 
     private func setupActions() {
-        primaryButton.addTarget(self, action: #selector(primaryTapped), for: .touchUpInside)
-        secondaryButton.addTarget(self, action: #selector(secondaryTapped), for: .touchUpInside)
+        primaryButton.addTarget(self,
+                                action: #selector(primaryTapped),
+                                for: .touchUpInside)
+        secondaryButton.addTarget(self,
+                                  action: #selector(secondaryTapped),
+                                  for: .touchUpInside)
     }
 
     private func configure() {
         imageView.image = UIImage(named: page.imageName)
 
         if let badge = page.badge {
-            badgeLabel.text = "  \(badge)  "
+            badgeLabel.text = "\(badge)"
             badgeLabel.isHidden = false
         } else {
             badgeLabel.isHidden = true
@@ -202,11 +225,13 @@ final class OnboardingPageViewController: UIViewController {
         gradientOverlay.layer.addSublayer(gradient)
     }
 
-    private func buildHighlightedTitle(full: String, highlighted: String) -> NSAttributedString {
+    private func buildHighlightedTitle(full: String,
+                                       highlighted: String) -> NSAttributedString {
         let attributed = NSMutableAttributedString(
             string: full,
             attributes: [
-                .font: UIFont.systemFont(ofSize: 32, weight: .bold),
+                .font: UIFont.systemFont(ofSize: 32,
+                                         weight: .bold),
                 .foregroundColor: UIColor(named: "OnDarkTextPrimary")!
             ]
         )

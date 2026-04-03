@@ -41,7 +41,8 @@ final class LibraryViewController: UIViewController {
 
     init(viewModel: LibraryViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
+        super.init(nibName: nil,
+                   bundle: nil)
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -58,7 +59,8 @@ final class LibraryViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true,
+                                                     animated: false)
         viewModel.loadLibrary()
     }
 
@@ -79,9 +81,12 @@ private extension LibraryViewController {
             UIColor(named: "LibraryShelfGradientStart")!.cgColor,
         ]
         wallGradient.locations = [0, 0.5, 1]
-        wallGradient.startPoint = CGPoint(x: 0, y: 0)
-        wallGradient.endPoint   = CGPoint(x: 0, y: 1)
-        wallView.layer.insertSublayer(wallGradient, at: 0)
+        wallGradient.startPoint = CGPoint(x: 0,
+                                          y: 0)
+        wallGradient.endPoint   = CGPoint(x: 0,
+                                          y: 1)
+        wallView.layer.insertSublayer(wallGradient,
+                                      at: 0)
 
         view.addSubview(wallView)
         NSLayoutConstraint.activate([
@@ -93,7 +98,8 @@ private extension LibraryViewController {
     }
 
     func setupNavBar() {
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true,
+                                                     animated: false)
     }
 
     func setupDecorations() {
@@ -102,12 +108,14 @@ private extension LibraryViewController {
 
         NSLayoutConstraint.activate([
             lampGlow.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 60),
-            lampGlow.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -20),
+            lampGlow.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                          constant: -20),
             lampGlow.widthAnchor.constraint(equalToConstant: 240),
             lampGlow.heightAnchor.constraint(equalToConstant: 240),
 
             lampIcon.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            lampIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            lampIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                          constant: 12),
             lampIcon.widthAnchor.constraint(equalToConstant: 28),
             lampIcon.heightAnchor.constraint(equalToConstant: 28),
         ])
@@ -118,16 +126,22 @@ private extension LibraryViewController {
             frame: .zero,
             collectionViewLayout: createLayout()
         )
-        collectionView.backgroundColor         = .clear
+        collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.dataSource              = self
-        collectionView.delegate                = self
+        collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.contentInset            = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 0,
+                                                              left: 0,
+                                                              bottom: 40,
+                                                              right: 0)
 
-        collectionView.register(BookSpineCell.self,        forCellWithReuseIdentifier: BookSpineCell.identifier)
-        collectionView.register(LibraryEmptyCell.self,     forCellWithReuseIdentifier: LibraryEmptyCell.identifier)
-        collectionView.register(AudioDiskCell.self,        forCellWithReuseIdentifier: AudioDiskCell.identifier)
+        collectionView.register(BookSpineCell.self,
+                                forCellWithReuseIdentifier: BookSpineCell.identifier)
+        collectionView.register(LibraryEmptyCell.self,
+                                forCellWithReuseIdentifier: LibraryEmptyCell.identifier)
+        collectionView.register(AudioDiskCell.self,
+                                forCellWithReuseIdentifier: AudioDiskCell.identifier)
 
         collectionView.register(
             LibraryShelfHeader.self,
@@ -143,17 +157,21 @@ private extension LibraryViewController {
         view.addSubview(collectionView)
 
         let titleLabel = UILabel()
-        titleLabel.text      = "My Library"
-        titleLabel.font      = .systemFont(ofSize: 28, weight: .bold)
+        titleLabel.text = "My Library"
+        titleLabel.font = .systemFont(ofSize: 28 ,
+                                           weight: .bold)
         titleLabel.textColor = UIColor(named: "LibraryTitleGold")!
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                            constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                constant: 20),
 
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
+            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                                constant: 16),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -197,7 +215,10 @@ private extension LibraryViewController {
         if !isEmpty { group.interItemSpacing = .fixed(12) }
 
         let layout = NSCollectionLayoutSection(group: group)
-        layout.contentInsets = .init(top: 12, leading: 20, bottom: 0, trailing: 20)
+        layout.contentInsets = .init(top: 12,
+                                     leading: 20,
+                                     bottom: 0,
+                                     trailing: 20)
         if !isEmpty { layout.orthogonalScrollingBehavior = .continuous }
 
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(52))
@@ -221,16 +242,26 @@ private extension LibraryViewController {
         }
         let isEmpty = viewModel.isEmpty(for: section)
 
-        let itemWidth: NSCollectionLayoutDimension  = isEmpty ? .fractionalWidth(1) : .absolute(48)
-        let itemHeight: NSCollectionLayoutDimension = isEmpty ? .absolute(160)      : .absolute(160)
+        let itemWidth: NSCollectionLayoutDimension  = isEmpty ?
+            .fractionalWidth(1) :
+            .absolute(48)
+        let itemHeight: NSCollectionLayoutDimension = isEmpty ?
+            .absolute(160)      :
+            .absolute(160)
 
         let item = NSCollectionLayoutItem(
-            layoutSize: .init(widthDimension: itemWidth, heightDimension: itemHeight)
+            layoutSize:
+                    .init(widthDimension: itemWidth,
+                          heightDimension: itemHeight)
         )
 
-        let groupWidth: NSCollectionLayoutDimension = isEmpty ? .fractionalWidth(1) : .estimated(800)
+        let groupWidth: NSCollectionLayoutDimension = isEmpty ? .fractionalWidth(1) :
+            .estimated(800)
         let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: .init(widthDimension: groupWidth, heightDimension: .absolute(160)),
+            layoutSize:
+                    .init(widthDimension: groupWidth,
+                              heightDimension:
+                    .absolute(160)),
             subitems: [item]
         )
         if !isEmpty {
@@ -238,7 +269,10 @@ private extension LibraryViewController {
         }
 
         let layout = NSCollectionLayoutSection(group: group)
-        layout.contentInsets = .init(top: 12, leading: 20, bottom: 0, trailing: 20)
+        layout.contentInsets = .init(top: 12,
+                                     leading: 20,
+                                     bottom: 0,
+                                     trailing: 20)
 
         if !isEmpty {
             layout.orthogonalScrollingBehavior = .continuous

@@ -84,7 +84,8 @@ final class SearchViewController: UIViewController {
     private let audiobooksTabBtn: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Audiobooks", for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        btn.titleLabel?.font = .systemFont(ofSize: 13,
+                                           weight: .semibold)
         btn.tintColor = UIColor(named: "OnDarkTextPrimary")!
         btn.tag = 0
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -197,7 +198,8 @@ private extension SearchViewController {
             audiobooksTabBtn.bottomAnchor.constraint(equalTo:
                                                         tabContainer.bottomAnchor),
             audiobooksTabBtn.widthAnchor.constraint(equalTo:
-                                                        tabContainer.widthAnchor, multiplier: 1.0/3.0),
+                                                        tabContainer.widthAnchor,
+                                                    multiplier: 1.0/3.0),
 
             booksTabBtn.leadingAnchor.constraint(equalTo:
                                                     audiobooksTabBtn.trailingAnchor),
@@ -235,8 +237,8 @@ private extension SearchViewController {
                                    action: #selector(tabTapped(_:)),
                                    for: .touchUpInside)
         booksTabBtn.addTarget(self,
-                              action: #selector(tabTapped(_:))
-                              , for: .touchUpInside)
+                              action: #selector(tabTapped(_:)),
+                              for: .touchUpInside)
         kidsTabBtn.addTarget(self,
                              action: #selector(tabTapped(_:)),
                              for: .touchUpInside)
@@ -253,27 +255,38 @@ private extension SearchViewController {
         collectionView.showsVerticalScrollIndicator = false
 
         collectionView.register(RecentSearchCell.self,
-                                forCellWithReuseIdentifier: RecentSearchCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    RecentSearchCell.identifier)
         collectionView.register(TrendingCategoryCell.self,
-                                forCellWithReuseIdentifier: TrendingCategoryCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    TrendingCategoryCell.identifier)
         collectionView.register(TrendingBookCell.self,
-                                forCellWithReuseIdentifier: TrendingBookCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    TrendingBookCell.identifier)
         collectionView.register(TopResultCell.self,
-                                forCellWithReuseIdentifier: TopResultCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    TopResultCell.identifier)
         collectionView.register(OtherVersionCell.self,
-                                forCellWithReuseIdentifier: OtherVersionCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    OtherVersionCell.identifier)
         collectionView.register(RelatedAuthorCell.self,
-                                forCellWithReuseIdentifier: RelatedAuthorCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    RelatedAuthorCell.identifier)
         collectionView.register(EbookTopResultCell.self,
-                                forCellWithReuseIdentifier: EbookTopResultCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    EbookTopResultCell.identifier)
         collectionView.register(EbookOtherResultCell.self,
-                                forCellWithReuseIdentifier: EbookOtherResultCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    EbookOtherResultCell.identifier)
         collectionView.register(EbookYouMightLikeCell.self,
-                                forCellWithReuseIdentifier: EbookYouMightLikeCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    EbookYouMightLikeCell.identifier)
         collectionView.register(KidsTrendingCell.self,
-                                forCellWithReuseIdentifier: KidsTrendingCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    KidsTrendingCell.identifier)
         collectionView.register(KidsRecommendedCell.self,
-                                forCellWithReuseIdentifier: KidsRecommendedCell.identifier)
+                                forCellWithReuseIdentifier:
+                                    KidsRecommendedCell.identifier)
 
         collectionView.register(
             SearchSectionHeaderView.self,
@@ -330,7 +343,9 @@ private extension SearchViewController {
         case .books: offset = tabW
         case .kids: offset = tabW * 2
         }
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
+        UIView.animate(withDuration: 0.25,
+                       delay: 0,
+                       options: .curveEaseInOut) {
             self.indicatorLeading.constant = offset
             self.tabContainer.layoutIfNeeded()
         }
@@ -415,9 +430,12 @@ private extension SearchViewController {
     @objc func tabTapped(_ sender: UIButton) {
         let newTab: SearchTab
         switch sender.tag {
-        case 1:newTab = .books
-        case 2: newTab = .kids
-        default: newTab = .audiobooks
+        case 1:
+            newTab = .books
+        case 2:
+            newTab = .kids
+        default:
+            newTab = .audiobooks
         }
         guard newTab != selectedTab
         else { return }

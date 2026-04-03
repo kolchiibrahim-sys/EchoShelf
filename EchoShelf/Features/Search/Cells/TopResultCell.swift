@@ -48,7 +48,8 @@ final class TopResultCell: UICollectionViewCell {
         coverShadow.layer.shadowColor = UIColor.black.cgColor
         coverShadow.layer.shadowOpacity = 0.5
         coverShadow.layer.shadowRadius = 12
-        coverShadow.layer.shadowOffset = CGSize(width: 0, height: 6)
+        coverShadow.layer.shadowOffset = CGSize(width: 0,
+                                                height: 6)
         coverShadow.translatesAutoresizingMaskIntoConstraints = false
 
         coverImage.layer.cornerRadius = 16
@@ -57,7 +58,8 @@ final class TopResultCell: UICollectionViewCell {
         coverImage.backgroundColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.2)
         coverImage.translatesAutoresizingMaskIntoConstraints = false
 
-        genreBadge.font = .systemFont(ofSize: 10, weight: .semibold)
+        genreBadge.font = .systemFont(ofSize: 10,
+                                      weight: .semibold)
         genreBadge.textColor = UIColor(named: "PrimaryGradientStart")!
         genreBadge.backgroundColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.15)
         genreBadge.layer.cornerRadius = 8
@@ -66,11 +68,13 @@ final class TopResultCell: UICollectionViewCell {
         genreBadge.isHidden = true
         genreBadge.translatesAutoresizingMaskIntoConstraints = false
 
-        titleLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: 17,
+                                      weight: .bold)
         titleLabel.textColor = UIColor(named: "OnDarkTextPrimary")!
         titleLabel.numberOfLines = 2
 
-        authorLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        authorLabel.font = .systemFont(ofSize: 13,
+                                       weight: .semibold)
         authorLabel.textColor = UIColor(named: "PrimaryGradientStart")!
 
         narratorLabel.font = .systemFont(ofSize: 12)
@@ -97,15 +101,21 @@ final class TopResultCell: UICollectionViewCell {
         config.image = UIImage(systemName: "play.fill")
         config.imagePlacement = .leading
         config.imagePadding = 6
-        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8,
+                                                       leading: 16,
+                                                       bottom: 8,
+                                                       trailing: 16)
 
         var titleAttr = AttributedString("Listen")
-        titleAttr.font = .systemFont(ofSize: 14, weight: .semibold)
+        titleAttr.font = .systemFont(ofSize: 14,
+                                     weight: .semibold)
         config.attributedTitle = titleAttr
         listenButton.configuration = config
         listenButton.layer.cornerRadius = 16
         listenButton.layer.masksToBounds = true
-        listenButton.addTarget(self, action: #selector(listenTapped), for: .touchUpInside)
+        listenButton.addTarget(self,
+                               action: #selector(listenTapped),
+                               for: .touchUpInside)
 
         downloadButton.setImage(UIImage(systemName: "arrow.down.circle.fill"), for: .normal)
         downloadButton.tintColor = UIColor(named: "OnDarkText70")!
@@ -140,7 +150,8 @@ final class TopResultCell: UICollectionViewCell {
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            coverShadow.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            coverShadow.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                                 constant: 16),
             coverShadow.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             coverShadow.widthAnchor.constraint(equalToConstant: 100),
             coverShadow.heightAnchor.constraint(equalToConstant: 130),
@@ -152,8 +163,10 @@ final class TopResultCell: UICollectionViewCell {
 
             genreBadge.heightAnchor.constraint(equalToConstant: 20),
 
-            textStack.leadingAnchor.constraint(equalTo: coverShadow.trailingAnchor, constant: 14),
-            textStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+            textStack.leadingAnchor.constraint(equalTo: coverShadow.trailingAnchor,
+                                               constant: 14),
+            textStack.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                                constant: -16),
             textStack.centerYAnchor.constraint(equalTo: container.centerYAnchor)
         ])
     }
@@ -178,7 +191,7 @@ final class TopResultCell: UICollectionViewCell {
             metaStack.isHidden = true
         }
 
-        genreBadge.text = "  LibriVox  "
+        genreBadge.text = "LibriVox"
         genreBadge.isHidden = false
     }
 

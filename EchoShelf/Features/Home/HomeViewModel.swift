@@ -61,7 +61,8 @@ final class HomeViewModel {
     }
 
     func fetchEbooks() {
-        ebookService.fetchEbooksBySubject(subject: "fiction", page: 0) { [weak self] result in
+        ebookService.fetchEbooksBySubject(subject: "fiction",
+                                          page: 0) { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
                 switch result {
@@ -76,7 +77,8 @@ final class HomeViewModel {
     }
 
     func fetchKidsEbooks() {
-        ebookService.fetchEbooksBySubject(subject: "children", page: 0) { [weak self] result in
+        ebookService.fetchEbooksBySubject(subject: "children",
+                                          page: 0) { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
                 switch result {

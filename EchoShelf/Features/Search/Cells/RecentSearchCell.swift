@@ -24,7 +24,8 @@ final class RecentSearchCell: UICollectionViewCell {
     private let label: UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
-        lbl.font = .systemFont(ofSize: 15, weight: .medium)
+        lbl.font = .systemFont(ofSize: 15,
+                               weight: .medium)
         return lbl
     }()
 
@@ -73,7 +74,9 @@ final class RecentSearchCell: UICollectionViewCell {
             divider.heightAnchor.constraint(equalToConstant: 0.5)
         ])
 
-        deleteButton.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
+        deleteButton.addTarget(self,
+                               action: #selector(deleteTapped),
+                               for: .touchUpInside)
     }
 
     func configure(with text: String) {

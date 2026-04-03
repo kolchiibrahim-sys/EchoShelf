@@ -45,8 +45,10 @@ final class OtherVersionCell: UICollectionViewCell {
         contentView.addSubview(stack)
 
         NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                           constant: 16),
+            stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                            constant: -16),
             stack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }

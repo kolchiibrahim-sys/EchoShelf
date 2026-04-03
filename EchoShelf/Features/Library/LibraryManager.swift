@@ -42,10 +42,13 @@ final class LibraryManager {
         }
         items.removeAll { $0.id == id }
         persist(items)
-        NotificationCenter.default.post(name: .libraryDidUpdate, object: nil)
+        NotificationCenter.default.post(name: .libraryDidUpdate,
+                                        object: nil)
     }
 
-    func updateProgress(id: String, page: Int, total: Int) {
+    func updateProgress(id: String,
+                        page: Int,
+                        total: Int) {
         var items = loadAll(includeDeleted: true)
         guard let idx = items.firstIndex(where: { $0.id == id }) else { return }
         items[idx].lastReadPage = page

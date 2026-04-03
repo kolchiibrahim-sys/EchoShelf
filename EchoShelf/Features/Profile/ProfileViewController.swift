@@ -44,7 +44,8 @@ final class ProfileViewController: UIViewController {
 
     private let initialsLabel: UILabel = {
         let l = UILabel()
-        l.font = .systemFont(ofSize: 26, weight: .bold)
+        l.font = .systemFont(ofSize: 26,
+                             weight: .bold)
         l.textColor = UIColor(named: "PrimaryAccent")!
         l.textAlignment = .center
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +54,8 @@ final class ProfileViewController: UIViewController {
 
     private let nameLabel: UILabel = {
         let l = UILabel()
-        l.font = .systemFont(ofSize: 20, weight: .bold)
+        l.font = .systemFont(ofSize: 20,
+                             weight: .bold)
         l.textColor = UIColor(named: "OnDarkTextPrimary")!
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
@@ -111,9 +113,12 @@ final class ProfileViewController: UIViewController {
         headerView.addSubview(emailLabel)
 
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            headerView.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                            constant: 24),
+            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: 20),
+            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: -20),
 
             avatarContainer.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
             avatarContainer.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
@@ -125,18 +130,25 @@ final class ProfileViewController: UIViewController {
             initialsLabel.centerXAnchor.constraint(equalTo: avatarContainer.centerXAnchor),
             initialsLabel.centerYAnchor.constraint(equalTo: avatarContainer.centerYAnchor),
 
-            nameLabel.leadingAnchor.constraint(equalTo: avatarContainer.trailingAnchor, constant: 16),
-            nameLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 20),
+            nameLabel.leadingAnchor.constraint(equalTo: avatarContainer.trailingAnchor,
+                                               constant: 16),
+            nameLabel.topAnchor.constraint(equalTo: headerView.topAnchor,
+                                           constant: 20),
             nameLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
 
             emailLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            emailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            emailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor,
+                                            constant: 4),
             emailLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor)
         ])
     }
 
     private func setupSections() {
-        let sections: [(title: String, rows: [(icon: String, iconBg: String, title: String, detail: String?, action: () -> Void)])] = [
+        let sections: [(title: String, rows: [(icon: String,
+                                               iconBg: String,
+                                               title: String,
+                                               detail: String?,
+                                               action: () -> Void)])] = [
             ("ACCOUNT", [
                 ("person.fill", "IconBlue", "Şəxsi Məlumat", nil, { [weak self] in self?.showSettings() }),
                 ("lock.fill", "IconPurple", "Şifrə və Təhlükəsizlik", nil, { [weak self] in self?.showSettings() }),
@@ -159,9 +171,12 @@ final class ProfileViewController: UIViewController {
             let headerLabel = makeSectionHeader(section.title)
             contentView.addSubview(headerLabel)
             NSLayoutConstraint.activate([
-                headerLabel.topAnchor.constraint(equalTo: lastBottom, constant: sIdx == 0 ? 28 : 24),
-                headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-                headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+                headerLabel.topAnchor.constraint(equalTo: lastBottom,
+                                                 constant: sIdx == 0 ? 28 : 24),
+                headerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                     constant: 20),
+                headerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                      constant: -20)
             ])
             lastBottom = headerLabel.bottomAnchor
             lastView = headerLabel
@@ -169,14 +184,21 @@ final class ProfileViewController: UIViewController {
             let card = makeCard()
             contentView.addSubview(card)
             NSLayoutConstraint.activate([
-                card.topAnchor.constraint(equalTo: lastBottom, constant: 8),
-                card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-                card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+                card.topAnchor.constraint(equalTo: lastBottom,
+                                          constant: 8),
+                card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                              constant: 16),
+                card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                               constant: -16)
             ])
 
             var prevRowBottom = card.topAnchor
             for (rIdx, row) in section.rows.enumerated() {
-                let rowView = makeRow(icon: row.icon, iconBg: row.iconBg, title: row.title, detail: row.detail, showDivider: rIdx < section.rows.count - 1, action: row.action)
+                let rowView = makeRow(icon: row.icon,
+                                      iconBg: row.iconBg,
+                                      title: row.title, detail: row.detail,
+                                      showDivider: rIdx < section.rows.count - 1,
+                                      action: row.action)
                 card.addSubview(rowView)
                 NSLayoutConstraint.activate([
                     rowView.topAnchor.constraint(equalTo: prevRowBottom),
@@ -198,11 +220,15 @@ final class ProfileViewController: UIViewController {
         let logoutBtn = makeLogoutButton()
         contentView.addSubview(logoutBtn)
         NSLayoutConstraint.activate([
-            logoutBtn.topAnchor.constraint(equalTo: lastBottom, constant: 32),
-            logoutBtn.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            logoutBtn.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            logoutBtn.topAnchor.constraint(equalTo: lastBottom,
+                                           constant: 32),
+            logoutBtn.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                               constant: 16),
+            logoutBtn.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -16),
             logoutBtn.heightAnchor.constraint(equalToConstant: 52),
-            logoutBtn.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -32)
+            logoutBtn.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                              constant: -32)
         ])
         _ = lastView
     }
@@ -233,8 +259,12 @@ final class ProfileViewController: UIViewController {
         container.translatesAutoresizingMaskIntoConstraints = false
         container.addAction(UIAction { _ in action() }, for: .touchUpInside)
 
-        container.addTarget(self, action: #selector(rowHighlight(_:)), for: .touchDown)
-        container.addTarget(self, action: #selector(rowUnhighlight(_:)), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+        container.addTarget(self,
+                            action: #selector(rowHighlight(_:)),
+                            for: .touchDown)
+        container.addTarget(self,
+                            action: #selector(rowUnhighlight(_:)),
+                            for: [.touchUpInside, .touchUpOutside, .touchCancel])
 
         let iconBg2 = UIView()
         iconBg2.backgroundColor = (UIColor(named: iconBg) ?? UIColor(named: "PrimaryAccent")!).withAlphaComponent(0.2)
@@ -263,7 +293,8 @@ final class ProfileViewController: UIViewController {
         container.addSubview(chevron)
 
         NSLayoutConstraint.activate([
-            iconBg2.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 14),
+            iconBg2.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                             constant: 14),
             iconBg2.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             iconBg2.widthAnchor.constraint(equalToConstant: 32),
             iconBg2.heightAnchor.constraint(equalToConstant: 32),
@@ -273,10 +304,12 @@ final class ProfileViewController: UIViewController {
             iconImg.widthAnchor.constraint(equalToConstant: 16),
             iconImg.heightAnchor.constraint(equalToConstant: 16),
 
-            titleLbl.leadingAnchor.constraint(equalTo: iconBg2.trailingAnchor, constant: 12),
+            titleLbl.leadingAnchor.constraint(equalTo: iconBg2.trailingAnchor,
+                                              constant: 12),
             titleLbl.centerYAnchor.constraint(equalTo: container.centerYAnchor),
 
-            chevron.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -14),
+            chevron.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                              constant: -14),
             chevron.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             chevron.widthAnchor.constraint(equalToConstant: 12),
             chevron.heightAnchor.constraint(equalToConstant: 12)
@@ -290,7 +323,8 @@ final class ProfileViewController: UIViewController {
             detailLbl.translatesAutoresizingMaskIntoConstraints = false
             container.addSubview(detailLbl)
             NSLayoutConstraint.activate([
-                detailLbl.trailingAnchor.constraint(equalTo: chevron.leadingAnchor, constant: -6),
+                detailLbl.trailingAnchor.constraint(equalTo: chevron.leadingAnchor,
+                                                    constant: -6),
                 detailLbl.centerYAnchor.constraint(equalTo: container.centerYAnchor)
             ])
         }
@@ -347,20 +381,25 @@ final class ProfileViewController: UIViewController {
 
     private func showSettings() {
         let vc = SettingsViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc,
+                                                 animated: true)
     }
 
     private func showStorageCache() {
         let vc = StorageCacheViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc,
+                                                 animated: true)
     }
 
     // MARK: - Actions
 
     @objc private func logoutTapped() {
-        let alert = UIAlertController(title: "Çıxış", message: "Hesabınızdan çıxmaq istədiyinizə əminsiniz?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ləğv et", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Çıxış", style: .destructive) { [weak self] _ in
+        let alert = UIAlertController(title: "Çıxış",
+                                      message: "Hesabınızdan çıxmaq istədiyinizə əminsiniz?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ləğv et",
+                                      style: .cancel))
+        alert.addAction(UIAlertAction(title: "Çıxış",
+                                      style: .destructive) { [weak self] _ in
             self?.viewModel.logout()
         })
         present(alert, animated: true)

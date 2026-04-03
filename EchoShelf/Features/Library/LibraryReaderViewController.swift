@@ -30,8 +30,8 @@ final class LibraryReaderViewController: UIViewController {
 
     private let errorLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font          = .systemFont(ofSize: 15)
-        lbl.textColor     = UIColor(named: "OnDarkTextSecondary")!
+        lbl.font = .systemFont(ofSize: 15)
+        lbl.textColor = UIColor(named: "OnDarkTextSecondary")!
         lbl.textAlignment = .center
         lbl.numberOfLines = 0
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -40,10 +40,11 @@ final class LibraryReaderViewController: UIViewController {
 
     private let pageLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font          = .systemFont(ofSize: 12, weight: .medium)
-        lbl.textColor     = UIColor(named: "OnDarkTextDetail")!
+        lbl.font = .systemFont(ofSize: 12,
+                               weight: .medium)
+        lbl.textColor = UIColor(named: "OnDarkTextDetail")!
         lbl.textAlignment = .center
-        lbl.isHidden      = true
+        lbl.isHidden = true
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -76,7 +77,8 @@ final class LibraryReaderViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.setNavigationBarHidden(false,
+                                                     animated: false)
     }
 
     deinit {
@@ -93,14 +95,14 @@ private extension LibraryReaderViewController {
             switch state {
             case .loading:
                 self.loadingIndicator.startAnimating()
-                self.pdfView.isHidden        = true
+                self.pdfView.isHidden = true
                 self.errorContainer.isHidden = true
 
             case .ready(let document):
                 self.loadingIndicator.stopAnimating()
                 self.errorContainer.isHidden = true
 
-                self.pdfView.document    = document
+                self.pdfView.document  = document
                 self.pdfView.scaleFactor = self.viewModel.scaleFactor
 
                 // Əvvəlki oxuma yerinə qayıt
@@ -116,10 +118,10 @@ private extension LibraryReaderViewController {
 
             case .error(let message):
                 self.loadingIndicator.stopAnimating()
-                self.pdfView.isHidden        = true
-                self.pageLabel.isHidden      = true
+                self.pdfView.isHidden  = true
+                self.pageLabel.isHidden  = true
                 self.errorContainer.isHidden = false
-                self.errorLabel.text         = message
+                self.errorLabel.text  = message
             }
         }
 
@@ -143,17 +145,20 @@ private extension LibraryReaderViewController {
         navigationItem.leftBarButtonItem?.tintColor = .white
 
         let fontMenu = UIMenu(title: "Text Size", children: [
-            UIAction(title: "Larger",  image: UIImage(systemName: "textformat.size.larger")) { [weak self] _ in
+            UIAction(title: "Larger",
+                     image: UIImage(systemName: "textformat.size.larger")) { [weak self] _ in
                 guard let self else { return }
                 self.viewModel.increaseScale()
                 self.pdfView.scaleFactor = self.viewModel.scaleFactor
             },
-            UIAction(title: "Smaller", image: UIImage(systemName: "textformat.size.smaller")) { [weak self] _ in
+            UIAction(title: "Smaller",
+                     image: UIImage(systemName: "textformat.size.smaller")) { [weak self] _ in
                 guard let self else { return }
                 self.viewModel.decreaseScale()
                 self.pdfView.scaleFactor = self.viewModel.scaleFactor
             },
-            UIAction(title: "Reset",   image: UIImage(systemName: "arrow.counterclockwise")) { [weak self] _ in
+            UIAction(title: "Reset",
+                     image: UIImage(systemName: "arrow.counterclockwise")) { [weak self] _ in
                 guard let self else { return }
                 self.viewModel.resetScale()
                 self.pdfView.scaleFactor = self.viewModel.scaleFactor
@@ -168,7 +173,7 @@ private extension LibraryReaderViewController {
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor     = UIColor(named: "AppBackground")!
+        appearance.backgroundColor  = UIColor(named: "AppBackground")!
         appearance.titleTextAttributes = [.foregroundColor: UIColor(named: "OnDarkTextPrimary")!]
         navigationController?.navigationBar.standardAppearance   = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
@@ -176,12 +181,12 @@ private extension LibraryReaderViewController {
 
     func setupPDFView() {
         pdfView = PDFView(frame: .zero)
-        pdfView.backgroundColor    = UIColor(named: "AppBackground")!
-        pdfView.autoScales         = true
-        pdfView.displayMode        = .singlePageContinuous
-        pdfView.displayDirection   = .vertical
+        pdfView.backgroundColor = UIColor(named: "AppBackground")!
+        pdfView.autoScales = true
+        pdfView.displayMode = .singlePageContinuous
+        pdfView.displayDirection = .vertical
         pdfView.pageShadowsEnabled = false
-        pdfView.isHidden           = true
+        pdfView.isHidden = true
         pdfView.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(pdfView)
@@ -208,15 +213,18 @@ private extension LibraryReaderViewController {
         NSLayoutConstraint.activate([
             errorContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             errorContainer.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            errorContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            errorContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
+            errorContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                    constant: 40),
+            errorContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                     constant: -40),
 
             errorIcon.topAnchor.constraint(equalTo: errorContainer.topAnchor),
             errorIcon.centerXAnchor.constraint(equalTo: errorContainer.centerXAnchor),
             errorIcon.widthAnchor.constraint(equalToConstant: 48),
             errorIcon.heightAnchor.constraint(equalToConstant: 48),
 
-            errorLabel.topAnchor.constraint(equalTo: errorIcon.bottomAnchor, constant: 16),
+            errorLabel.topAnchor.constraint(equalTo: errorIcon.bottomAnchor,
+                                            constant: 16),
             errorLabel.leadingAnchor.constraint(equalTo: errorContainer.leadingAnchor),
             errorLabel.trailingAnchor.constraint(equalTo: errorContainer.trailingAnchor),
             errorLabel.bottomAnchor.constraint(equalTo: errorContainer.bottomAnchor)
@@ -226,7 +234,8 @@ private extension LibraryReaderViewController {
     func setupPageLabel() {
         view.addSubview(pageLabel)
         NSLayoutConstraint.activate([
-            pageLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            pageLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                              constant: -10),
             pageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
@@ -248,7 +257,7 @@ private extension LibraryReaderViewController {
     }
 
     @objc func pageChanged() {
-        guard let page     = pdfView.currentPage,
+        guard let page = pdfView.currentPage,
               let document = pdfView.document else { return }
         viewModel.updateCurrentPage(document.index(for: page))
     }

@@ -35,7 +35,8 @@ final class RelatedAuthorCell: UICollectionViewCell {
         imageView.backgroundColor = UIColor(named: "PrimaryGradientStart")!.withAlphaComponent(0.3)
 
         initialsLabel.textColor = .white
-        initialsLabel.font = .systemFont(ofSize: 28, weight: .bold)
+        initialsLabel.font = .systemFont(ofSize: 28,
+                                         weight: .bold)
         initialsLabel.textAlignment = .center
         initialsLabel.translatesAutoresizingMaskIntoConstraints = false
 
@@ -58,7 +59,8 @@ final class RelatedAuthorCell: UICollectionViewCell {
             initialsLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
             initialsLabel.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
 
-            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 6),
+            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor,
+                                           constant: 6),
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])

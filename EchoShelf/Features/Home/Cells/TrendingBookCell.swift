@@ -23,7 +23,8 @@ final class TrendingBookCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 14, weight: .semibold)
+        lbl.font = .systemFont(ofSize: 14,
+                               weight: .semibold)
         lbl.textColor = .white
         lbl.numberOfLines = 2
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +33,8 @@ final class TrendingBookCell: UICollectionViewCell {
 
     private let authorLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 12, weight: .regular)
+        lbl.font = .systemFont(ofSize: 12,
+                               weight: .regular)
         lbl.textColor = .lightGray
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -56,11 +58,13 @@ final class TrendingBookCell: UICollectionViewCell {
             coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             coverImageView.heightAnchor.constraint(equalToConstant: 180),
 
-            titleLabel.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 8),
+            titleLabel.topAnchor.constraint(equalTo: coverImageView.bottomAnchor,
+                                            constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
+            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                             constant: 2),
             authorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             authorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])

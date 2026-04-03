@@ -13,16 +13,16 @@ final class EbookTopResultCell: UICollectionViewCell {
 
     var onRead: (() -> Void)?
 
-    private let container   = UIView()
+    private let container = UIView()
     private let coverShadow = UIView()
-    private let coverImage  = UIImageView()
-    private let genreBadge  = UILabel()
-    private let titleLabel  = UILabel()
+    private let coverImage = UIImageView()
+    private let genreBadge = UILabel()
+    private let titleLabel = UILabel()
     private let authorLabel = UILabel()
     private let sourceLabel = UILabel()
-    private let metaStack   = UIStackView()
+    private let metaStack = UIStackView()
     private let downloadLabel = UILabel()
-    private let readButton  = UIButton(type: .system)
+    private let readButton = UIButton(type: .system)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,7 +45,8 @@ final class EbookTopResultCell: UICollectionViewCell {
         coverShadow.layer.shadowColor = UIColor.black.cgColor
         coverShadow.layer.shadowOpacity = 0.5
         coverShadow.layer.shadowRadius = 12
-        coverShadow.layer.shadowOffset = CGSize(width: 0, height: 6)
+        coverShadow.layer.shadowOffset = CGSize(width: 0,
+                                                height: 6)
         coverShadow.translatesAutoresizingMaskIntoConstraints = false
 
         coverImage.layer.cornerRadius = 16
@@ -54,7 +55,8 @@ final class EbookTopResultCell: UICollectionViewCell {
         coverImage.backgroundColor = UIColor(named: "PrimaryAccent")!.withAlphaComponent(0.2)
         coverImage.translatesAutoresizingMaskIntoConstraints = false
 
-        genreBadge.font = .systemFont(ofSize: 10, weight: .semibold)
+        genreBadge.font = .systemFont(ofSize: 10,
+                                      weight: .semibold)
         genreBadge.textColor = UIColor(named: "PrimaryAccent")!
         genreBadge.backgroundColor = UIColor(named: "PrimaryAccent")!.withAlphaComponent(0.15)
         genreBadge.layer.cornerRadius = 8
@@ -62,11 +64,13 @@ final class EbookTopResultCell: UICollectionViewCell {
         genreBadge.textAlignment = .center
         genreBadge.translatesAutoresizingMaskIntoConstraints = false
 
-        titleLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: 17,
+                                      weight: .bold)
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
 
-        authorLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        authorLabel.font = .systemFont(ofSize: 13,
+                                       weight: .semibold)
         authorLabel.textColor = UIColor(named: "PrimaryAccent")!
 
         sourceLabel.font = .systemFont(ofSize: 12)
@@ -89,12 +93,17 @@ final class EbookTopResultCell: UICollectionViewCell {
         config.image = UIImage(systemName: "book.fill")
         config.imagePlacement = .leading
         config.imagePadding = 6
-        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8,
+                                                       leading: 16,
+                                                       bottom: 8,
+                                                       trailing: 16)
         var titleAttr = AttributedString("Read")
         titleAttr.font = .systemFont(ofSize: 14, weight: .semibold)
         config.attributedTitle = titleAttr
         readButton.configuration = config
-        readButton.addTarget(self, action: #selector(readTapped), for: .touchUpInside)
+        readButton.addTarget(self,
+                             action: #selector(readTapped),
+                             for: .touchUpInside)
 
         let buttonRow = UIStackView(arrangedSubviews: [readButton])
         buttonRow.translatesAutoresizingMaskIntoConstraints = false
@@ -105,8 +114,10 @@ final class EbookTopResultCell: UICollectionViewCell {
         textStack.axis = .vertical
         textStack.spacing = 5
         textStack.translatesAutoresizingMaskIntoConstraints = false
-        textStack.setCustomSpacing(8, after: sourceLabel)
-        textStack.setCustomSpacing(10, after: metaStack)
+        textStack.setCustomSpacing(8,
+                                   after: sourceLabel)
+        textStack.setCustomSpacing(10,
+                                   after: metaStack)
 
         contentView.addSubview(container)
         container.addSubview(coverShadow)
@@ -119,7 +130,8 @@ final class EbookTopResultCell: UICollectionViewCell {
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            coverShadow.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            coverShadow.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                                 constant: 16),
             coverShadow.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             coverShadow.widthAnchor.constraint(equalToConstant: 100),
             coverShadow.heightAnchor.constraint(equalToConstant: 130),
@@ -131,8 +143,10 @@ final class EbookTopResultCell: UICollectionViewCell {
 
             genreBadge.heightAnchor.constraint(equalToConstant: 20),
 
-            textStack.leadingAnchor.constraint(equalTo: coverShadow.trailingAnchor, constant: 14),
-            textStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+            textStack.leadingAnchor.constraint(equalTo: coverShadow.trailingAnchor,
+                                               constant: 14),
+            textStack.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                                constant: -16),
             textStack.centerYAnchor.constraint(equalTo: container.centerYAnchor)
         ])
     }
@@ -141,7 +155,8 @@ final class EbookTopResultCell: UICollectionViewCell {
         titleLabel.text = ebook.title
         authorLabel.text = ebook.authorName
         if let url = ebook.coverURL {
-            coverImage.kf.setImage(with: url, placeholder: UIImage(systemName: "book.fill"))
+            coverImage.kf.setImage(with: url,
+                                   placeholder: UIImage(systemName: "book.fill"))
         }
         if ebook.downloadCount > 0 {
             downloadLabel.text = "📥 \(ebook.downloadCount) downloads"
@@ -156,10 +171,10 @@ final class EbookOtherResultCell: UICollectionViewCell {
 
     static let identifier = "EbookOtherResultCell"
 
-    private let container    = UIView()
-    private let coverImage   = UIImageView()
-    private let titleLabel   = UILabel()
-    private let authorLabel  = UILabel()
+    private let container = UIView()
+    private let coverImage = UIImageView()
+    private let titleLabel = UILabel()
+    private let authorLabel = UILabel()
     private let downloadLabel = UILabel()
 
     override init(frame: CGRect) {
@@ -184,11 +199,13 @@ final class EbookOtherResultCell: UICollectionViewCell {
         coverImage.backgroundColor = UIColor(named: "PrimaryAccent")!.withAlphaComponent(0.15)
         coverImage.translatesAutoresizingMaskIntoConstraints = false
 
-        titleLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: 15,
+                                      weight: .bold)
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
 
-        authorLabel.font = .systemFont(ofSize: 13, weight: .medium)
+        authorLabel.font = .systemFont(ofSize: 13,
+                                       weight: .medium)
         authorLabel.textColor = UIColor(named: "PrimaryAccent")!
 
         downloadLabel.font = .systemFont(ofSize: 12)
@@ -212,13 +229,16 @@ final class EbookOtherResultCell: UICollectionViewCell {
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            coverImage.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 14),
+            coverImage.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                                constant: 14),
             coverImage.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             coverImage.widthAnchor.constraint(equalToConstant: 55),
             coverImage.heightAnchor.constraint(equalToConstant: 75),
 
-            mainStack.leadingAnchor.constraint(equalTo: coverImage.trailingAnchor, constant: 12),
-            mainStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -14),
+            mainStack.leadingAnchor.constraint(equalTo: coverImage.trailingAnchor,
+                                               constant: 12),
+            mainStack.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                                constant: -14),
             mainStack.centerYAnchor.constraint(equalTo: container.centerYAnchor)
         ])
     }
@@ -239,10 +259,10 @@ final class EbookYouMightLikeCell: UICollectionViewCell {
 
     static let identifier = "EbookYouMightLikeCell"
 
-    private let coverImage  = UIImageView()
-    private let titleLabel  = UILabel()
+    private let coverImage = UIImageView()
+    private let titleLabel = UILabel()
     private let authorLabel = UILabel()
-    private let badgeLabel  = UILabel()
+    private let badgeLabel = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -263,7 +283,8 @@ final class EbookYouMightLikeCell: UICollectionViewCell {
         coverImage.translatesAutoresizingMaskIntoConstraints = false
 
         badgeLabel.text = "BOOK"
-        badgeLabel.font = .systemFont(ofSize: 9, weight: .bold)
+        badgeLabel.font = .systemFont(ofSize: 9,
+                                      weight: .bold)
         badgeLabel.textColor = .white
         badgeLabel.backgroundColor = UIColor(named: "PrimaryAccent")!
         badgeLabel.layer.cornerRadius = 6
@@ -271,7 +292,8 @@ final class EbookYouMightLikeCell: UICollectionViewCell {
         badgeLabel.textAlignment = .center
         badgeLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        titleLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        titleLabel.font = .systemFont(ofSize: 13,
+                                      weight: .semibold)
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -291,16 +313,20 @@ final class EbookYouMightLikeCell: UICollectionViewCell {
             coverImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             coverImage.heightAnchor.constraint(equalToConstant: 170),
 
-            badgeLabel.topAnchor.constraint(equalTo: coverImage.topAnchor, constant: 8),
-            badgeLabel.trailingAnchor.constraint(equalTo: coverImage.trailingAnchor, constant: -8),
+            badgeLabel.topAnchor.constraint(equalTo: coverImage.topAnchor,
+                                            constant: 8),
+            badgeLabel.trailingAnchor.constraint(equalTo: coverImage.trailingAnchor,
+                                                 constant: -8),
             badgeLabel.widthAnchor.constraint(equalToConstant: 36),
             badgeLabel.heightAnchor.constraint(equalToConstant: 18),
 
-            titleLabel.topAnchor.constraint(equalTo: coverImage.bottomAnchor, constant: 8),
+            titleLabel.topAnchor.constraint(equalTo: coverImage.bottomAnchor,
+                                            constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3),
+            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                             constant: 3),
             authorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             authorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])

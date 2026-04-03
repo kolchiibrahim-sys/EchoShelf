@@ -31,7 +31,8 @@ final class OnboardingViewController: UIViewController {
         config.baseForegroundColor = UIColor(named: "OnDarkTextSecondary")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
             var a = attrs
-            a.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+            a.font = UIFont.systemFont(ofSize: 15,
+                                       weight: .medium)
             return a
         }
         let btn = UIButton(configuration: config)
@@ -99,11 +100,14 @@ final class OnboardingViewController: UIViewController {
         pageControl.currentPage = 0
 
         NSLayoutConstraint.activate([
-            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -120),
+            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                                                constant: -120),
             pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            skipButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            skipButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                            constant: 8),
+            skipButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                 constant: -16)
         ])
     }
 

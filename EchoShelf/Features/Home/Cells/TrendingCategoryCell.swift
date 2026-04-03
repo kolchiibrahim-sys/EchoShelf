@@ -29,7 +29,8 @@ final class TrendingCategoryCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 18, weight: .bold)
+        lbl.font = .systemFont(ofSize: 18,
+                               weight: .bold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -51,20 +52,27 @@ final class TrendingCategoryCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 20
         contentView.clipsToBounds = true
 
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.startPoint = CGPoint(x: 0,
+                                           y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1,
+                                         y: 1)
         contentView.layer.insertSublayer(gradientLayer, at: 0)
 
         contentView.addSubview(iconLabel)
         contentView.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            iconLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14),
-            iconLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -14),
+            iconLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                           constant: 14),
+            iconLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -14),
 
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: 16),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                               constant: -16),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: -16)
         ])
     }
 

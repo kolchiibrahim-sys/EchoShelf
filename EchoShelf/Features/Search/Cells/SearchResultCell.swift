@@ -41,11 +41,13 @@ final class SearchResultCell: UICollectionViewCell {
         coverImage.translatesAutoresizingMaskIntoConstraints = false
         coverImage.contentMode = .scaleAspectFill
 
-        titleLabel.font = .systemFont(ofSize: 15, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: 15,
+                                      weight: .bold)
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
 
-        authorLabel.font = .systemFont(ofSize: 13, weight: .medium)
+        authorLabel.font = .systemFont(ofSize: 13,
+                                       weight: .medium)
         authorLabel.textColor = UIColor(named: "PrimaryGradientStart")!
 
         narratorLabel.font = .systemFont(ofSize: 12)
@@ -73,13 +75,16 @@ final class SearchResultCell: UICollectionViewCell {
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            coverImage.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 14),
+            coverImage.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                                constant: 14),
             coverImage.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             coverImage.widthAnchor.constraint(equalToConstant: 55),
             coverImage.heightAnchor.constraint(equalToConstant: 75),
 
-            mainStack.leadingAnchor.constraint(equalTo: coverImage.trailingAnchor, constant: 12),
-            mainStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -14),
+            mainStack.leadingAnchor.constraint(equalTo: coverImage.trailingAnchor,
+                                               constant: 12),
+            mainStack.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                                constant: -14),
             mainStack.centerYAnchor.constraint(equalTo: container.centerYAnchor)
         ])
     }

@@ -44,9 +44,12 @@ final class SearchViewModel {
         DispatchQueue.main.async { self.onDataUpdated?() }
 
         switch tab {
-        case .audiobooks: searchAudiobooks(query: trimmed)
-        case .books:      searchEbooks(query: trimmed)
-        case .kids:       searchKidsBooks(query: trimmed)
+        case .audiobooks:
+            searchAudiobooks(query: trimmed)
+        case .books:
+            searchEbooks(query: trimmed)
+        case .kids:
+            searchKidsBooks(query: trimmed)
         }
     }
 
@@ -56,7 +59,8 @@ final class SearchViewModel {
 
         switch tab {
         case .audiobooks:
-            audiobookService.fetchByGenre(subject: subject, page: 0) { [weak self] result in
+            audiobookService.fetchByGenre(subject: subject,
+                                          page: 0) { [weak self] result in
                 guard let self else { return }
                 DispatchQueue.main.async {
                     self.isLoading = false
@@ -66,7 +70,8 @@ final class SearchViewModel {
                 }
             }
         case .books:
-            ebookService.fetchEbooksBySubject(subject: subject, page: 0) { [weak self] result in
+            ebookService.fetchEbooksBySubject(subject: subject,
+                                              page: 0) { [weak self] result in
                 guard let self else { return }
                 DispatchQueue.main.async {
                     self.isLoading = false
@@ -76,7 +81,8 @@ final class SearchViewModel {
                 }
             }
         case .kids:
-            ebookService.fetchEbooksBySubject(subject: subject, page: 0) { [weak self] result in
+            ebookService.fetchEbooksBySubject(subject: subject,
+                                              page: 0) { [weak self] result in
                 guard let self else { return }
                 DispatchQueue.main.async {
                     self.isLoading = false
@@ -131,7 +137,7 @@ final class SearchViewModel {
 
 private extension SearchViewModel {
 
-    var recentsKey: String { "recent_searches" }
+    var recentsKey: String {"recent_searches"}
 
     func loadRecents() {
         recentSearches = UserDefaults.standard.stringArray(forKey: recentsKey) ?? []
@@ -192,7 +198,8 @@ private extension SearchViewModel {
                 }
             }
         }
-        ebookService.fetchEbooksBySubject(subject: "fiction", page: 0) { [weak self] result in
+        ebookService.fetchEbooksBySubject(subject: "fiction",
+                                          page: 0) { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
                 if case .success(let b) = result {

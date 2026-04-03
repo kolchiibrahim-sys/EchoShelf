@@ -22,7 +22,8 @@ final class KidsTrendingCell: UICollectionViewCell {
     private let badgeLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "⭐ KIDS"
-        lbl.font = .systemFont(ofSize: 9, weight: .bold)
+        lbl.font = .systemFont(ofSize: 9,
+                               weight: .bold)
         lbl.textColor = UIColor(named: "PureBlack")!
         lbl.backgroundColor = UIColor(named: "RatingStarYellow")!
         lbl.layer.cornerRadius = 6
@@ -34,7 +35,8 @@ final class KidsTrendingCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 13, weight: .semibold)
+        lbl.font = .systemFont(ofSize: 13,
+                               weight: .semibold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.numberOfLines = 2
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -72,16 +74,20 @@ final class KidsTrendingCell: UICollectionViewCell {
             coverImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             coverImage.heightAnchor.constraint(equalToConstant: 170),
 
-            badgeLabel.topAnchor.constraint(equalTo: coverImage.topAnchor, constant: 8),
-            badgeLabel.trailingAnchor.constraint(equalTo: coverImage.trailingAnchor, constant: -8),
+            badgeLabel.topAnchor.constraint(equalTo: coverImage.topAnchor,
+                                            constant: 8),
+            badgeLabel.trailingAnchor.constraint(equalTo: coverImage.trailingAnchor,
+                                                 constant: -8),
             badgeLabel.widthAnchor.constraint(equalToConstant: 46),
             badgeLabel.heightAnchor.constraint(equalToConstant: 18),
 
-            titleLabel.topAnchor.constraint(equalTo: coverImage.bottomAnchor, constant: 8),
+            titleLabel.topAnchor.constraint(equalTo: coverImage.bottomAnchor,
+                                            constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3),
+            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                             constant: 3),
             authorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             authorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
@@ -121,7 +127,8 @@ final class KidsRecommendedCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 13, weight: .bold)
+        lbl.font = .systemFont(ofSize: 13,
+                               weight: .bold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.numberOfLines = 2
         return lbl
@@ -129,7 +136,8 @@ final class KidsRecommendedCell: UICollectionViewCell {
 
     private let authorLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 11, weight: .medium)
+        lbl.font = .systemFont(ofSize: 11,
+                               weight: .medium)
         lbl.textColor = UIColor(named: "RatingStarYellow")!.withAlphaComponent(0.8)
         return lbl
     }()
@@ -168,13 +176,17 @@ final class KidsRecommendedCell: UICollectionViewCell {
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            coverImage.topAnchor.constraint(equalTo: container.topAnchor, constant: 12),
-            coverImage.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 12),
+            coverImage.topAnchor.constraint(equalTo: container.topAnchor,
+                                            constant: 12),
+            coverImage.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                                constant: 12),
             coverImage.widthAnchor.constraint(equalToConstant: 60),
             coverImage.heightAnchor.constraint(equalToConstant: 80),
 
-            textStack.leadingAnchor.constraint(equalTo: coverImage.trailingAnchor, constant: 10),
-            textStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -12),
+            textStack.leadingAnchor.constraint(equalTo: coverImage.trailingAnchor,
+                                               constant: 10),
+            textStack.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                                constant: -12),
             textStack.centerYAnchor.constraint(equalTo: coverImage.centerYAnchor)
         ])
     }

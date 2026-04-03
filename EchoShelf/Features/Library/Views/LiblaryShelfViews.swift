@@ -14,6 +14,7 @@ final class LibraryShelfHeader: UICollectionReusableView {
     private let iconView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
+        //Assets
         iv.tintColor = UIColor(hex: "#C8A96E")
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -23,6 +24,7 @@ final class LibraryShelfHeader: UICollectionReusableView {
         let lbl = UILabel()
         lbl.font      = .systemFont(ofSize: 18,
                                     weight: .bold)
+        //Assets
         lbl.textColor = UIColor(hex: "#E8D5B0")
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -32,6 +34,7 @@ final class LibraryShelfHeader: UICollectionReusableView {
         let lbl = UILabel()
         lbl.font      = .systemFont(ofSize: 12,
                                     weight: .medium)
+        //Assets
         lbl.textColor = UIColor(hex: "#C8A96E").withAlphaComponent(0.7)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -39,6 +42,7 @@ final class LibraryShelfHeader: UICollectionReusableView {
 
     private let divider: UIView = {
         let v = UIView()
+        //Assets
         v.backgroundColor = UIColor(hex: "#C8A96E").withAlphaComponent(0.2)
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -117,7 +121,7 @@ final class ShelfWoodView: UICollectionReusableView {
                                       width: bounds.width,
                                       height: 8)
     }
-
+//Assets
     private func setupLayers() {
         woodLayer.colors = [
             UIColor(hex: "#7B5B2A").cgColor,
@@ -126,8 +130,10 @@ final class ShelfWoodView: UICollectionReusableView {
             UIColor(hex: "#4A3010").cgColor,
         ]
         woodLayer.locations = [0, 0.3, 0.7, 1]
-        woodLayer.startPoint = CGPoint(x: 0, y: 0)
-        woodLayer.endPoint   = CGPoint(x: 0, y: 1)
+        woodLayer.startPoint = CGPoint(x: 0,
+                                       y: 0)
+        woodLayer.endPoint   = CGPoint(x: 0,
+                                       y: 1)
         layer.insertSublayer(woodLayer, at: 0)
 
         topGlow.backgroundColor = UIColor.white.withAlphaComponent(0.18).cgColor

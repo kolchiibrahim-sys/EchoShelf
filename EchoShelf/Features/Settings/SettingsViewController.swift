@@ -47,46 +47,75 @@ final class SettingsViewController: UIViewController {
         var lastBottom = contentView.topAnchor
 
         // ACCOUNT
-        lastBottom = addSection(title: "HESAB", rows: [
-            makeNavRow(icon: "person.fill", iconBg: "IconBlue", title: "Şəxsi Məlumat") {},
-            makeNavRow(icon: "lock.fill", iconBg: "IconPurple", title: "Şifrə və Təhlükəsizlik") {},
-            makeNavRow(icon: "creditcard.fill", iconBg: "IconGreen", title: "Abunəlik", detail: "Aktiv") {}
+        lastBottom = addSection(title: "HESAB",
+                                rows: [
+            makeNavRow(icon: "person.fill",
+                       iconBg: "IconBlue",
+                       title: "Şəxsi Məlumat") {},
+            makeNavRow(icon: "lock.fill",
+                       iconBg: "IconPurple",
+                       title: "Şifrə və Təhlükəsizlik") {},
+            makeNavRow(icon: "creditcard.fill",
+                       iconBg: "IconGreen", title: "Abunəlik",
+                       detail: "Aktiv") {}
         ], topAnchor: lastBottom, topSpacing: 20)
 
         // PLAYBACK
-        let autoPlayToggle = makeToggleRow(icon: "play.circle.fill", iconBg: "IconOrange", title: "Avtomatik oynat", isOn: autoPlayEnabled) { [weak self] val in
+        let autoPlayToggle = makeToggleRow(icon: "play.circle.fill",
+                                           iconBg: "IconOrange",
+                                           title: "Avtomatik oynat",
+                                           isOn: autoPlayEnabled) { [weak self] val in
             self?.autoPlayEnabled = val
         }
-        let audioQualityRow = makeNavRow(icon: "hifi.speaker.fill", iconBg: "IconOrangeSoft", title: "Audio Keyfiyyəti", detail: "Yüksək (Lossless)") { [weak self] in
+        let audioQualityRow = makeNavRow(icon: "hifi.speaker.fill",
+                                         iconBg: "IconOrangeSoft",
+                                         title: "Audio Keyfiyyəti",
+                                         detail: "Yüksək (Lossless)") { [weak self] in
             self?.showAudioQualityPicker()
         }
-        lastBottom = addSection(title: "OXUTMA", rows: [autoPlayToggle, audioQualityRow], topAnchor: lastBottom, topSpacing: 24)
+        lastBottom = addSection(title: "OXUTMA", rows: [autoPlayToggle,
+                                                        audioQualityRow], topAnchor: lastBottom, topSpacing: 24)
 
         // STORAGE
-        let autoDownloadToggle = makeToggleRow(icon: "arrow.down.circle.fill", iconBg: "IconGreen", title: "Avtomatik yüklə", isOn: autoDownloadEnabled) { [weak self] val in
+        let autoDownloadToggle = makeToggleRow(icon: "arrow.down.circle.fill",
+                                               iconBg: "IconGreen", title: "Avtomatik yüklə", isOn: autoDownloadEnabled) { [weak self] val in
             self?.autoDownloadEnabled = val
         }
-        let clearCacheRow = makeNavRow(icon: "trash.fill", iconBg: "IconDarkRed", title: "Keşi təmizlə", detail: "1.2 GB") { [weak self] in
+        let clearCacheRow = makeNavRow(icon: "trash.fill",
+                                       iconBg: "IconDarkRed",
+                                       title: "Keşi təmizlə",
+                                       detail: "1.2 GB") { [weak self] in
             self?.confirmClearCache()
         }
-        lastBottom = addSection(title: "YADDAŞ", rows: [autoDownloadToggle, clearCacheRow], topAnchor: lastBottom, topSpacing: 24)
+        lastBottom = addSection(title: "YADDAŞ",
+                                rows: [autoDownloadToggle,
+                                       clearCacheRow],
+                                topAnchor: lastBottom,
+                                topSpacing: 24)
 
         // NOTIFICATIONS
-        lastBottom = addSection(title: "BİLDİRİŞLƏR", rows: [
-            makeNavRow(icon: "bell.fill", iconBg: "IconRed", title: "Push Bildirişlər") {}
+        lastBottom = addSection(title: "BİLDİRİŞLƏR",
+                                rows: [
+            makeNavRow(icon: "bell.fill",
+                       iconBg: "IconRed",
+                       title: "Push Bildirişlər") {}
         ], topAnchor: lastBottom, topSpacing: 24)
 
         // ABOUT
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
         lastBottom = addSection(title: "HAQQINDA", rows: [
-            makeInfoRow(title: "Versiya", detail: "\(version) (\(build))"),
-            makeNavRow(icon: "doc.text.fill", iconBg: "IconGray", title: "İstifadə Şərtləri") {},
-            makeNavRow(icon: "hand.raised.fill", iconBg: "IconGray", title: "Məxfilik Siyasəti") {}
+            makeInfoRow(title: "Versiya",
+                        detail: "\(version) (\(build))"),
+            makeNavRow(icon: "doc.text.fill",
+                       iconBg: "IconGray", title: "İstifadə Şərtləri") {},
+            makeNavRow(icon: "hand.raised.fill",
+                       iconBg: "IconGray", title: "Məxfilik Siyasəti") {}
         ], topAnchor: lastBottom, topSpacing: 24)
 
         NSLayoutConstraint.activate([
-            lastBottom.constraint(equalTo: contentView.bottomAnchor, constant: -80)
+            lastBottom.constraint(equalTo: contentView.bottomAnchor,
+                                  constant: -80)
         ])
     }
 
@@ -95,16 +124,21 @@ final class SettingsViewController: UIViewController {
         let headerLbl = makeSectionHeader(title)
         contentView.addSubview(headerLbl)
         NSLayoutConstraint.activate([
-            headerLbl.topAnchor.constraint(equalTo: topAnchor, constant: topSpacing),
-            headerLbl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+            headerLbl.topAnchor.constraint(equalTo: topAnchor,
+                                           constant: topSpacing),
+            headerLbl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                               constant: 20)
         ])
 
         let card = makeCard()
         contentView.addSubview(card)
         NSLayoutConstraint.activate([
-            card.topAnchor.constraint(equalTo: headerLbl.bottomAnchor, constant: 8),
-            card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            card.topAnchor.constraint(equalTo: headerLbl.bottomAnchor,
+                                      constant: 8),
+            card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                          constant: 16),
+            card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                           constant: -16)
         ])
 
         var prevBottom = card.topAnchor
@@ -121,7 +155,8 @@ final class SettingsViewController: UIViewController {
                 card.addSubview(div)
                 NSLayoutConstraint.activate([
                     div.bottomAnchor.constraint(equalTo: row.bottomAnchor),
-                    div.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 58),
+                    div.leadingAnchor.constraint(equalTo: card.leadingAnchor,
+                                                 constant: 58),
                     div.trailingAnchor.constraint(equalTo: card.trailingAnchor),
                     div.heightAnchor.constraint(equalToConstant: 0.5)
                 ])
@@ -152,9 +187,12 @@ final class SettingsViewController: UIViewController {
     private func makeNavRow(icon: String, iconBg: String, title: String, detail: String? = nil, action: @escaping () -> Void) -> UIView {
         let container = UIControl()
         container.translatesAutoresizingMaskIntoConstraints = false
-        container.addAction(UIAction { _ in action() }, for: .touchUpInside)
-        container.addTarget(self, action: #selector(rowHighlight(_:)), for: .touchDown)
-        container.addTarget(self, action: #selector(rowUnhighlight(_:)), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+        container.addAction(UIAction { _ in action() },
+                            for: .touchUpInside)
+        container.addTarget(self, action: #selector(rowHighlight(_:)),
+                            for: .touchDown)
+        container.addTarget(self, action: #selector(rowUnhighlight(_:)),
+                            for: [.touchUpInside, .touchUpOutside, .touchCancel])
 
         let iconBgView = makeIconBg(icon: icon, iconTintAsset: iconBg)
         let titleLbl = makeRowTitle(title)
@@ -168,13 +206,16 @@ final class SettingsViewController: UIViewController {
         container.addSubview(chevron)
 
         NSLayoutConstraint.activate([
-            iconBgView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 14),
+            iconBgView.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                                constant: 14),
             iconBgView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             iconBgView.widthAnchor.constraint(equalToConstant: 32),
             iconBgView.heightAnchor.constraint(equalToConstant: 32),
-            titleLbl.leadingAnchor.constraint(equalTo: iconBgView.trailingAnchor, constant: 12),
+            titleLbl.leadingAnchor.constraint(equalTo: iconBgView.trailingAnchor,
+                                              constant: 12),
             titleLbl.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            chevron.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -14),
+            chevron.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                              constant: -14),
             chevron.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             chevron.widthAnchor.constraint(equalToConstant: 12),
             chevron.heightAnchor.constraint(equalToConstant: 12)
@@ -188,7 +229,8 @@ final class SettingsViewController: UIViewController {
             detailLbl.translatesAutoresizingMaskIntoConstraints = false
             container.addSubview(detailLbl)
             NSLayoutConstraint.activate([
-                detailLbl.trailingAnchor.constraint(equalTo: chevron.leadingAnchor, constant: -6),
+                detailLbl.trailingAnchor.constraint(equalTo: chevron.leadingAnchor,
+                                                    constant: -6),
                 detailLbl.centerYAnchor.constraint(equalTo: container.centerYAnchor)
             ])
         }
@@ -206,20 +248,24 @@ final class SettingsViewController: UIViewController {
         toggle.onTintColor = UIColor(named: "PrimaryAccent")!
         toggle.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         toggle.translatesAutoresizingMaskIntoConstraints = false
-        toggle.addAction(UIAction { _ in onChange(toggle.isOn) }, for: .valueChanged)
+        toggle.addAction(UIAction { _ in onChange(toggle.isOn) },
+                         for: .valueChanged)
 
         container.addSubview(iconBgView)
         container.addSubview(titleLbl)
         container.addSubview(toggle)
 
         NSLayoutConstraint.activate([
-            iconBgView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 14),
+            iconBgView.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                                constant: 14),
             iconBgView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             iconBgView.widthAnchor.constraint(equalToConstant: 32),
             iconBgView.heightAnchor.constraint(equalToConstant: 32),
-            titleLbl.leadingAnchor.constraint(equalTo: iconBgView.trailingAnchor, constant: 12),
+            titleLbl.leadingAnchor.constraint(equalTo: iconBgView.trailingAnchor,
+                                              constant: 12),
             titleLbl.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            toggle.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -14),
+            toggle.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                             constant: -14),
             toggle.centerYAnchor.constraint(equalTo: container.centerYAnchor)
         ])
         return container
@@ -238,9 +284,11 @@ final class SettingsViewController: UIViewController {
         container.addSubview(titleLbl)
         container.addSubview(detailLbl)
         NSLayoutConstraint.activate([
-            titleLbl.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            titleLbl.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                              constant: 16),
             titleLbl.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            detailLbl.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+            detailLbl.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                                constant: -16),
             detailLbl.centerYAnchor.constraint(equalTo: container.centerYAnchor)
         ])
         return container
@@ -305,11 +353,15 @@ final class SettingsViewController: UIViewController {
 
     // MARK: - Actions
 
-    @objc private func rowHighlight(_ s: UIControl) { UIView.animate(withDuration: 0.1) { s.alpha = 0.6 } }
-    @objc private func rowUnhighlight(_ s: UIControl) { UIView.animate(withDuration: 0.2) { s.alpha = 1 } }
+    @objc private func rowHighlight(_ s: UIControl) { UIView.animate(withDuration: 0.1)
+        { s.alpha = 0.6 } }
+    @objc private func rowUnhighlight(_ s: UIControl) { UIView.animate(withDuration: 0.2)
+        { s.alpha = 1 } }
 
     private func showAudioQualityPicker() {
-        let alert = UIAlertController(title: "Audio Keyfiyyəti", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Audio Keyfiyyəti",
+                                      message: nil,
+                                      preferredStyle: .actionSheet)
         ["Yüksək (Lossless)", "Orta", "Aşağı"].forEach { q in
             alert.addAction(UIAlertAction(title: q, style: .default))
         }
@@ -318,9 +370,13 @@ final class SettingsViewController: UIViewController {
     }
 
     private func confirmClearCache() {
-        let alert = UIAlertController(title: "Keşi Təmizlə", message: "1.2 GB silinəcək. Əminsiniz?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ləğv et", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Təmizlə", style: .destructive))
+        let alert = UIAlertController(title: "Keşi Təmizlə",
+                                      message: "1.2 GB silinəcək. Əminsiniz?",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ləğv et",
+                                      style: .cancel))
+        alert.addAction(UIAlertAction(title: "Təmizlə",
+                                      style: .destructive))
         present(alert, animated: true)
     }
 }

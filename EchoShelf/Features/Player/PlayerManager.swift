@@ -30,7 +30,8 @@ final class PlayerManager {
         removeTimeObserver()
 
         guard let url = previewURL else {
-            NotificationCenter.default.post(name: .playerStarted, object: nil)
+            NotificationCenter.default.post(name: .playerStarted,
+                                            object: nil)
             return
         }
 
@@ -40,7 +41,8 @@ final class PlayerManager {
 
         addTimeObserver()
 
-        NotificationCenter.default.post(name: .playerStarted, object: nil)
+        NotificationCenter.default.post(name: .playerStarted,
+                                        object: nil)
     }
 
     func pause() {
@@ -59,7 +61,8 @@ final class PlayerManager {
 
         guard let player else { return }
 
-        let interval = CMTime(seconds: 1, preferredTimescale: 1)
+        let interval = CMTime(seconds: 1,
+                              preferredTimescale: 1)
 
         timeObserver = player.addPeriodicTimeObserver(
             forInterval: interval,
@@ -75,7 +78,8 @@ final class PlayerManager {
                 self.duration = duration
             }
 
-            NotificationCenter.default.post(name: .playerProgressUpdated, object: nil)
+            NotificationCenter.default.post(name: .playerProgressUpdated,
+                                            object: nil)
         }
     }
 

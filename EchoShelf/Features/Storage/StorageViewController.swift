@@ -53,26 +53,34 @@ final class StorageCacheViewController: UIViewController {
         let storageCard = makeStorageCard()
         contentView.addSubview(storageCard)
         NSLayoutConstraint.activate([
-            storageCard.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            storageCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            storageCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            storageCard.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                             constant: 20),
+            storageCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                 constant: 16),
+            storageCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                  constant: -16)
         ])
 
         // Books header
         let booksHeader = makeSectionHeader("YÜKLƏNMIŞ KİTABLAR")
         contentView.addSubview(booksHeader)
         NSLayoutConstraint.activate([
-            booksHeader.topAnchor.constraint(equalTo: storageCard.bottomAnchor, constant: 24),
-            booksHeader.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+            booksHeader.topAnchor.constraint(equalTo: storageCard.bottomAnchor,
+                                             constant: 24),
+            booksHeader.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                 constant: 20)
         ])
 
         // Books list
         let booksCard = makeCard()
         contentView.addSubview(booksCard)
         NSLayoutConstraint.activate([
-            booksCard.topAnchor.constraint(equalTo: booksHeader.bottomAnchor, constant: 8),
-            booksCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            booksCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            booksCard.topAnchor.constraint(equalTo: booksHeader.bottomAnchor,
+                                           constant: 8),
+            booksCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                               constant: 16),
+            booksCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -16)
         ])
 
         var prevBottom = booksCard.topAnchor
@@ -92,7 +100,8 @@ final class StorageCacheViewController: UIViewController {
                 booksCard.addSubview(div)
                 NSLayoutConstraint.activate([
                     div.bottomAnchor.constraint(equalTo: row.bottomAnchor),
-                    div.leadingAnchor.constraint(equalTo: booksCard.leadingAnchor, constant: 72),
+                    div.leadingAnchor.constraint(equalTo: booksCard.leadingAnchor,
+                                                 constant: 72),
                     div.trailingAnchor.constraint(equalTo: booksCard.trailingAnchor),
                     div.heightAnchor.constraint(equalToConstant: 0.5)
                 ])
@@ -105,11 +114,15 @@ final class StorageCacheViewController: UIViewController {
         let cacheView = makeCacheFooter()
         contentView.addSubview(cacheView)
         NSLayoutConstraint.activate([
-            cacheView.topAnchor.constraint(equalTo: booksCard.bottomAnchor, constant: 20),
-            cacheView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            cacheView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            cacheView.topAnchor.constraint(equalTo: booksCard.bottomAnchor,
+                                           constant: 20),
+            cacheView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                               constant: 16),
+            cacheView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -16),
             cacheView.heightAnchor.constraint(equalToConstant: 72),
-            cacheView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -32)
+            cacheView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                              constant: -32)
         ])
     }
 
@@ -125,17 +138,20 @@ final class StorageCacheViewController: UIViewController {
         totalLabel.translatesAutoresizingMaskIntoConstraints = false
         let totalAttr = NSMutableAttributedString(
             string: "\(Int(totalGB)) GB ",
-            attributes: [.font: UIFont.systemFont(ofSize: 26, weight: .bold), .foregroundColor: UIColor(named: "OnDarkTextPrimary")!]
+            attributes: [.font: UIFont.systemFont(ofSize: 26, weight: .bold),
+                .foregroundColor: UIColor(named: "OnDarkTextPrimary")!]
         )
         totalAttr.append(NSAttributedString(
             string: "Toplam",
-            attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor(named: "OnDarkTextTertiary")!]
+            attributes: [.font: UIFont.systemFont(ofSize: 14),
+                .foregroundColor: UIColor(named: "OnDarkTextTertiary")!]
         ))
         totalLabel.attributedText = totalAttr
 
         let freeLabel = UILabel()
         freeLabel.text = "\(String(format: "%.1f", totalGB - usedGB)) GB Boş"
-        freeLabel.font = .systemFont(ofSize: 15, weight: .semibold)
+        freeLabel.font = .systemFont(ofSize: 15,
+                                     weight: .semibold)
         freeLabel.textColor = UIColor(named: "PrimaryAccent")!
         freeLabel.translatesAutoresizingMaskIntoConstraints = false
 
@@ -170,33 +186,46 @@ final class StorageCacheViewController: UIViewController {
         let appRatio = CGFloat(appGB / totalGB)
 
         NSLayoutConstraint.activate([
-            sectionLabel.topAnchor.constraint(equalTo: card.topAnchor, constant: 16),
-            sectionLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
+            sectionLabel.topAnchor.constraint(equalTo: card.topAnchor,
+                                              constant: 16),
+            sectionLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor,
+                                                  constant: 16),
 
-            totalLabel.topAnchor.constraint(equalTo: sectionLabel.bottomAnchor, constant: 6),
-            totalLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
+            totalLabel.topAnchor.constraint(equalTo: sectionLabel.bottomAnchor,
+                                            constant: 6),
+            totalLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor,
+                                                constant: 16),
 
             freeLabel.centerYAnchor.constraint(equalTo: totalLabel.centerYAnchor),
-            freeLabel.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
+            freeLabel.trailingAnchor.constraint(equalTo: card.trailingAnchor,
+                                                constant: -16),
 
-            barBg.topAnchor.constraint(equalTo: totalLabel.bottomAnchor, constant: 14),
-            barBg.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
-            barBg.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
+            barBg.topAnchor.constraint(equalTo: totalLabel.bottomAnchor,
+                                       constant: 14),
+            barBg.leadingAnchor.constraint(equalTo: card.leadingAnchor,
+                                           constant: 16),
+            barBg.trailingAnchor.constraint(equalTo: card.trailingAnchor,
+                                            constant: -16),
             barBg.heightAnchor.constraint(equalToConstant: 8),
 
             appFill.topAnchor.constraint(equalTo: barBg.topAnchor),
             appFill.leadingAnchor.constraint(equalTo: barBg.leadingAnchor),
             appFill.bottomAnchor.constraint(equalTo: barBg.bottomAnchor),
-            appFill.widthAnchor.constraint(equalTo: barBg.widthAnchor, multiplier: appRatio),
+            appFill.widthAnchor.constraint(equalTo: barBg.widthAnchor,
+                                           multiplier: appRatio),
 
             otherFill.topAnchor.constraint(equalTo: barBg.topAnchor),
             otherFill.leadingAnchor.constraint(equalTo: appFill.trailingAnchor),
             otherFill.bottomAnchor.constraint(equalTo: barBg.bottomAnchor),
-            otherFill.widthAnchor.constraint(equalTo: barBg.widthAnchor, multiplier: otherRatio),
+            otherFill.widthAnchor.constraint(equalTo: barBg.widthAnchor,
+                                             multiplier: otherRatio),
 
-            legendStack.topAnchor.constraint(equalTo: barBg.bottomAnchor, constant: 12),
-            legendStack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
-            legendStack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
+            legendStack.topAnchor.constraint(equalTo: barBg.bottomAnchor,
+                                             constant: 12),
+            legendStack.leadingAnchor.constraint(equalTo: card.leadingAnchor,
+                                                 constant: 16),
+            legendStack.bottomAnchor.constraint(equalTo: card.bottomAnchor,
+                                                constant: -16)
         ])
 
         return card
@@ -253,7 +282,8 @@ final class StorageCacheViewController: UIViewController {
 
         let titleLbl = UILabel()
         titleLbl.text = book.title
-        titleLbl.font = .systemFont(ofSize: 14, weight: .medium)
+        titleLbl.font = .systemFont(ofSize: 14,
+                                    weight: .medium)
         titleLbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         titleLbl.translatesAutoresizingMaskIntoConstraints = false
 
@@ -268,7 +298,8 @@ final class StorageCacheViewController: UIViewController {
         deleteBtn.tintColor = UIColor(named: "IconRed")!
         deleteBtn.translatesAutoresizingMaskIntoConstraints = false
         deleteBtn.tag = index
-        deleteBtn.addTarget(self, action: #selector(deleteBook(_:)), for: .touchUpInside)
+        deleteBtn.addTarget(self, action: #selector(deleteBook(_:)),
+                            for: .touchUpInside)
 
         coverBg.addSubview(coverIcon)
         container.addSubview(coverBg)
@@ -277,7 +308,8 @@ final class StorageCacheViewController: UIViewController {
         container.addSubview(deleteBtn)
 
         NSLayoutConstraint.activate([
-            coverBg.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 14),
+            coverBg.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                             constant: 14),
             coverBg.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             coverBg.widthAnchor.constraint(equalToConstant: 42),
             coverBg.heightAnchor.constraint(equalToConstant: 42),
@@ -287,14 +319,17 @@ final class StorageCacheViewController: UIViewController {
             coverIcon.widthAnchor.constraint(equalToConstant: 20),
             coverIcon.heightAnchor.constraint(equalToConstant: 20),
 
-            titleLbl.leadingAnchor.constraint(equalTo: coverBg.trailingAnchor, constant: 12),
+            titleLbl.leadingAnchor.constraint(equalTo: coverBg.trailingAnchor,
+                                              constant: 12),
             titleLbl.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
             titleLbl.trailingAnchor.constraint(equalTo: deleteBtn.leadingAnchor, constant: -8),
 
             detailLbl.leadingAnchor.constraint(equalTo: titleLbl.leadingAnchor),
-            detailLbl.topAnchor.constraint(equalTo: titleLbl.bottomAnchor, constant: 3),
+            detailLbl.topAnchor.constraint(equalTo: titleLbl.bottomAnchor,
+                                           constant: 3),
 
-            deleteBtn.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+            deleteBtn.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                                constant: -16),
             deleteBtn.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             deleteBtn.widthAnchor.constraint(equalToConstant: 28),
             deleteBtn.heightAnchor.constraint(equalToConstant: 28)
@@ -312,31 +347,41 @@ final class StorageCacheViewController: UIViewController {
         cacheLabel.translatesAutoresizingMaskIntoConstraints = false
         let attr = NSMutableAttributedString(
             string: "MÜVƏQQƏTİ KEŞ\n",
-            attributes: [.font: UIFont.systemFont(ofSize: 10, weight: .semibold), .foregroundColor: UIColor(named: "OnDarkTextCaption")!]
+            attributes: [.font: UIFont.systemFont(ofSize: 10,
+                                                  weight: .semibold),
+                .foregroundColor: UIColor(named: "OnDarkTextCaption")!]
         )
         attr.append(NSAttributedString(
             string: "2.4 GB",
-            attributes: [.font: UIFont.systemFont(ofSize: 20, weight: .bold), .foregroundColor: UIColor(named: "OnDarkTextPrimary")!]
+            attributes: [.font: UIFont.systemFont(ofSize: 20,
+                                                  weight: .bold),
+                .foregroundColor: UIColor(named: "OnDarkTextPrimary")!]
         ))
         cacheLabel.attributedText = attr
         cacheLabel.numberOfLines = 2
 
         let clearBtn = UIButton(type: .system)
         clearBtn.setTitle("KEŞİ TƏMİZLƏ", for: .normal)
-        clearBtn.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
+        clearBtn.titleLabel?.font = .systemFont(ofSize: 13,
+                                                weight: .bold)
         clearBtn.backgroundColor = UIColor(named: "PrimaryAccent")!
-        clearBtn.setTitleColor(UIColor(named: "OnDarkTextPrimary")!, for: .normal)
+        clearBtn.setTitleColor(UIColor(named: "OnDarkTextPrimary")!,
+                               for: .normal)
         clearBtn.layer.cornerRadius = 20
         clearBtn.translatesAutoresizingMaskIntoConstraints = false
-        clearBtn.addTarget(self, action: #selector(clearCacheTapped), for: .touchUpInside)
+        clearBtn.addTarget(self,
+                           action: #selector(clearCacheTapped),
+                           for: .touchUpInside)
 
         card.addSubview(cacheLabel)
         card.addSubview(clearBtn)
 
         NSLayoutConstraint.activate([
-            cacheLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
+            cacheLabel.leadingAnchor.constraint(equalTo: card.leadingAnchor,
+                                                constant: 16),
             cacheLabel.centerYAnchor.constraint(equalTo: card.centerYAnchor),
-            clearBtn.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
+            clearBtn.trailingAnchor.constraint(equalTo: card.trailingAnchor,
+                                               constant: -16),
             clearBtn.centerYAnchor.constraint(equalTo: card.centerYAnchor),
             clearBtn.widthAnchor.constraint(equalToConstant: 140),
             clearBtn.heightAnchor.constraint(equalToConstant: 40)
@@ -360,7 +405,8 @@ final class StorageCacheViewController: UIViewController {
     private func makeSectionHeader(_ text: String) -> UILabel {
         let l = UILabel()
         l.text = text
-        l.font = .systemFont(ofSize: 10, weight: .semibold)
+        l.font = .systemFont(ofSize: 10,
+                             weight: .semibold)
         l.textColor = UIColor(named: "OnDarkTextCaption")!
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
@@ -370,9 +416,13 @@ final class StorageCacheViewController: UIViewController {
 
     @objc private func deleteBook(_ sender: UIButton) {
         let idx = sender.tag
-        let alert = UIAlertController(title: "Kitabı Sil", message: "\"\(books[idx].title)\" silinsin?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ləğv et", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Sil", style: .destructive) { [weak self] _ in
+        let alert = UIAlertController(title: "Kitabı Sil",
+                                      message: "\"\(books[idx].title)\" silinsin?",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ləğv et",
+                                      style: .cancel))
+        alert.addAction(UIAlertAction(title: "Sil",
+                                      style: .destructive) { [weak self] _ in
             self?.books.remove(at: idx)
             // TODO: LibraryManager.shared.delete(id:)
         })
@@ -380,9 +430,13 @@ final class StorageCacheViewController: UIViewController {
     }
 
     @objc private func clearCacheTapped() {
-        let alert = UIAlertController(title: "Keşi Təmizlə", message: "2.4 GB müvəqqəti fayl silinəcək.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ləğv et", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Təmizlə", style: .destructive))
+        let alert = UIAlertController(title: "Keşi Təmizlə",
+                                      message: "2.4 GB müvəqqəti fayl silinəcək.",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ləğv et",
+                                      style: .cancel))
+        alert.addAction(UIAlertAction(title: "Təmizlə",
+                                      style: .destructive))
         present(alert, animated: true)
     }
 }

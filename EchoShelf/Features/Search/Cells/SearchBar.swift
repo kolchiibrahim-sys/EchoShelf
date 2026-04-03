@@ -24,7 +24,8 @@ final class SearchBarView: UIView {
 
     private let micButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setImage(UIImage(systemName: "mic.fill"), for: .normal)
+        btn.setImage(UIImage(systemName: "mic.fill"),
+                     for: .normal)
         btn.tintColor = UIColor.white.withAlphaComponent(0.5)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -32,7 +33,8 @@ final class SearchBarView: UIView {
 
     private let clearButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        btn.setImage(UIImage(systemName: "xmark.circle.fill"),
+                     for: .normal)
         btn.tintColor = UIColor.white.withAlphaComponent(0.5)
         btn.alpha = 0
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -42,8 +44,10 @@ final class SearchBarView: UIView {
     private let cancelButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Cancel", for: .normal)
-        btn.setTitleColor(UIColor(named: "PrimaryGradientStart")!, for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        btn.setTitleColor(UIColor(named: "PrimaryGradientStart")!,
+                          for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 15,
+                                           weight: .medium)
         btn.alpha = 0
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -104,38 +108,50 @@ private extension SearchBarView {
         textField.addSubview(micButton)
         textField.addSubview(clearButton)
 
-        textFieldTrailing = textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
+        textFieldTrailing = textField.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                                constant: -20)
         textFieldTrailing?.isActive = true
 
         NSLayoutConstraint.activate([
-            cancelButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            cancelButton.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                   constant: -16),
             cancelButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            textField.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                               constant: 20),
             textField.centerYAnchor.constraint(equalTo: centerYAnchor),
             textField.heightAnchor.constraint(equalToConstant: 48),
 
-            searchIcon.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 16),
+            searchIcon.leadingAnchor.constraint(equalTo: textField.leadingAnchor,
+                                                constant: 16),
             searchIcon.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
             searchIcon.widthAnchor.constraint(equalToConstant: 18),
             searchIcon.heightAnchor.constraint(equalToConstant: 18),
 
-            micButton.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
+            micButton.trailingAnchor.constraint(equalTo: textField.trailingAnchor,
+                                                constant: -16),
             micButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
 
-            clearButton.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -16),
+            clearButton.trailingAnchor.constraint(equalTo: textField.trailingAnchor,
+                                                  constant: -16),
             clearButton.centerYAnchor.constraint(equalTo: textField.centerYAnchor)
         ])
 
         textField.setLeftPaddingPoints(44)
         textField.setRightPaddingPoints(44)
         textField.delegate = self
-        textField.addTarget(self, action: #selector(textChanged), for: .editingChanged)
+        textField.addTarget(self,
+                            action: #selector(textChanged),
+                            for: .editingChanged)
     }
 
     func setupActions() {
-        clearButton.addTarget(self, action: #selector(clearTapped), for: .touchUpInside)
-        cancelButton.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
+        clearButton.addTarget(self,
+                              action: #selector(clearTapped),
+                              for: .touchUpInside)
+        cancelButton.addTarget(self,
+                               action: #selector(cancelTapped),
+                               for: .touchUpInside)
     }
 
     func showCancelButton(_ show: Bool) {
@@ -171,7 +187,8 @@ private extension SearchBarView {
         debounceTimer?.invalidate()
         guard text.count >= 2 else { return }
 
-        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.45, repeats: false) { [weak self] _ in
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.45,
+                                             repeats: false) { [weak self] _ in
             self?.onSearch?(text)
         }
     }
@@ -188,11 +205,17 @@ extension SearchBarView: UITextFieldDelegate {
 
 extension UITextField {
     func setLeftPaddingPoints(_ amount: CGFloat) {
-        leftView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: frame.height))
+        leftView = UIView(frame: CGRect(x: 0,
+                                        y: 0,
+                                        width: amount,
+                                        height: frame.height))
         leftViewMode = .always
     }
     func setRightPaddingPoints(_ amount: CGFloat) {
-        rightView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: frame.height))
+        rightView = UIView(frame: CGRect(x: 0,
+                                         y: 0,
+                                         width: amount,
+                                         height: frame.height))
         rightViewMode = .always
     }
 }
