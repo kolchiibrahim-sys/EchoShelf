@@ -104,7 +104,7 @@ final class SearchResultCell: UICollectionViewCell {
         if let url = book.coverURL {
             coverImage.kf.setImage(with: url)
         } else {
-            coverImage.image = UIImage(systemName: "book.fill")
+            coverImage.image = UIImage(systemName:"book.fill")
         }
     }
 }
