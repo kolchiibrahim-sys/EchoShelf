@@ -17,7 +17,8 @@ final class SignInViewController: UIViewController {
 
     init(viewModel: SignInViewModel = SignInViewModel()) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
+        super.init(nibName: nil,
+                   bundle: nil)
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -55,7 +56,8 @@ final class SignInViewController: UIViewController {
     private lazy var appNameLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "EchoShelf"
-        lbl.font = .systemFont(ofSize: 22, weight: .bold)
+        lbl.font = .systemFont(ofSize: 22,
+                               weight: .bold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -64,7 +66,8 @@ final class SignInViewController: UIViewController {
     private lazy var welcomeLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Welcome Back"
-        lbl.font = .systemFont(ofSize: 34, weight: .bold)
+        lbl.font = .systemFont(ofSize: 34,
+                               weight: .bold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -93,10 +96,16 @@ final class SignInViewController: UIViewController {
         tf.autocapitalizationType = .none
         tf.leftViewMode = .always
         tf.translatesAutoresizingMaskIntoConstraints = false
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: 52, height: 24))
+        let container = UIView(frame: CGRect(x: 0,
+                                             y: 0,
+                                             width: 52,
+                                             height: 24))
         let icon = UIImageView(image: UIImage(systemName: "envelope"))
         icon.tintColor = UIColor(named: "TabTextInactive")!
-        icon.frame = CGRect(x: 16, y: 0, width: 22, height: 24)
+        icon.frame = CGRect(x: 16,
+                            y: 0,
+                            width: 22,
+                            height: 24)
         icon.contentMode = .scaleAspectFit
         container.addSubview(icon)
         tf.leftView = container
@@ -116,18 +125,29 @@ final class SignInViewController: UIViewController {
         tf.leftViewMode = .always
         tf.rightViewMode = .always
         tf.translatesAutoresizingMaskIntoConstraints = false
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: 52, height: 24))
+        let container = UIView(frame: CGRect(x: 0,
+                                             y: 0,
+                                             width: 52,
+                                             height: 24))
         let lockIcon = UIImageView(image: UIImage(systemName: "lock"))
         lockIcon.tintColor = UIColor(named: "TabTextInactive")!
-        lockIcon.frame = CGRect(x: 16, y: 0, width: 22, height: 24)
+        lockIcon.frame = CGRect(x: 16,
+                                y: 0,
+                                width: 22,
+                                height: 24)
         lockIcon.contentMode = .scaleAspectFit
         container.addSubview(lockIcon)
         tf.leftView = container
         let eyeButton = UIButton(type: .system)
         eyeButton.setImage(UIImage(systemName: "eye"), for: .normal)
         eyeButton.tintColor = UIColor(named: "TabTextInactive")!
-        eyeButton.frame = CGRect(x: 0, y: 0, width: 48, height: 24)
-        eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        eyeButton.frame = CGRect(x: 0,
+                                 y: 0,
+                                 width: 48,
+                                 height: 24)
+        eyeButton.addTarget(self,
+                            action: #selector(togglePasswordVisibility),
+                            for: .touchUpInside)
         tf.rightView = eyeButton
         return tf
     }()
@@ -137,7 +157,8 @@ final class SignInViewController: UIViewController {
         config.title = "Forgot Password?"
         config.baseForegroundColor = UIColor(named: "OnDarkText70")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
-            var a = attrs; a.font = UIFont.systemFont(ofSize: 14); return a
+        var a = attrs; a.font = UIFont.systemFont(ofSize: 14);
+        return a
         }
         let btn = UIButton(configuration: config)
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -150,7 +171,9 @@ final class SignInViewController: UIViewController {
         config.baseForegroundColor = UIColor(named: "OnDarkTextPrimary")!
         config.baseBackgroundColor = UIColor(named: "PrimaryGradientStart")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
-            var a = attrs; a.font = UIFont.systemFont(ofSize: 18, weight: .semibold); return a
+        var a = attrs; a.font = UIFont.systemFont(ofSize: 18,
+                                                      weight: .semibold);
+        return a
         }
         config.cornerStyle = .capsule
         let btn = UIButton(configuration: config)
@@ -169,7 +192,8 @@ final class SignInViewController: UIViewController {
     private lazy var orLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "OR"
-        lbl.font = .systemFont(ofSize: 13, weight: .medium)
+        lbl.font = .systemFont(ofSize: 13,
+                               weight: .medium)
         lbl.textColor = UIColor(named: "OnDarkTextDetail")!
         lbl.textAlignment = .center
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -198,7 +222,9 @@ final class SignInViewController: UIViewController {
         config.baseForegroundColor = UIColor(named: "OnDarkTextPrimary")!
         config.baseBackgroundColor = UIColor(named: "PureBlack")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
-            var a = attrs; a.font = UIFont.systemFont(ofSize: 17, weight: .semibold); return a
+        var a = attrs; a.font = UIFont.systemFont(ofSize: 17,
+                                                      weight: .semibold);
+        return a
         }
         config.cornerStyle = .capsule
         let btn = UIButton(configuration: config)
@@ -212,20 +238,24 @@ final class SignInViewController: UIViewController {
         config.baseForegroundColor = UIColor(named: "PureBlack")!
         config.baseBackgroundColor = UIColor(named: "OnDarkTextPrimary")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
-            var a = attrs; a.font = UIFont.systemFont(ofSize: 17, weight: .semibold); return a
+        var a = attrs; a.font = UIFont.systemFont(ofSize: 17,
+                                                      weight: .semibold);
+        return a
         }
         config.cornerStyle = .capsule
         let btn = UIButton(configuration: config)
         btn.translatesAutoresizingMaskIntoConstraints = false
         let gLabel = UILabel()
         gLabel.text = "G"
-        gLabel.font = .systemFont(ofSize: 18, weight: .bold)
+        gLabel.font = .systemFont(ofSize: 18,
+                                  weight: .bold)
         gLabel.textColor = UIColor(named: "AccentColor")
         gLabel.translatesAutoresizingMaskIntoConstraints = false
         btn.addSubview(gLabel)
         NSLayoutConstraint.activate([
-            gLabel.leadingAnchor.constraint(equalTo: btn.leadingAnchor, constant: 24),
-            gLabel.centerYAnchor.constraint(equalTo: btn.centerYAnchor)
+        gLabel.leadingAnchor.constraint(equalTo: btn.leadingAnchor,
+                                            constant: 24),
+        gLabel.centerYAnchor.constraint(equalTo: btn.centerYAnchor)
         ])
         return btn
     }()
@@ -236,7 +266,9 @@ final class SignInViewController: UIViewController {
         config.baseForegroundColor = UIColor(named: "OnDarkTextPrimary")!
         config.baseBackgroundColor = UIColor(named: "FillGlass")!
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
-            var a = attrs; a.font = UIFont.systemFont(ofSize: 17, weight: .semibold); return a
+            var a = attrs; a.font = UIFont.systemFont(ofSize: 17,
+                                                      weight: .semibold);
+            return a
         }
         config.cornerStyle = .capsule
         let btn = UIButton(configuration: config)
@@ -262,10 +294,15 @@ final class SignInViewController: UIViewController {
         )
         let purple = UIColor(named: "PrimaryGradientStart")!
         if let r = fullText.range(of: "Terms of Service") {
-            attributed.addAttribute(.foregroundColor, value: purple, range: NSRange(r, in: fullText))
+            attributed.addAttribute(.foregroundColor,
+                                    value: purple,
+                                    range: NSRange(r, in: fullText))
         }
         if let r = fullText.range(of: "Privacy Policy") {
-            attributed.addAttribute(.foregroundColor, value: purple, range: NSRange(r, in: fullText))
+            attributed.addAttribute(.foregroundColor,
+                                    value: purple,
+                                    range: NSRange(r,
+                                                   in: fullText))
         }
         lbl.attributedText = attributed
         return lbl
@@ -312,8 +349,10 @@ final class SignInViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
-            logoContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60),
-            logoContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -55),
+            logoContainerView.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                                   constant: 60),
+            logoContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor,
+                                                       constant: -55),
             logoContainerView.widthAnchor.constraint(equalToConstant: 40),
             logoContainerView.heightAnchor.constraint(equalToConstant: 40),
 
@@ -323,80 +362,127 @@ final class SignInViewController: UIViewController {
             logoImageView.heightAnchor.constraint(equalToConstant: 22),
 
             appNameLabel.centerYAnchor.constraint(equalTo: logoContainerView.centerYAnchor),
-            appNameLabel.leadingAnchor.constraint(equalTo: logoContainerView.trailingAnchor, constant: 8),
+            appNameLabel.leadingAnchor.constraint(equalTo: logoContainerView.trailingAnchor,
+                                                  constant: 8),
 
-            welcomeLabel.topAnchor.constraint(equalTo: logoContainerView.bottomAnchor, constant: 28),
-            welcomeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            welcomeLabel.topAnchor.constraint(equalTo: logoContainerView.bottomAnchor,
+                                              constant: 28),
+            welcomeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                  constant: 24),
 
-            subtitleLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 8),
-            subtitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            subtitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            subtitleLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor,
+                                               constant: 8),
+            subtitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                   constant: 24),
+            subtitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                    constant: -24),
 
-            emailTextField.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 28),
-            emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            emailTextField.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor,
+                                                constant: 28),
+            emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                    constant: 24),
+            emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                     constant: -24),
             emailTextField.heightAnchor.constraint(equalToConstant: 58),
 
-            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 14),
-            passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor,
+                                                   constant: 14),
+            passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                       constant: 24),
+            passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                        constant: -24),
             passwordTextField.heightAnchor.constraint(equalToConstant: 58),
 
-            forgotPasswordButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 10),
-            forgotPasswordButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            forgotPasswordButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor,
+                                                      constant: 10),
+            forgotPasswordButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                           constant: -24),
 
-            signInButton.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 20),
-            signInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            signInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            signInButton.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor,
+                                              constant: 20),
+            signInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                  constant: 24),
+            signInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                   constant: -24),
             signInButton.heightAnchor.constraint(equalToConstant: 58),
 
             activityIndicator.centerXAnchor.constraint(equalTo: signInButton.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: signInButton.centerYAnchor),
 
-            orLabel.topAnchor.constraint(equalTo: signInButton.bottomAnchor, constant: 24),
+            orLabel.topAnchor.constraint(equalTo: signInButton.bottomAnchor,
+                                         constant: 24),
             orLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
 
             leftDivider.centerYAnchor.constraint(equalTo: orLabel.centerYAnchor),
-            leftDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            leftDivider.trailingAnchor.constraint(equalTo: orLabel.leadingAnchor, constant: -12),
+            leftDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                 constant: 24),
+            leftDivider.trailingAnchor.constraint(equalTo: orLabel.leadingAnchor,
+                                                  constant: -12),
             leftDivider.heightAnchor.constraint(equalToConstant: 1),
 
             rightDivider.centerYAnchor.constraint(equalTo: orLabel.centerYAnchor),
-            rightDivider.leadingAnchor.constraint(equalTo: orLabel.trailingAnchor, constant: 12),
-            rightDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            rightDivider.leadingAnchor.constraint(equalTo: orLabel.trailingAnchor,
+                                                  constant: 12),
+            rightDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                   constant: -24),
             rightDivider.heightAnchor.constraint(equalToConstant: 1),
 
-            appleButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor, constant: 20),
-            appleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            appleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            appleButton.topAnchor.constraint(equalTo: orLabel.bottomAnchor,
+                                             constant: 20),
+            appleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                 constant: 24),
+            appleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                  constant: -24),
             appleButton.heightAnchor.constraint(equalToConstant: 58),
 
-            googleButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: 12),
-            googleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            googleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            googleButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor,
+                                              constant: 12),
+            googleButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                  constant: 24),
+            googleButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                   constant: -24),
             googleButton.heightAnchor.constraint(equalToConstant: 58),
 
-            createAccountButton.topAnchor.constraint(equalTo: googleButton.bottomAnchor, constant: 12),
-            createAccountButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            createAccountButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            createAccountButton.topAnchor.constraint(equalTo: googleButton.bottomAnchor,
+                                                     constant: 12),
+            createAccountButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                         constant: 24),
+            createAccountButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                          constant: -24),
             createAccountButton.heightAnchor.constraint(equalToConstant: 58),
 
-            termsLabel.topAnchor.constraint(equalTo: createAccountButton.bottomAnchor, constant: 20),
-            termsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            termsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            termsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -32)
+            termsLabel.topAnchor.constraint(equalTo: createAccountButton.bottomAnchor,
+                                            constant: 20),
+            termsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: 24),
+            termsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: -24),
+            termsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                               constant: -32)
         ])
     }
 
     private func setupActions() {
-        signInButton.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
-        forgotPasswordButton.addTarget(self, action: #selector(forgotPasswordTapped), for: .touchUpInside)
-        appleButton.addTarget(self, action: #selector(appleSignInTapped), for: .touchUpInside)
-        googleButton.addTarget(self, action: #selector(googleSignInTapped), for: .touchUpInside)
-        createAccountButton.addTarget(self, action: #selector(createAccountTapped), for: .touchUpInside)
-        let termsTap = UITapGestureRecognizer(target: self, action: #selector(termsLabelTapped(_:)))
+        signInButton.addTarget(self,
+                               action: #selector(signInTapped),
+                               for: .touchUpInside)
+        forgotPasswordButton.addTarget(self,
+                                       action: #selector(forgotPasswordTapped),
+                                       for: .touchUpInside)
+        appleButton.addTarget(self,
+                              action: #selector(appleSignInTapped),
+                              for: .touchUpInside)
+        googleButton.addTarget(self,
+                               action: #selector(googleSignInTapped),
+                               for: .touchUpInside)
+        createAccountButton.addTarget(self,
+                                      action: #selector(createAccountTapped),
+                                      for: .touchUpInside)
+        let termsTap = UITapGestureRecognizer(target: self,
+                                              action: #selector(termsLabelTapped(_:)))
         termsLabel.addGestureRecognizer(termsTap)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        let tap = UITapGestureRecognizer(target: self,
+                                         action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
@@ -414,15 +500,18 @@ final class SignInViewController: UIViewController {
         }
         viewModel.onError = { [weak self] message in
             DispatchQueue.main.async {
-                let alert = UIAlertController(title: "Xəta", message: message, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                let alert = UIAlertController(title: "Xəta",
+                                              message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .default))
                 self?.present(alert, animated: true)
             }
         }
     }
 
     @objc private func signInTapped() {
-        viewModel.login(email: emailTextField.text, password: passwordTextField.text)
+        viewModel.login(email: emailTextField.text,
+                        password: passwordTextField.text)
     }
 
     @objc private func forgotPasswordTapped() {
@@ -435,9 +524,12 @@ final class SignInViewController: UIViewController {
                 switch result {
                 case .success: self?.onLoginSuccess?()
                 case .failure(let error):
-                    let alert = UIAlertController(title: "Xəta", message: error.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default))
-                    self?.present(alert, animated: true)
+                    let alert = UIAlertController(title: "Xəta",
+                                                  message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK",
+                                                  style: .default))
+                    self?.present(alert,
+                                  animated: true)
                 }
             }
         }
@@ -449,9 +541,12 @@ final class SignInViewController: UIViewController {
                 switch result {
                 case .success: self?.onLoginSuccess?()
                 case .failure(let error):
-                    let alert = UIAlertController(title: "Xəta", message: error.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default))
-                    self?.present(alert, animated: true)
+                    let alert = UIAlertController(title: "Xəta",
+                                                  message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK",
+                                                  style: .default))
+                    self?.present(alert,
+                                  animated: true)
                 }
             }
         }
@@ -465,9 +560,13 @@ final class SignInViewController: UIViewController {
         guard let label = gesture.view as? UILabel,
               let text = label.attributedText?.string else { return }
         let point = gesture.location(in: label)
-        if isTapped(in: label, at: point, range: (text as NSString).range(of: "Terms of Service")) {
+        if isTapped(in: label,
+                    at: point,
+                    range: (text as NSString).range(of: "Terms of Service")) {
             openURL("https://kolchiibrahim-sys.github.io/EchoShelf/terms")
-        } else if isTapped(in: label, at: point, range: (text as NSString).range(of: "Privacy Policy")) {
+        } else if isTapped(in: label,
+                           at: point,
+                           range: (text as NSString).range(of: "Privacy Policy")) {
             openURL("https://kolchiibrahim-sys.github.io/EchoShelf/privacy")
         }
     }
@@ -483,7 +582,9 @@ final class SignInViewController: UIViewController {
         view.endEditing(true)
     }
 
-    private func isTapped(in label: UILabel, at point: CGPoint, range: NSRange) -> Bool {
+    private func isTapped(in label: UILabel,
+                          at point: CGPoint,
+                          range: NSRange) -> Bool {
         guard let attributed = label.attributedText else { return false }
         let layoutManager = NSLayoutManager()
         let textContainer = NSTextContainer(size: label.bounds.size)
@@ -493,6 +594,7 @@ final class SignInViewController: UIViewController {
         textContainer.lineBreakMode = label.lineBreakMode
         layoutManager.addTextContainer(textContainer)
         textStorage.addLayoutManager(layoutManager)
+        
         let index = layoutManager.characterIndex(for: point, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
         return NSLocationInRange(index, range)
     }

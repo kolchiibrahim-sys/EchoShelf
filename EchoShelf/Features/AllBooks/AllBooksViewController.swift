@@ -8,12 +8,14 @@ import UIKit
 
 final class AllBooksViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        let cv = UICollectionView(frame: .zero,
+                                  collectionViewLayout: createLayout())
         cv.backgroundColor = .clear
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.dataSource = self
         cv.delegate = self
-        cv.register(TrendingBookCell.self, forCellWithReuseIdentifier: TrendingBookCell.identifier)
+        cv.register(TrendingBookCell.self,
+                    forCellWithReuseIdentifier: TrendingBookCell.identifier)
         cv.register(
             LoadingFooterView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
@@ -23,7 +25,8 @@ final class AllBooksViewController: UIViewController {
     }()
 
     private let activityIndicator: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(style: .large)
+        let ai = UIActivityIndicatorView(style:
+                .large)
         ai.color = UIColor(named: "PrimaryGradientStart")!
         ai.translatesAutoresizingMaskIntoConstraints = false
         ai.hidesWhenStopped = true
@@ -35,7 +38,8 @@ final class AllBooksViewController: UIViewController {
     
     init(viewModel: AllBooksViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
+        super.init(nibName: nil,
+                   bundle: nil)
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -88,8 +92,11 @@ final class AllBooksViewController: UIViewController {
     }
 
     private func showError(_ message: String) {
-        let alert = UIAlertController(title: "Xəta", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let alert = UIAlertController(title: "Xəta",
+                                      message: message,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK",
+                                      style: .default))
         present(alert, animated: true)
     }
 
@@ -99,17 +106,24 @@ final class AllBooksViewController: UIViewController {
             heightDimension: .absolute(250)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                     leading: 8,
+                                                     bottom: 0,
+                                                     trailing: 8)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .absolute(250)
         )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item, item])
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                       subitems: [item, item])
 
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 16
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 12, bottom: 16, trailing: 12)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16,
+                                                        leading: 12,
+                                                        bottom: 16,
+                                                        trailing: 12)
 
         let footerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
@@ -128,16 +142,19 @@ final class AllBooksViewController: UIViewController {
 
 extension AllBooksViewController: UICollectionViewDataSource {
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         viewModel.books.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: TrendingBookCell.identifier,
             for: indexPath
         ) as! TrendingBookCell
-        cell.configure(with: viewModel.books[indexPath.item])
+        cell.configure(with:
+                        viewModel.books[indexPath.item])
         return cell
     }
 
@@ -149,18 +166,20 @@ extension AllBooksViewController: UICollectionViewDataSource {
         }
         let footer = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
-            withReuseIdentifier: LoadingFooterView.identifier,
+            withReuseIdentifier:
+                LoadingFooterView.identifier,
             for: indexPath
         ) as! LoadingFooterView
 
-        viewModel.hasMore ? footer.startAnimating() : footer.stopAnimating()
+        viewModel.hasMore ? footer.startAnimating(): footer.stopAnimating()
         return footer
     }
 }
 
 extension AllBooksViewController: UICollectionViewDelegate {
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
         let book = viewModel.books[indexPath.item]
         coordinator?.showBookDetail(book: book)
     }
@@ -179,7 +198,8 @@ final class LoadingFooterView: UICollectionReusableView {
     static let identifier = "LoadingFooterView"
 
     private let spinner: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(style: .medium)
+        let ai = UIActivityIndicatorView(style:
+                .medium)
         ai.color = UIColor(named: "PrimaryGradientStart")!
         ai.translatesAutoresizingMaskIntoConstraints = false
         ai.hidesWhenStopped = true

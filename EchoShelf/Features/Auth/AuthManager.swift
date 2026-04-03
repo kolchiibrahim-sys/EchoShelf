@@ -38,7 +38,8 @@ final class AuthManager {
     func login(
         email: String,
         password: String,
-        completion: @escaping (Result<Void, Error>) -> Void
+        completion: @escaping (Result<Void,
+                               Error>) -> Void
     ) {
         service.signIn(email: email, password: password) { result in
             completion(result.map { _ in () })
@@ -51,9 +52,12 @@ final class AuthManager {
         name: String,
         email: String,
         password: String,
-        completion: @escaping (Result<Void, Error>) -> Void
+        completion: @escaping (Result<Void,
+                               Error>) -> Void
     ) {
-        service.signUp(name: name, email: email, password: password) { result in
+        service.signUp(name: name,
+                       email: email,
+                       password: password) { result in
             completion(result.map { _ in () })
         }
     }
@@ -62,16 +66,19 @@ final class AuthManager {
 
     func resetPassword(
         email: String,
-        completion: @escaping (Result<Void, Error>) -> Void
+        completion: @escaping (Result<Void,
+                               Error>) -> Void
     ) {
-        service.resetPassword(email: email, completion: completion)
+        service.resetPassword(email: email,
+                              completion: completion)
     }
 
     // MARK: - Apple Sign In
 
     func signInWithApple(
         presentingVC: ASAuthorizationControllerPresentationContextProviding,
-        completion: @escaping (Result<Void, Error>) -> Void
+        completion: @escaping (Result<Void,
+                               Error>) -> Void
     ) {
         service.signInWithApple(presentingVC: presentingVC) { result in
             completion(result.map { _ in () })
@@ -82,7 +89,8 @@ final class AuthManager {
 
     func signInWithGoogle(
         presentingVC: UIViewController,
-        completion: @escaping (Result<Void, Error>) -> Void
+        completion: @escaping (Result<Void,
+                               Error>) -> Void
     ) {
         service.signInWithGoogle(presentingVC: presentingVC) { result in
             completion(result.map { _ in () })

@@ -24,7 +24,8 @@ final class FavoriteBookCell: UICollectionViewCell {
 
     private let titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 13, weight: .semibold)
+        lbl.font = .systemFont(ofSize: 13,
+                               weight: .semibold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.numberOfLines = 2
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -62,11 +63,13 @@ final class FavoriteBookCell: UICollectionViewCell {
             coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             coverImageView.heightAnchor.constraint(equalToConstant: 160),
 
-            titleLabel.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: 8),
+            titleLabel.topAnchor.constraint(equalTo: coverImageView.bottomAnchor,
+                                            constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
-            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
+            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                             constant: 2),
             authorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             authorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
@@ -114,7 +117,8 @@ final class FavoriteAuthorCell: UICollectionViewCell {
 
     private let initialsLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 20, weight: .bold)
+        lbl.font = .systemFont(ofSize: 20,
+                               weight: .bold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.textAlignment = .center
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -123,7 +127,8 @@ final class FavoriteAuthorCell: UICollectionViewCell {
 
     private let nameLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 15, weight: .semibold)
+        lbl.font = .systemFont(ofSize: 15,
+                               weight: .semibold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -155,7 +160,8 @@ final class FavoriteAuthorCell: UICollectionViewCell {
         contentView.addSubview(subLabel)
 
         NSLayoutConstraint.activate([
-            avatarView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 14),
+            avatarView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: 14),
             avatarView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             avatarView.widthAnchor.constraint(equalToConstant: 56),
             avatarView.heightAnchor.constraint(equalToConstant: 56),
@@ -163,13 +169,15 @@ final class FavoriteAuthorCell: UICollectionViewCell {
             initialsLabel.centerXAnchor.constraint(equalTo: avatarView.centerXAnchor),
             initialsLabel.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor),
 
-            nameLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor, constant: 14),
+            nameLabel.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor,
+                                               constant: 14),
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -14),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -14),
 
             subLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            subLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4)
-        ])
+            subLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor,
+                                          
     }
 
     func configure(with author: Author) {

@@ -74,17 +74,28 @@ struct GutendexBook {
 
 extension GutendexBook: Decodable {
     nonisolated init(from decoder: Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        id = try c.decode(Int.self, forKey: .id)
-        title = try c.decode(String.self, forKey: .title)
-        authors = try c.decode([GutendexAuthor].self, forKey: .authors)
-        subjects = try c.decode([String].self, forKey: .subjects)
-        formats = try c.decode([String: String].self, forKey: .formats)
-        downloadCount = try c.decode(Int.self, forKey: .downloadCount)
+        let c = try decoder.container(keyedBy:
+                                        CodingKeys.self)
+        id = try c.decode(Int.self,
+                          forKey: .id)
+        title = try c.decode(String.self,
+                             forKey: .title)
+        authors = try c.decode([GutendexAuthor].self,
+                               forKey: .authors)
+        subjects = try c.decode([String].self,
+                                forKey: .subjects)
+        formats = try c.decode([String: String].self,
+                               forKey: .formats)
+        downloadCount = try c.decode(Int.self,
+                                     forKey: .downloadCount)
     }
 
     private enum CodingKeys: String, CodingKey {
-        case id, title, authors, subjects, formats
+        case id,
+             title,
+             authors,
+             subjects,
+             formats
         case downloadCount = "download_count"
     }
 }
@@ -107,7 +118,9 @@ extension GutendexResponse: Decodable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case count, next, results
+        case count,
+             next,
+             results
     }
 }
 

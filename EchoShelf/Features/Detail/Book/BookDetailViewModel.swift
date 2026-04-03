@@ -57,7 +57,8 @@ final class BookDetailViewModel {
                 favoritesViewModel.toggleEbook(ebook)
             }
         }
-        NotificationCenter.default.post(name: .favoritesDidChange, object: nil)
+        NotificationCenter.default.post(name: .favoritesDidChange,
+                                        object: nil)
     }
 
     func isFavorited(bookType: BookDetailType) -> Bool {
@@ -141,9 +142,14 @@ final class EbookDetailViewModel {
 
     private func formatDownloadCount(_ count: Int) -> String {
         switch count {
-        case 0..<1_000:  return "\(count)"
-        case 0..<10_000: return String(format: "%.1fK", Double(count) / 1_000)
-        default:         return String(format: "%.0fK", Double(count) / 1_000)
+        case 0..<1_000:  
+            return "\(count)"
+        case 0..<10_000:
+            return String(format: "%.1fK",
+                                       Double(count) / 1_000)
+        default:
+            return String(format: "%.0fK",
+                                       Double(count) / 1_000)
         }
     }
 }

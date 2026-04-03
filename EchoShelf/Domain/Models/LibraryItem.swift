@@ -32,14 +32,17 @@ struct LibraryItem: Codable, Identifiable {
 
     var localURL: URL? {
         FileManager.default
-            .urls(for: .documentDirectory, in: .userDomainMask)
+            .urls(for: .documentDirectory
+                  , in: .userDomainMask)
             .first?
             .appendingPathComponent(localPDFPath)
     }
 
     var isFileExists: Bool {
-        if type == .audiobook { return true }
-        guard let url = localURL else { return false }
+        if type == .audiobook
+        { return true }
+        guard let url = localURL
+        else { return false }
         return FileManager.default.fileExists(atPath: url.path)
     }
 
@@ -59,30 +62,34 @@ struct LibraryItem: Codable, Identifiable {
 
 extension LibraryItem {
     init(from book: Audiobook) {
-        self.id             = String(book.id.value)
-        self.title          = book.title
-        self.author         = book.authorName
+        self.id = String(book.id.value)
+        self.title = book.title
+        self.author = book.authorName
         self.coverURLString = book.coverURL?.absoluteString
-        self.localPDFPath   = ""
-        self.downloadedAt   = Date()
-        self.lastReadPage   = 0
-        self.totalPages     = 0
-        self.type           = .audiobook
+        self.localPDFPath = ""
+        self.downloadedAt = Date()
+        self.lastReadPage = 0
+        self.totalPages = 0
+        self.type = .audiobook
     }
 }
 
 extension LibraryItem {
     init(from ebook: Ebook, localPDFPath: String) {
-        self.id             = ebook.id
-        self.title          = ebook.title
-        self.author         = ebook.authorName
+        self.id = ebook.id
+        self.title = ebook.title
+        self.author = ebook.authorName
         self.coverURLString = ebook.coverURL?.absoluteString
-        self.localPDFPath   = localPDFPath
-        self.downloadedAt   = Date()
+        self.localPDFPath = localPDFPath
+        self.downloadedAt = Date()
         self.lastReadPage   = 0
-        self.totalPages     = 0
-        let kidsKeywords = ["children", "juvenile", "kids", "picture books", "fairy tales"]
-        let allSubjects  = ebook.subjects.map { $0.lowercased() }
+        self.totalPages = 0
+        let kidsKeywords = ["children",
+                            "juvenile",
+                            "kids",
+                            "picture books",
+                            "fairy tales"]
+        let allSubjects = ebook.subjects.map { $0.lowercased() }
         let isKids = allSubjects.contains(where: { sub in
             kidsKeywords.contains(where: { sub.contains($0) })
         })

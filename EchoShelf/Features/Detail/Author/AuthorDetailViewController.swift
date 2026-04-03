@@ -12,7 +12,8 @@ final class AuthorDetailViewController: UIViewController{
     
     init(author: Author) {
         self.viewModel = AuthorDetailViewModel(author: author)
-        super.init(nibName: nil, bundle: nil)
+        super.init(nibName: nil,
+                   bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -53,7 +54,8 @@ final class AuthorDetailViewController: UIViewController{
     private lazy var bioLbl: UILabel = {
         let lbl = UILabel()
         lbl.text = "Audiobooks by Ibrahim Kolchi"
-        lbl.font = .systemFont(ofSize: 20, weight: .bold)
+        lbl.font = .systemFont(ofSize: 20,
+                               weight: .bold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")
         return lbl
         lbl.translatesAutoresizingMaskIntoConstraints = false

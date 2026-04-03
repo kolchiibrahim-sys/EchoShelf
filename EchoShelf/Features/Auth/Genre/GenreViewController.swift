@@ -29,7 +29,8 @@ final class GenreViewController: UIViewController {
 
     private let backButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        btn.setImage(UIImage(systemName: "chevron.left"),
+                     for: .normal)
         btn.tintColor = UIColor(named: "OnDarkTextPrimary")!
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -37,7 +38,8 @@ final class GenreViewController: UIViewController {
 
     private let titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 22, weight: .bold)
+        lbl.font = .systemFont(ofSize: 22,
+                               weight: .bold)
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -61,8 +63,10 @@ final class GenreViewController: UIViewController {
 
     private let audiobooksTabBtn: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Audiobooks", for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        btn.setTitle("Audiobooks",
+                     for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 13,
+                                           weight: .semibold)
         btn.tintColor = UIColor(named: "OnDarkTextPrimary")!
         btn.tag = 0
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +76,8 @@ final class GenreViewController: UIViewController {
     private let booksTabBtn: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Books", for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        btn.titleLabel?.font = .systemFont(ofSize: 13,
+                                           weight: .semibold)
         btn.tintColor = UIColor(named: "TabTextInactive")!
         btn.tag = 1
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -110,12 +115,14 @@ final class GenreViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true,
+                                                     animated: false)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.setNavigationBarHidden(false,
+                                                     animated: false)
     }
 }
 
@@ -134,16 +141,20 @@ private extension GenreViewController {
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 50),
 
-            backButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            backButton.leadingAnchor.constraint(equalTo: headerView.leadingAnchor,
+                                                constant: 16),
             backButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
             backButton.widthAnchor.constraint(equalToConstant: 36),
             backButton.heightAnchor.constraint(equalToConstant: 36),
 
-            titleLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor, constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor,
+                                                constant: 8),
             titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
         ])
 
-        backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
+        backButton.addTarget(self,
+                             action: #selector(backTapped),
+                             for: .touchUpInside)
     }
 
     func setupTabBar() {
@@ -153,7 +164,8 @@ private extension GenreViewController {
         tabContainer.addSubview(booksTabBtn)
 
         NSLayoutConstraint.activate([
-            tabContainer.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 10),
+            tabContainer.topAnchor.constraint(equalTo: headerView.bottomAnchor,
+                                              constant: 10),
             tabContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tabContainer.widthAnchor.constraint(equalToConstant: 240),
             tabContainer.heightAnchor.constraint(equalToConstant: 36),
@@ -161,42 +173,58 @@ private extension GenreViewController {
             audiobooksTabBtn.leadingAnchor.constraint(equalTo: tabContainer.leadingAnchor),
             audiobooksTabBtn.topAnchor.constraint(equalTo: tabContainer.topAnchor),
             audiobooksTabBtn.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
-            audiobooksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5),
+            audiobooksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor,
+                                                    multiplier: 0.5),
 
             booksTabBtn.trailingAnchor.constraint(equalTo: tabContainer.trailingAnchor),
             booksTabBtn.topAnchor.constraint(equalTo: tabContainer.topAnchor),
             booksTabBtn.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
-            booksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5),
+            booksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor,
+                                               multiplier: 0.5),
 
-            tabIndicator.topAnchor.constraint(equalTo: tabContainer.topAnchor, constant: 3),
-            tabIndicator.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor, constant: -3),
-            tabIndicator.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 0.5, constant: -3)
+            tabIndicator.topAnchor.constraint(equalTo: tabContainer.topAnchor,
+                                              constant: 3),
+            tabIndicator.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor,
+                                                 constant: -3),
+            tabIndicator.widthAnchor.constraint(equalTo: tabContainer.widthAnchor,
+                                                multiplier: 0.5,
+                                                constant: -3)
         ])
 
         indicatorLeading = tabIndicator.leadingAnchor.constraint(
-            equalTo: tabContainer.leadingAnchor, constant: 3
+            equalTo: tabContainer.leadingAnchor,
+            constant: 3
         )
         indicatorLeading.isActive = true
 
-        audiobooksTabBtn.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
-        booksTabBtn.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
+        audiobooksTabBtn.addTarget(self,
+                                   action: #selector(tabTapped(_:)),
+                                   for: .touchUpInside)
+        booksTabBtn.addTarget(self,
+                              action: #selector(tabTapped(_:)),
+                              for: .touchUpInside)
     }
 
     func setupCollectionView() {
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        collectionView = UICollectionView(frame: .zero,
+                                          collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.showsVerticalScrollIndicator = false
 
-        collectionView.register(GenreBookCell.self,      forCellWithReuseIdentifier: GenreBookCell.identifier)
-        collectionView.register(GenreEbookCell.self,     forCellWithReuseIdentifier: GenreEbookCell.identifier)
-        collectionView.register(GenreLoadingCell.self,   forCellWithReuseIdentifier: GenreLoadingCell.identifier)
+        collectionView.register(GenreBookCell.self,
+                                forCellWithReuseIdentifier: GenreBookCell.identifier)
+        collectionView.register(GenreEbookCell.self,
+                                forCellWithReuseIdentifier: GenreEbookCell.identifier)
+        collectionView.register(GenreLoadingCell.self,
+                                forCellWithReuseIdentifier: GenreLoadingCell.identifier)
 
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: tabContainer.bottomAnchor, constant: 16),
+            collectionView.topAnchor.constraint(equalTo: tabContainer.bottomAnchor,
+                                                constant: 16),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -217,7 +245,9 @@ private extension GenreViewController {
 
     func updateTabIndicator() {
         let isAudio = selectedTab == .audiobooks
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
+        UIView.animate(withDuration: 0.25,
+                       delay: 0,
+                       options: .curveEaseInOut) {
             self.indicatorLeading.constant = isAudio ? 3 : 120
             self.tabContainer.layoutIfNeeded()
         }
@@ -230,18 +260,26 @@ private extension GenreViewController {
 
     func createLayout() -> UICollectionViewLayout {
         let item = NSCollectionLayoutItem(
-            layoutSize: .init(widthDimension: .fractionalWidth(0.5), heightDimension: .absolute(230))
+            layoutSize: .init(widthDimension: .fractionalWidth(0.5),
+                              heightDimension: .absolute(230))
         )
-        item.contentInsets = .init(top: 0, leading: 6, bottom: 0, trailing: 6)
+        item.contentInsets = .init(top: 0,
+                                   leading: 6,
+                                   bottom: 0,
+                                   trailing: 6)
 
         let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(230)),
+            layoutSize: .init(widthDimension: .fractionalWidth(1),
+                              heightDimension: .absolute(230)),
             subitems: [item, item]
         )
 
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 16
-        section.contentInsets = .init(top: 0, leading: 14, bottom: 40, trailing: 14)
+        section.contentInsets = .init(top: 0,
+                                      leading: 14,
+                                       bottom: 40,
+                                      trailing: 14)
         return UICollectionViewCompositionalLayout(section: section)
     }
 }
@@ -260,7 +298,8 @@ extension GenreViewController: UICollectionViewDataSource {
         let count = viewModel.items(for: selectedTab)
         if indexPath.item == count {
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: GenreLoadingCell.identifier, for: indexPath
+                withReuseIdentifier: GenreLoadingCell.identifier,
+                for: indexPath
             ) as! GenreLoadingCell
             cell.startAnimating()
             return cell
@@ -268,13 +307,15 @@ extension GenreViewController: UICollectionViewDataSource {
 
         if selectedTab == .audiobooks {
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: GenreBookCell.identifier, for: indexPath
+                withReuseIdentifier: GenreBookCell.identifier,
+                for: indexPath
             ) as! GenreBookCell
             cell.configure(with: viewModel.audiobooks[indexPath.item])
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: GenreEbookCell.identifier, for: indexPath
+                withReuseIdentifier: GenreEbookCell.identifier,
+                for: indexPath
             ) as! GenreEbookCell
             cell.configure(with: viewModel.ebooks[indexPath.item])
             return cell
@@ -287,7 +328,8 @@ extension GenreViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
-        if viewModel.shouldFetchNextPage(for: selectedTab, at: indexPath.item) {
+        if viewModel.shouldFetchNextPage(for: selectedTab,
+                                         at: indexPath.item) {
             if selectedTab == .audiobooks {
                 viewModel.fetchNextAudiobookPage()
             } else {
@@ -302,9 +344,11 @@ extension GenreViewController: UICollectionViewDelegate {
         guard indexPath.item < count else { return }
 
         if selectedTab == .audiobooks {
-            coordinator?.showBookDetail(book: viewModel.audiobooks[indexPath.item])
+            coordinator?.showBookDetail(book:
+                                            viewModel.audiobooks[indexPath.item])
         } else {
-            coordinator?.showEbookDetail(ebook: viewModel.ebooks[indexPath.item])
+            coordinator?.showEbookDetail(ebook:
+                                            viewModel.ebooks[indexPath.item])
         }
     }
 }
@@ -312,7 +356,8 @@ extension GenreViewController: UICollectionViewDelegate {
 private extension GenreViewController {
 
     @objc func backTapped() {
-        navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated:
+                                                    true)
     }
 
     @objc func tabTapped(_ sender: UIButton) {

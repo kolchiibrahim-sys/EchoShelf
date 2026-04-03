@@ -13,8 +13,6 @@ enum GenreTab {
 
 final class GenreViewModel {
 
-    
-
     let genre: String
 
     private let audiobookService: AudiobookServiceProtocol
@@ -59,7 +57,8 @@ final class GenreViewModel {
         isLoadingAudiobooks = true
         onLoadingChanged?()
 
-        audiobookService.fetchByGenre(subject: genre, page: audiobookPage) { [weak self] result in
+        audiobookService.fetchByGenre(subject: genre,
+                                      page: audiobookPage) { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
                 self.isLoadingAudiobooks = false
@@ -86,7 +85,8 @@ final class GenreViewModel {
     }
 
     func fetchEbooks(reset: Bool = false) {
-        guard !isLoadingEbooks, hasMoreEbooks || reset else { return }
+        guard !isLoadingEbooks,
+              hasMoreEbooks || reset else { return }
 
         if reset {
             ebookPage = 0
@@ -97,7 +97,8 @@ final class GenreViewModel {
         isLoadingEbooks = true
         onLoadingChanged?()
 
-        ebookService.fetchEbooksBySubject(subject: genre, page: ebookPage) { [weak self] result in
+        ebookService.fetchEbooksBySubject(subject: genre,
+                                          page: ebookPage) { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
                 self.isLoadingEbooks = false
@@ -136,7 +137,8 @@ final class GenreViewModel {
         tab == .audiobooks ? hasMoreAudiobooks : hasMoreEbooks
     }
 
-    func shouldFetchNextPage(for tab: GenreTab, at index: Int) -> Bool {
+    func shouldFetchNextPage(for tab: GenreTab,
+                             at index: Int) -> Bool {
         switch tab {
         case .audiobooks:
             let threshold = audiobooks.count - 4

@@ -11,8 +11,10 @@ enum AllBooksType {
     case recommended
     var title: String {
         switch self {
-        case .trending:    return "Trending Today"
-        case .recommended: return "Recommended For You"
+        case .trending:    
+            return "Trending Today"
+        case .recommended:
+            return "Recommended For You"
         }
     }
 }
@@ -29,7 +31,8 @@ final class AllBooksViewModel {
     private var currentPage = 1
     private let pageSize = 20
 
-    init(type: AllBooksType, service: AudiobookServiceProtocol = AudiobookService()) {
+    init(type: AllBooksType,
+         service: AudiobookServiceProtocol = AudiobookService()) {
         self.type = type
         self.service = service
     }

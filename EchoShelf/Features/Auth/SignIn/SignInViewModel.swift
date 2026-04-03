@@ -18,8 +18,10 @@ final class SignInViewModel {
         self.authManager = authManager
     }
 
-    func login(email: String?, password: String?) {
-        guard let email = email, !email.isEmpty else {
+    func login(email: String?,
+               password: String?) {
+        guard let email = email,
+                !email.isEmpty else {
             onError?("Email is required.")
             return
         }
@@ -40,7 +42,8 @@ final class SignInViewModel {
         }
 
         onLoadingChanged?(true)
-        authManager.login(email: email, password: password) { [weak self] result in
+        authManager.login(email: email,
+                          password: password) { [weak self] result in
             self?.onLoadingChanged?(false)
             switch result {
             case .success:

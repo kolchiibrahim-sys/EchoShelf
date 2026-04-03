@@ -16,7 +16,9 @@ final class CreateAccountViewModel {
         self.authManager = authManager
     }
 
-    func createAccount(name: String?, email: String?, password: String?) {
+    func createAccount(name: String?,
+                       email: String?,
+                       password: String?) {
         guard let name = name, !name.isEmpty else {
             onError?("Full name is required."); return
         }
@@ -34,11 +36,14 @@ final class CreateAccountViewModel {
         }
 
         onLoadingChanged?(true)
-        authManager.register(name: name, email: email, password: password) { [weak self] result in
+        authManager.register(name: name,
+                             email: email,
+                             password: password) { [weak self] result in
             self?.onLoadingChanged?(false)
             switch result {
             case .success:
-                UserDefaults.standard.set(name, forKey: "user_name")
+                UserDefaults.standard.set(name,
+                                          forKey: "user_name")
                 self?.onCreateSuccess?()
             case .failure(let error):
                 self?.onError?(error.localizedDescription)
