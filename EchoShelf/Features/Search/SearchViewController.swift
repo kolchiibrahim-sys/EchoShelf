@@ -12,7 +12,8 @@ final class SearchViewController: UIViewController {
 
     var preselectedGenre: String? {
         didSet {
-            guard let genre = preselectedGenre, isViewLoaded else { return }
+            guard let genre = preselectedGenre,
+                  isViewLoaded else { return }
             triggerGenreSearch(genre)
         }
     }
@@ -30,12 +31,34 @@ final class SearchViewController: UIViewController {
     private let ai = GeminiService()
 
     private let trendingCategories: [TrendingCategory] = [
-        TrendingCategory(title: "AI Picks",    icon: "🤖", colorName: "TrendingAIPicks",    query: "science",         subject: "Science Fiction"),
-        TrendingCategory(title: "Bestsellers", icon: "🔥", colorName: "TrendingBestsellers", query: "adventure",       subject: "Adventure"),
-        TrendingCategory(title: "Sci-Fi",      icon: "🚀", colorName: "TrendingSciFi",       query: "science fiction", subject: "Science Fiction"),
-        TrendingCategory(title: "Thriller",    icon: "👁",  colorName: "TrendingThriller",    query: "mystery",         subject: "Mystery & Detective Stories"),
-        TrendingCategory(title: "Classics",    icon: "📖", colorName: "TrendingClassics",    query: "classic",         subject: "General Fiction"),
-        TrendingCategory(title: "Narrators",   icon: "🎙", colorName: "TrendingNarrators",   query: "drama",           subject: "Plays")
+        TrendingCategory(title: "AI Picks",
+                         icon: "🤖",
+                         colorName: "TrendingAIPicks",
+                         query: "science",
+                         subject: "Science Fiction"),
+        TrendingCategory(title: "Bestsellers",
+                         icon: "🔥",
+                         colorName: "TrendingBestsellers",
+                         query: "adventure",
+                         subject: "Adventure"),
+        TrendingCategory(title: "Sci-Fi",
+                         icon: "🚀", colorName: "TrendingSciFi",
+                         query: "science fiction",
+                         subject: "Science Fiction"),
+        TrendingCategory(title: "Thriller",
+                         icon: "👁",
+                         colorName: "TrendingThriller",
+                         query: "mystery",
+                         subject: "Mystery & Detective Stories"),
+        TrendingCategory(title: "Classics",
+                         icon: "📖", colorName: "TrendingClassics",
+                         query: "classic",
+                         subject: "General Fiction"),
+        TrendingCategory(title: "Narrators",
+                         icon: "🎙",
+                         colorName: "TrendingNarrators",
+                         query: "drama",
+                         subject: "Plays")
     ]
 
     private var recentSearches: [String] { viewModel.recentSearches }
@@ -70,8 +93,10 @@ final class SearchViewController: UIViewController {
 
     private let booksTabBtn: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Books", for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        btn.setTitle("Books",
+                     for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 13,
+                                           weight: .semibold)
         btn.tintColor = UIColor(named: "TabTextInactive")!
         btn.tag = 1
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -80,8 +105,10 @@ final class SearchViewController: UIViewController {
 
     private let kidsTabBtn: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Kids", for: .normal)
-        btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        btn.setTitle("Kids",
+                     for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 13,
+                                           weight: .semibold)
         btn.tintColor = UIColor(named: "TabTextInactive")!
         btn.tag = 2
         btn.translatesAutoresizingMaskIntoConstraints = false
@@ -95,15 +122,16 @@ final class SearchViewController: UIViewController {
         label.text = "No results found"
         label.textColor = UIColor(named: "OnDarkTextSecondary")!
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.font = .systemFont(ofSize: 16,
+                                 weight: .medium)
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private enum HomeSection: Int, CaseIterable {
-        case recents      = 0
-        case trending     = 1
+        case recents = 0
+        case trending = 1
         case youMightLike = 2
     }
 
@@ -124,7 +152,8 @@ final class SearchViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true,
+                                                     animated: false)
     }
 }
 
@@ -154,40 +183,68 @@ private extension SearchViewController {
         )
 
         NSLayoutConstraint.activate([
-            tabContainer.topAnchor.constraint(equalTo: searchBarView.bottomAnchor, constant: 4),
-            tabContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            tabContainer.topAnchor.constraint(equalTo: searchBarView.bottomAnchor,
+                                              constant: 4),
+            tabContainer.centerXAnchor.constraint(equalTo:
+                                                    view.centerXAnchor),
             tabContainer.widthAnchor.constraint(equalToConstant: 300),
             tabContainer.heightAnchor.constraint(equalToConstant: 36),
 
-            audiobooksTabBtn.leadingAnchor.constraint(equalTo: tabContainer.leadingAnchor),
-            audiobooksTabBtn.topAnchor.constraint(equalTo: tabContainer.topAnchor),
-            audiobooksTabBtn.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
-            audiobooksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 1.0/3.0),
+            audiobooksTabBtn.leadingAnchor.constraint(equalTo:
+                                                        tabContainer.leadingAnchor),
+            audiobooksTabBtn.topAnchor.constraint(equalTo:
+                                                    tabContainer.topAnchor),
+            audiobooksTabBtn.bottomAnchor.constraint(equalTo:
+                                                        tabContainer.bottomAnchor),
+            audiobooksTabBtn.widthAnchor.constraint(equalTo:
+                                                        tabContainer.widthAnchor, multiplier: 1.0/3.0),
 
-            booksTabBtn.leadingAnchor.constraint(equalTo: audiobooksTabBtn.trailingAnchor),
-            booksTabBtn.topAnchor.constraint(equalTo: tabContainer.topAnchor),
-            booksTabBtn.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
-            booksTabBtn.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 1.0/3.0),
+            booksTabBtn.leadingAnchor.constraint(equalTo:
+                                                    audiobooksTabBtn.trailingAnchor),
+            booksTabBtn.topAnchor.constraint(equalTo:
+                                                tabContainer.topAnchor),
+            booksTabBtn.bottomAnchor.constraint(equalTo:
+                                                    tabContainer.bottomAnchor),
+            booksTabBtn.widthAnchor.constraint(equalTo:
+                                                tabContainer.widthAnchor,
+                                               multiplier: 1.0/3.0),
 
-            kidsTabBtn.leadingAnchor.constraint(equalTo: booksTabBtn.trailingAnchor),
-            kidsTabBtn.topAnchor.constraint(equalTo: tabContainer.topAnchor),
-            kidsTabBtn.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor),
-            kidsTabBtn.trailingAnchor.constraint(equalTo: tabContainer.trailingAnchor),
+            kidsTabBtn.leadingAnchor.constraint(equalTo:
+                                                    booksTabBtn.trailingAnchor),
+            kidsTabBtn.topAnchor.constraint(equalTo:
+                                                tabContainer.topAnchor),
+            kidsTabBtn.bottomAnchor.constraint(equalTo:
+                                                tabContainer.bottomAnchor),
+            kidsTabBtn.trailingAnchor.constraint(equalTo:
+                                                    tabContainer.trailingAnchor),
 
-            tabIndicator.topAnchor.constraint(equalTo: tabContainer.topAnchor, constant: 3),
-            tabIndicator.bottomAnchor.constraint(equalTo: tabContainer.bottomAnchor, constant: -3),
-            tabIndicator.widthAnchor.constraint(equalTo: tabContainer.widthAnchor, multiplier: 1.0/3.0, constant: -3),
+            tabIndicator.topAnchor.constraint(equalTo:
+                                                tabContainer.topAnchor,
+                                              constant: 3),
+            tabIndicator.bottomAnchor.constraint(equalTo:
+                                                    tabContainer.bottomAnchor,
+                                                 constant: -3),
+            tabIndicator.widthAnchor.constraint(equalTo:
+                                                    tabContainer.widthAnchor,
+                                                multiplier: 1.0/3.0, constant: -3),
 
             indicatorLeading
         ])
 
-        audiobooksTabBtn.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
-        booksTabBtn.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
-        kidsTabBtn.addTarget(self, action: #selector(tabTapped(_:)), for: .touchUpInside)
+        audiobooksTabBtn.addTarget(self,
+                                   action: #selector(tabTapped(_:)),
+                                   for: .touchUpInside)
+        booksTabBtn.addTarget(self,
+                              action: #selector(tabTapped(_:))
+                              , for: .touchUpInside)
+        kidsTabBtn.addTarget(self,
+                             action: #selector(tabTapped(_:)),
+                             for: .touchUpInside)
     }
 
     func setupCollectionView() {
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        collectionView = UICollectionView(frame: .zero,
+                                          collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -195,17 +252,28 @@ private extension SearchViewController {
         collectionView.keyboardDismissMode = .onDrag
         collectionView.showsVerticalScrollIndicator = false
 
-        collectionView.register(RecentSearchCell.self,      forCellWithReuseIdentifier: RecentSearchCell.identifier)
-        collectionView.register(TrendingCategoryCell.self,  forCellWithReuseIdentifier: TrendingCategoryCell.identifier)
-        collectionView.register(TrendingBookCell.self,      forCellWithReuseIdentifier: TrendingBookCell.identifier)
-        collectionView.register(TopResultCell.self,         forCellWithReuseIdentifier: TopResultCell.identifier)
-        collectionView.register(OtherVersionCell.self,      forCellWithReuseIdentifier: OtherVersionCell.identifier)
-        collectionView.register(RelatedAuthorCell.self,     forCellWithReuseIdentifier: RelatedAuthorCell.identifier)
-        collectionView.register(EbookTopResultCell.self,    forCellWithReuseIdentifier: EbookTopResultCell.identifier)
-        collectionView.register(EbookOtherResultCell.self,  forCellWithReuseIdentifier: EbookOtherResultCell.identifier)
-        collectionView.register(EbookYouMightLikeCell.self, forCellWithReuseIdentifier: EbookYouMightLikeCell.identifier)
-        collectionView.register(KidsTrendingCell.self,      forCellWithReuseIdentifier: KidsTrendingCell.identifier)
-        collectionView.register(KidsRecommendedCell.self,   forCellWithReuseIdentifier: KidsRecommendedCell.identifier)
+        collectionView.register(RecentSearchCell.self,
+                                forCellWithReuseIdentifier: RecentSearchCell.identifier)
+        collectionView.register(TrendingCategoryCell.self,
+                                forCellWithReuseIdentifier: TrendingCategoryCell.identifier)
+        collectionView.register(TrendingBookCell.self,
+                                forCellWithReuseIdentifier: TrendingBookCell.identifier)
+        collectionView.register(TopResultCell.self,
+                                forCellWithReuseIdentifier: TopResultCell.identifier)
+        collectionView.register(OtherVersionCell.self,
+                                forCellWithReuseIdentifier: OtherVersionCell.identifier)
+        collectionView.register(RelatedAuthorCell.self,
+                                forCellWithReuseIdentifier: RelatedAuthorCell.identifier)
+        collectionView.register(EbookTopResultCell.self,
+                                forCellWithReuseIdentifier: EbookTopResultCell.identifier)
+        collectionView.register(EbookOtherResultCell.self,
+                                forCellWithReuseIdentifier: EbookOtherResultCell.identifier)
+        collectionView.register(EbookYouMightLikeCell.self,
+                                forCellWithReuseIdentifier: EbookYouMightLikeCell.identifier)
+        collectionView.register(KidsTrendingCell.self,
+                                forCellWithReuseIdentifier: KidsTrendingCell.identifier)
+        collectionView.register(KidsRecommendedCell.self,
+                                forCellWithReuseIdentifier: KidsRecommendedCell.identifier)
 
         collectionView.register(
             SearchSectionHeaderView.self,
@@ -215,7 +283,8 @@ private extension SearchViewController {
 
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: tabContainer.bottomAnchor, constant: 8),
+            collectionView.topAnchor.constraint(equalTo: tabContainer.bottomAnchor,
+                                                constant: 8),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -235,7 +304,8 @@ private extension SearchViewController {
             self?.performSearch(query)
         }
         searchBarView.onTextChange = { [weak self] text in
-            if text.isEmpty { self?.resetToHomeState() }
+            if text.isEmpty
+            { self?.resetToHomeState() }
         }
         searchBarView.onCancel = { [weak self] in
             self?.resetToHomeState()
@@ -245,8 +315,10 @@ private extension SearchViewController {
     func setupEmptyState() {
         view.addSubview(emptyLabel)
         NSLayoutConstraint.activate([
-            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            emptyLabel.centerXAnchor.constraint(equalTo:
+                                                    view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo:
+                                                    view.centerYAnchor)
         ])
     }
 
@@ -255,33 +327,41 @@ private extension SearchViewController {
         let offset: CGFloat
         switch selectedTab {
         case .audiobooks: offset = 3
-        case .books:      offset = tabW
-        case .kids:       offset = tabW * 2
+        case .books: offset = tabW
+        case .kids: offset = tabW * 2
         }
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut) {
             self.indicatorLeading.constant = offset
             self.tabContainer.layoutIfNeeded()
         }
         audiobooksTabBtn.tintColor = selectedTab == .audiobooks ? UIColor(named: "OnDarkTextPrimary")! : UIColor(named: "TabTextInactive")!
-        booksTabBtn.tintColor      = selectedTab == .books       ? UIColor(named: "OnDarkTextPrimary")! : UIColor(named: "TabTextInactive")!
-        kidsTabBtn.tintColor       = selectedTab == .kids        ? UIColor(named: "OnDarkTextPrimary")! : UIColor(named: "TabTextInactive")!
+        booksTabBtn.tintColor      = selectedTab == .books ? UIColor(named: "OnDarkTextPrimary")! : UIColor(named: "TabTextInactive")!
+        kidsTabBtn.tintColor       = selectedTab == .kids ? UIColor(named: "OnDarkTextPrimary")! : UIColor(named: "TabTextInactive")!
     }
 
     func updateEmptyState() {
         let isEmpty: Bool
         switch selectedTab {
-        case .audiobooks: isEmpty = viewModel.books.isEmpty
-        case .books:      isEmpty = viewModel.ebooks.isEmpty
-        case .kids:       isEmpty = viewModel.kidsBooks.isEmpty
+        case .audiobooks: isEmpty =
+            viewModel.books.isEmpty
+        case .books: isEmpty =
+            viewModel.ebooks.isEmpty
+        case .kids: isEmpty =
+            viewModel.kidsBooks.isEmpty
         }
-        emptyLabel.isHidden = !(isSearching && isEmpty && !viewModel.isLoading)
+        emptyLabel.isHidden = !(isSearching &&
+                                isEmpty &&
+                                !viewModel.isLoading)
     }
 
     func triggerGenreSearch(_ genre: String) {
         isSearching = true
         searchBarView.setText(genre)
-        collectionView.setCollectionViewLayout(createLayout(), animated: false)
-        viewModel.searchByGenre(subject: genre, displayTitle: genre, tab: selectedTab)
+        collectionView.setCollectionViewLayout(createLayout(),
+                                               animated: false)
+        viewModel.searchByGenre(subject: genre,
+                                displayTitle: genre,
+                                tab: selectedTab)
         updateEmptyState()
         collectionView.reloadData()
     }
@@ -292,15 +372,18 @@ private extension SearchViewController {
         isSearching = true
         searchBarView.setText(query)
 
-        viewModel.search(query: query, tab: selectedTab)
+        viewModel.search(query: query,
+                         tab: selectedTab)
 
         ai.ask(prompt: "Suggest books related to \(query)") { response in
             DispatchQueue.main.async {
-                print("AI Response:", response ?? "No AI response")
+                print("AI Response:",
+                      response ?? "No AI response")
             }
         }
 
-        collectionView.setCollectionViewLayout(createLayout(), animated: false)
+        collectionView.setCollectionViewLayout(createLayout(),
+                                               animated: false)
         updateEmptyState()
         collectionView.reloadData()
     }
@@ -309,31 +392,35 @@ private extension SearchViewController {
         isSearching = false
         preselectedGenre = nil
         searchBarView.resetToHome()
-        collectionView.setCollectionViewLayout(createLayout(), animated: false)
+        collectionView.setCollectionViewLayout(createLayout(),
+                                               animated: false)
         collectionView.reloadData()
         updateEmptyState()
     }
 
     func openAudiobookDetail(_ book: Audiobook) {
         navigationController?.pushViewController(
-            BookDetailViewController(book: book), animated: true
+            BookDetailViewController(book: book),
+            animated: true
         )
     }
 
     func openEbookDetail(_ ebook: Ebook) {
         navigationController?.pushViewController(
-            BookDetailViewController(ebook: ebook), animated: true
+            BookDetailViewController(ebook: ebook),
+            animated: true
         )
     }
 
     @objc func tabTapped(_ sender: UIButton) {
         let newTab: SearchTab
         switch sender.tag {
-        case 1:  newTab = .books
-        case 2:  newTab = .kids
+        case 1:newTab = .books
+        case 2: newTab = .kids
         default: newTab = .audiobooks
         }
-        guard newTab != selectedTab else { return }
+        guard newTab != selectedTab
+        else { return }
         selectedTab = newTab
     }
 }
@@ -346,13 +433,18 @@ extension SearchViewController: UICollectionViewDataSource {
                         numberOfItemsInSection section: Int) -> Int {
         if !isSearching {
             switch HomeSection(rawValue: section) {
-            case .recents:      return recentSearches.count
-            case .trending:     return trendingCategories.count
+            case .recents:
+                return recentSearches.count
+            case .trending:
+                return trendingCategories.count
             case .youMightLike:
                 switch selectedTab {
-                case .audiobooks: return viewModel.youMightLike.count
-                case .books:      return viewModel.youMightLikeEbooks.count
-                case .kids:       return viewModel.youMightLikeKids.count
+                case .audiobooks:
+                    return viewModel.youMightLike.count
+                case .books:
+                    return viewModel.youMightLikeEbooks.count
+                case .kids:
+                    return viewModel.youMightLikeKids.count
                 }
             case .none: return 0
             }
@@ -360,15 +452,21 @@ extension SearchViewController: UICollectionViewDataSource {
             switch section {
             case 0:
                 switch selectedTab {
-                case .audiobooks: return viewModel.topResult != nil ? 1 : 0
-                case .books:      return viewModel.topEbookResult != nil ? 1 : 0
-                case .kids:       return viewModel.topKidsResult != nil ? 1 : 0
+                case .audiobooks:
+                    return viewModel.topResult != nil ? 1 : 0
+                case .books:
+                    return viewModel.topEbookResult != nil ? 1 : 0
+                case .kids:
+                    return viewModel.topKidsResult != nil ? 1 : 0
                 }
             case 1:
                 switch selectedTab {
-                case .audiobooks: return viewModel.otherVersions.count
-                case .books:      return viewModel.otherEbooks.count
-                case .kids:       return viewModel.otherKidsBooks.count
+                case .audiobooks:
+                    return viewModel.otherVersions.count
+                case .books:
+                    return viewModel.otherEbooks.count
+                case .kids:
+                    return viewModel.otherKidsBooks.count
                 }
             case 2:
                 return selectedTab == .audiobooks ? viewModel.relatedAuthors.count : 0
@@ -466,21 +564,27 @@ extension SearchViewController: UICollectionViewDataSource {
         ) as! SearchSectionHeaderView
 
         if !isSearching {
-            switch HomeSection(rawValue: indexPath.section) {
+            switch HomeSection(rawValue:
+                                indexPath.section) {
             case .recents:
-                header.configure("Recent Searches", showClearAll: !recentSearches.isEmpty)
+                header.configure("Recent Searches",
+                                 showClearAll:
+                                    !recentSearches.isEmpty)
                 header.onClearAll = { [weak self] in self?.viewModel.clearRecents() }
             case .trending:
                 header.configure("Trending Categories")
             case .youMightLike:
-                let title = selectedTab == .audiobooks ? "You Might Like" : "Popular Books"
+                let title = selectedTab == .audiobooks ? "You Might Like" : 
+                "Popular Books"
                 header.configure(title)
             case .none: break
             }
         } else {
             switch indexPath.section {
             case 0: header.configure("Top Result")
-            case 1: header.configure(selectedTab == .audiobooks ? "Other Versions" : "More Books")
+            case 1: header.configure(selectedTab == .audiobooks ?
+                                     "Other Versions" :
+                                        "More Books")
             default: header.configure("Authors")
             }
         }
@@ -508,9 +612,12 @@ extension SearchViewController: UICollectionViewDelegate {
 
             case .youMightLike:
                 switch selectedTab {
-                case .audiobooks: openAudiobookDetail(viewModel.youMightLike[indexPath.item])
-                case .books:      openEbookDetail(viewModel.youMightLikeEbooks[indexPath.item])
-                case .kids:       openEbookDetail(viewModel.youMightLikeKids[indexPath.item])
+                case .audiobooks:
+                    openAudiobookDetail(viewModel.youMightLike[indexPath.item])
+                case .books:
+                    openEbookDetail(viewModel.youMightLikeEbooks[indexPath.item])
+                case .kids:
+                    openEbookDetail(viewModel.youMightLikeKids[indexPath.item])
                 }
 
             case .none: break
@@ -539,7 +646,8 @@ private extension SearchViewController {
 
     func makeHeader(height: CGFloat = 50) -> NSCollectionLayoutBoundarySupplementaryItem {
         NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(height)),
+            layoutSize: .init(widthDimension: .fractionalWidth(1),
+                              heightDimension: .absolute(height)),
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
@@ -584,29 +692,43 @@ private extension SearchViewController {
     }
 
     func recentSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .absolute(50)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize,
+                                                     subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 10
-        section.contentInsets = .init(top: 10, leading: 20, bottom: 24, trailing: 20)
+        section.contentInsets = .init(top: 10,
+                                      leading: 20,
+                                      bottom: 24,
+                                      trailing: 20)
         return section
     }
 
     func trendingSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(0.5), heightDimension: .absolute(110)))
-        item.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 8)
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(0.5),
+                                                            heightDimension: .absolute(110)))
+        item.contentInsets = .init(top: 0,
+                                   leading: 0,
+                                   bottom: 0,
+                                   trailing: 8)
         let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(110)),
+            layoutSize: .init(widthDimension: .fractionalWidth(1),
+                              heightDimension: .absolute(110)),
             subitems: [item, item]
         )
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 10, leading: 20, bottom: 28, trailing: 12)
+        section.contentInsets = .init(top: 10,
+                                      leading: 20,
+                                      bottom: 28,
+                                      trailing: 12)
         return section
     }
 
     func youMightLikeSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(140), heightDimension: .absolute(230)))
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(140),
+                                                            heightDimension: .absolute(230)))
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: .init(widthDimension: .absolute(140), heightDimension: .absolute(230)),
             subitems: [item]
@@ -614,37 +736,55 @@ private extension SearchViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 16
-        section.contentInsets = .init(top: 10, leading: 20, bottom: 40, trailing: 20)
+        section.contentInsets = .init(top: 10,
+                                      leading: 20,
+                                      bottom: 40,
+                                      trailing: 20)
         return section
     }
 
     func topResultSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(170)))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .absolute(170)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize,
+                                                     subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .init(top: 10, leading: 20, bottom: 20, trailing: 20)
+        section.contentInsets = .init(top: 10,
+                                      leading: 20,
+                                      bottom: 20,
+                                      trailing: 20)
         return section
     }
 
     func otherVersionsSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(90)))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .absolute(90)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize,
+                                                     subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 10, leading: 20, bottom: 20, trailing: 20)
+        section.contentInsets = .init(top: 10,
+                                      leading: 20,
+                                      bottom: 20,
+                                      trailing: 20)
         return section
     }
 
     func relatedAuthorsSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(90), heightDimension: .absolute(120)))
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(90),
+                                                            heightDimension: .absolute(120)))
         let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: .init(widthDimension: .absolute(90), heightDimension: .absolute(120)),
+            layoutSize: .init(widthDimension: .absolute(90),
+                              heightDimension: .absolute(120)),
             subitems: [item]
         )
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 16
-        section.contentInsets = .init(top: 10, leading: 20, bottom: 40, trailing: 20)
+        section.contentInsets = .init(top: 10,
+                                      leading: 20,
+                                      bottom: 40,
+                                      trailing: 20)
         return section
     }
 }

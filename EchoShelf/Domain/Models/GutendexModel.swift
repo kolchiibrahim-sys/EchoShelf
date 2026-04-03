@@ -16,10 +16,14 @@ struct GutendexAuthor {
 
 extension GutendexAuthor: Decodable {
     nonisolated init(from decoder: Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        name = try c.decode(String.self, forKey: .name)
-        birthYear = try c.decodeIfPresent(Int.self, forKey: .birthYear)
-        deathYear = try c.decodeIfPresent(Int.self, forKey: .deathYear)
+        let c = try decoder.container(keyedBy:
+                                        CodingKeys.self)
+        name = try c.decode(String.self,
+                            forKey: .name)
+        birthYear = try c.decodeIfPresent(Int.self,
+                                          forKey: .birthYear)
+        deathYear = try c.decodeIfPresent(Int.self,
+                                          forKey: .deathYear)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -44,7 +48,8 @@ struct GutendexBook {
         ]
         for key in pdfKeys {
             if let urlStr = formats[key] {
-                let secure = urlStr.replacingOccurrences(of: "http://", with: "https://")
+                let secure = urlStr.replacingOccurrences(of: "http://",
+                                                         with: "https://")
                 if let url = URL(string: secure) { return url }
             }
         }
@@ -53,13 +58,15 @@ struct GutendexBook {
 
     nonisolated var coverURL: URL? {
         guard let urlStr = formats["image/jpeg"] else { return nil }
-        let secure = urlStr.replacingOccurrences(of: "http://", with: "https://")
+        let secure = urlStr.replacingOccurrences(of: "http://",
+                                                 with: "https://")
         return URL(string: secure)
     }
 
     nonisolated var authorName: String {
         authors.first.map { a in
-            let parts = a.name.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+            let parts = a.name.split(separator: ",")
+                .map { $0.trimmingCharacters(in: .whitespaces) }
             return parts.count == 2 ? "\(parts[1]) \(parts[0])" : a.name
         } ?? "Unknown Author"
     }
@@ -91,9 +98,12 @@ struct GutendexResponse {
 extension GutendexResponse: Decodable {
     nonisolated init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        count = try c.decode(Int.self, forKey: .count)
-        next = try c.decodeIfPresent(String.self, forKey: .next)
-        results = try c.decode([GutendexBook].self, forKey: .results)
+        count = try c.decode(Int.self,
+                             forKey: .count)
+        next = try c.decodeIfPresent(String.self,
+                                     forKey: .next)
+        results = try c.decode([GutendexBook].self,
+                               forKey: .results)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -121,25 +131,30 @@ struct Ebook: Codable {
     }
 
     init(from book: GutendexBook) {
-        self.id           = String(book.id)
-        self.title        = book.title
-        self.authorName   = book.authorName
-        self.coverURL     = book.coverURL
-        self.pdfURL       = book.pdfURL
-        self.subject      = book.subjects.first
-        self.subjects     = book.subjects
+        self.id = String(book.id)
+        self.title = book.title
+        self.authorName = book.authorName
+        self.coverURL = book.coverURL
+        self.pdfURL = book.pdfURL
+        self.subject = book.subjects.first
+        self.subjects = book.subjects
         self.downloadCount = book.downloadCount
     }
-    init(id: String, title: String, authorName: String,
-         coverURL: URL?, pdfURL: URL?, subject: String?,
-         subjects: [String] = [], downloadCount: Int) {
-        self.id            = id
-        self.title         = title
-        self.authorName    = authorName
-        self.coverURL      = coverURL
-        self.pdfURL        = pdfURL
-        self.subject       = subject
-        self.subjects      = subjects
+    init(id: String,
+         title: String,
+         authorName: String,
+         coverURL: URL?,
+         pdfURL: URL?,
+         subject: String?,
+         subjects: [String] = [],
+         downloadCount: Int) {
+        self.id = id
+        self.title = title
+        self.authorName = authorName
+        self.coverURL = coverURL
+        self.pdfURL = pdfURL
+        self.subject = subject
+        self.subjects = subjects
         self.downloadCount = downloadCount
     }
 }
