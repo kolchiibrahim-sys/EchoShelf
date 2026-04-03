@@ -21,7 +21,7 @@ struct Audiobook: Codable {
         case title
         case description
         case urlLibrivox = "url_librivox"
-        case urlRss      = "url_rss"
+        case urlRss = "url_rss"
         case urlZipFile  = "url_zip_file"
         case numSections = "num_sections"
         case authors

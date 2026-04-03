@@ -12,7 +12,8 @@ final class SecretsManager {
     private init() {}
 
     private lazy var secrets: [String: Any] = {
-        guard let url = Bundle.main.url(forResource: "Secrets", withExtension: "plist"),
+        guard let url = Bundle.main.url(forResource: "Secrets",
+                                        withExtension: "plist"),
               let dict = NSDictionary(contentsOf: url) as? [String: Any] else {
             return [:]
         }

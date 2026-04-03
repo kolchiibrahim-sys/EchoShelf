@@ -16,12 +16,15 @@ final class LibraryManager {
 
     @discardableResult
     func saveBook(from ebook: Ebook, pdfData: Data) throws -> LibraryItem {
-        let fileName = buildFileName(id: ebook.id, title: ebook.title)
+        let fileName = buildFileName(id: ebook.id,
+                                     title: ebook.title)
         let fileURL  = documentsURL.appendingPathComponent(fileName)
 
-        try pdfData.write(to: fileURL, options: .atomic)
+        try pdfData.write(to: fileURL,
+                          options: .atomic)
 
-        let item = LibraryItem(from: ebook, localPDFPath: fileName)
+        let item = LibraryItem(from: ebook,
+                               localPDFPath: fileName)
         upsert(item)
         return item
     }
@@ -66,23 +69,28 @@ final class LibraryManager {
     }
 
     private var documentsURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        FileManager.default.urls(for: .documentDirectory,
+                                 in: .userDomainMask)[0]
     }
 
     private func upsert(_ item: LibraryItem) {
         var items = loadAll(includeDeleted: true)
         items.removeAll { $0.id == item.id }
-        items.insert(item, at: 0)
+        items.insert(item,
+                     at: 0)
         persist(items)
-        NotificationCenter.default.post(name: .libraryDidUpdate, object: nil)
+        NotificationCenter.default.post(name: .libraryDidUpdate,
+                                        object: nil)
     }
 
     private func persist(_ items: [LibraryItem]) {
         guard let data = try? JSONEncoder().encode(items) else { return }
-        UserDefaults.standard.set(data, forKey: storageKey)
+        UserDefaults.standard.set(data,
+                                  forKey: storageKey)
     }
 
-    private func buildFileName(id: String, title: String) -> String {
+    private func buildFileName(id: String,
+                               title: String) -> String {
         let safe = title
             .components(separatedBy: .init(charactersIn: "/:*?\"<>|\\"))
             .joined(separator: "_")

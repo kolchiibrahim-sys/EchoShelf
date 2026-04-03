@@ -15,8 +15,10 @@ private enum GutendexHTTPDecoding {
 }
 
 protocol EbookServiceProtocol {
-    func searchEbooks(query: String, completion: @escaping (Result<[Ebook], APIError>) -> Void)
-    func fetchEbooksBySubject(subject: String, page: Int, completion: @escaping (Result<[Ebook], APIError>) -> Void)
+    func searchEbooks(query: String, completion: @escaping (Result<[Ebook],
+                                                            APIError>) -> Void)
+    func fetchEbooksBySubject(subject: String, page: Int, completion: @escaping (Result<[Ebook],
+                                                                                 APIError>) -> Void)
 }
 
 final class EbookService: EbookServiceProtocol {
@@ -26,7 +28,8 @@ final class EbookService: EbookServiceProtocol {
 
     private let baseURL = "https://gutendex.com/books"
 
-    func searchEbooks(query: String, completion: @escaping (Result<[Ebook], APIError>) -> Void) {
+    func searchEbooks(query: String, completion: @escaping (Result<[Ebook],
+                                                            APIError>) -> Void) {
         let params: [String: Any] = [
             "search": query,
             "mime_type": "application/pdf"
@@ -53,7 +56,10 @@ final class EbookService: EbookServiceProtocol {
     }
 
 
-    func fetchEbooksBySubject(subject: String, page: Int, completion: @escaping (Result<[Ebook], APIError>) -> Void) {
+    func fetchEbooksBySubject(subject: String,
+                              page: Int,
+                              completion: @escaping (Result<[Ebook],
+                                                     APIError>) -> Void) {
         let params: [String: Any] = [
             "topic": subject,
             "mime_type": "application/pdf",

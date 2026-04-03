@@ -36,8 +36,10 @@ enum OpenLibraryBio: Decodable {
 
     var text: String {
         switch self {
-        case .string(let s): return s
-        case .object(let s): return s
+        case .string(let s):
+            return s
+        case .object(let s):
+            return s
         }
     }
 }
@@ -78,7 +80,11 @@ final class AuthorService {
     ) {
         let name = "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespaces)
         guard !name.isEmpty else {
-            completion(AuthorDetail(firstName: firstName, lastName: lastName, photoURL: nil, bio: nil, olid: nil))
+            completion(AuthorDetail(firstName: firstName,
+                                    lastName: lastName,
+                                    photoURL: nil,
+                                    bio: nil,
+                                    olid: nil))
             return
         }
 
@@ -88,7 +94,10 @@ final class AuthorService {
             .responseDecodable(of: OpenLibrarySearchResponse.self) { [weak self] response in
                 guard let self else { return }
                 guard let doc = try? response.result.get().docs.first else {
-                    completion(AuthorDetail(firstName: firstName, lastName: lastName, photoURL: nil, bio: nil, olid: nil))
+                    completion(AuthorDetail(firstName: firstName,
+                                            lastName: lastName,
+                                            photoURL: nil,
+                                            bio: nil, olid: nil))
                     return
                 }
 

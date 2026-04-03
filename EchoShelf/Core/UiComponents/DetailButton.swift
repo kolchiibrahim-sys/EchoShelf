@@ -11,7 +11,8 @@ final class DetailButton: UIButton {
     init(systemName: String) {
         super.init(frame: .zero)
 
-        setImage(UIImage(systemName: systemName), for: .normal)
+        setImage(UIImage(systemName: systemName),
+                 for: .normal)
         tintColor = .white
         backgroundColor = UIColor.white.withAlphaComponent(0.08)
 

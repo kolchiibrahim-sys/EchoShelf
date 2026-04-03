@@ -34,26 +34,36 @@ final class MainTabBarController: UITabBarController {
 
     private func setupTabs() {
         let homeNav = UINavigationController()
-        homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
+        homeNav.tabBarItem = UITabBarItem(title: "Home",
+                                          image: UIImage(systemName: "house.fill"),
+                                          tag: 0)
         homeCoordinator = HomeCoordinator(navigationController: homeNav)
         homeCoordinator?.start()
 
         let search = UINavigationController(rootViewController: SearchViewController())
-        search.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        search.tabBarItem = UITabBarItem(title: "Search",
+                                         image: UIImage(systemName: "magnifyingglass"),
+                                         tag: 1)
 
         let libraryNav = UINavigationController()
-        libraryNav.tabBarItem = UITabBarItem(title: "Library", image: UIImage(systemName: "books.vertical.fill"), tag: 2)
+        libraryNav.tabBarItem = UITabBarItem(title: "Library",
+                                             image: UIImage(systemName: "books.vertical.fill"),
+                                             tag: 2)
         libraryCoordinator = LibraryCoordinator(navigationController: libraryNav)
         libraryCoordinator?.start()
 
         let favorites = UINavigationController(rootViewController: FavoritesViewController())
-        favorites.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "heart.fill"), tag: 3)
+        favorites.tabBarItem = UITabBarItem(title: "Favorites",
+                                            image: UIImage(systemName: "heart.fill"),
+                                            tag: 3)
 
         let profileVM = ProfileViewModel()
         let profileVC = ProfileViewController(viewModel: profileVM)
         profileVC.onLogout = { [weak self] in self?.onLogout?() }
         let profile = UINavigationController(rootViewController: profileVC)
-        profile.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 4)
+        profile.tabBarItem = UITabBarItem(title: "Profile",
+                                          image: UIImage(systemName: "person.fill"),
+                                          tag: 4)
 
         viewControllers = [homeNav, search, libraryNav, favorites, profile]
     }
@@ -69,8 +79,14 @@ final class MainTabBarController: UITabBarController {
     }
 
     private func observePlayerEvents() {
-        NotificationCenter.default.addObserver(self, selector: #selector(showMiniPlayer), name: .playerStarted, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(openFullPlayer), name: .openFullPlayer, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(showMiniPlayer),
+                                               name: .playerStarted,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(openFullPlayer),
+                                               name: .openFullPlayer,
+                                               object: nil)
     }
 
     @objc private func showMiniPlayer() {

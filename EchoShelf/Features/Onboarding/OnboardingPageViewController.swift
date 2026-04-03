@@ -12,7 +12,8 @@ final class OnboardingPageViewController: UIViewController {
 
     init(page: OnboardingPage) {
         self.page = page
-        super.init(nibName: nil, bundle: nil)
+        super.init(nibName: nil,
+                   bundle: nil)
     }
 
     required init?(coder: NSCoder) { fatalError() }
@@ -106,7 +107,6 @@ final class OnboardingPageViewController: UIViewController {
 
     private func setupUI() {
         view.backgroundColor = UIColor(named: "AppBackground")!
-
         view.addSubview(imageView)
         view.addSubview(gradientOverlay)
         view.addSubview(badgeLabel)

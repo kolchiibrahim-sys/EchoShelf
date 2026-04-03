@@ -11,14 +11,17 @@ final class AudiobookService: AudiobookServiceProtocol {
 
     func fetchAudiobooks(
         page: Int,
-        completion: @escaping (Result<[Audiobook], APIError>) -> Void
+        completion: @escaping (Result<[Audiobook],
+                               APIError>) -> Void
     ) {
         let endpoint = AudiobookEndpoint.getAudiobooks(page: page)
-        request(endpoint) { [weak self] (result: Result<AudiobooksResponse, APIError>) in
+        request(endpoint) { [weak self] (result: Result<AudiobooksResponse,
+                                         APIError>) in
             guard let self else { return }
             switch result {
             case .success(let response):
-                self.attachCovers(to: response.books, completion: completion)
+                self.attachCovers(to: response.books,
+                                  completion: completion)
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -27,14 +30,19 @@ final class AudiobookService: AudiobookServiceProtocol {
 
     func searchAudiobooks(
         query: String,
-        completion: @escaping (Result<[Audiobook], APIError>) -> Void
+        completion: @escaping (Result<[Audiobook],
+                               APIError>) -> Void
     ) {
         let endpoint = AudiobookEndpoint.search(query: query)
-        request(endpoint) { [weak self] (result: Result<AudiobooksResponse, APIError>) in
+        request(endpoint) { [weak self] (result: Result<AudiobooksResponse,
+                                         APIError>) in
             guard let self else { return }
+            
             switch result {
+                
             case .success(let response):
-                self.attachCovers(to: response.books, completion: completion)
+                self.attachCovers(to: response.books,
+                                  completion: completion)
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -43,10 +51,12 @@ final class AudiobookService: AudiobookServiceProtocol {
 
     func fetchAudiobookDetail(
         id: Int,
-        completion: @escaping (Result<Audiobook, APIError>) -> Void
+        completion: @escaping (Result<Audiobook,
+                               APIError>) -> Void
     ) {
         let endpoint = AudiobookEndpoint.detail(id: id)
-        request(endpoint) { [weak self] (result: Result<AudiobooksResponse, APIError>) in
+        request(endpoint) { [weak self] (result: Result<AudiobooksResponse,
+                                         APIError>) in
             guard let self else { return }
             switch result {
             case .success(let response):
@@ -65,14 +75,18 @@ final class AudiobookService: AudiobookServiceProtocol {
     func fetchByGenre(
         subject: String,
         page: Int,
-        completion: @escaping (Result<[Audiobook], APIError>) -> Void
+        completion: @escaping (Result<[Audiobook],
+                               APIError>) -> Void
     ) {
-        let endpoint = AudiobookEndpoint.genre(subject: subject, page: page)
-        request(endpoint) { [weak self] (result: Result<AudiobooksResponse, APIError>) in
+        let endpoint = AudiobookEndpoint.genre(subject: subject,
+                                               page: page)
+        request(endpoint) { [weak self] (result: Result<AudiobooksResponse,
+                                         APIError>) in
             guard let self else { return }
             switch result {
             case .success(let response):
-                self.attachCovers(to: response.books, completion: completion)
+                self.attachCovers(to: response.books,
+                                  completion: completion)
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -87,9 +101,12 @@ private extension AudiobookService {
         completion: @escaping (Result<T, APIError>) -> Void
     ) {
         AF.request(endpoint.baseURL,
-                   method: endpoint.method,
-                   parameters: endpoint.parameters,
-                   encoding: URLEncoding.default)
+                   method:
+                    endpoint.method,
+                   parameters:
+                    endpoint.parameters,
+                   encoding:
+                    URLEncoding.default)
         .validate()
         .responseDecodable(of: T.self) { response in
             switch response.result {
@@ -111,7 +128,8 @@ private extension AudiobookService {
 
     func attachCovers(
         to books: [Audiobook],
-        completion: @escaping (Result<[Audiobook], APIError>) -> Void
+        completion: @escaping (Result<[Audiobook],
+                               APIError>) -> Void
     ) {
         var booksWithCovers = books
         for index in booksWithCovers.indices {
