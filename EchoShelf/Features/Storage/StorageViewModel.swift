@@ -88,7 +88,7 @@ final class StorageCacheViewModel {
     func deleteBook(id: String) {
         LibraryManager.shared.delete(id: id)
         loadBooks()
-        onSuccess?("Kitab silindi.")
+        onSuccess?("Book Deleted")
     }
 
     // MARK: - Clear Cache
@@ -103,7 +103,7 @@ final class StorageCacheViewModel {
             for file in files {
                 try? FileManager.default.removeItem(at: file)
             }
-            onSuccess?("Keş təmizləndi.")
+            onSuccess?("Cache cleared")
             onBooksUpdated?()
         } catch {
             onError?(error.localizedDescription)

@@ -38,8 +38,10 @@ final class HomeViewController: UIViewController {
         let sc = UISegmentedControl(items: ["Audiobooks", "Books", "Kids", "Genres"])
         sc.selectedSegmentIndex = 0
         sc.selectedSegmentTintColor = UIColor(named: "PrimaryGradientStart")!
-        sc.setTitleTextAttributes([.foregroundColor: UIColor(named: "OnDarkTextPrimary")!], for: .selected)
-        sc.setTitleTextAttributes([.foregroundColor: UIColor(named: "OnDarkTextSecondary")!], for: .normal)
+        sc.setTitleTextAttributes([.foregroundColor: UIColor(named: "OnDarkTextPrimary")!],
+                                  for: .selected)
+        sc.setTitleTextAttributes([.foregroundColor: UIColor(named: "OnDarkTextSecondary")!],
+                                  for: .normal)
         sc.backgroundColor = UIColor(named: "FillGlass")!
         sc.translatesAutoresizingMaskIntoConstraints = false
         return sc
@@ -83,7 +85,8 @@ final class HomeViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true,
+                                                     animated: false)
         greetingView.configure()
     }
 }
@@ -93,7 +96,8 @@ private extension HomeViewController {
     func setupGreeting() {
         view.addSubview(greetingView)
         NSLayoutConstraint.activate([
-            greetingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            greetingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                              constant: 12),
             greetingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             greetingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             greetingView.heightAnchor.constraint(equalToConstant: 60)
@@ -104,13 +108,19 @@ private extension HomeViewController {
     func setupSegmentControl() {
         view.addSubview(segmentControl)
         NSLayoutConstraint.activate([
-            segmentControl.topAnchor.constraint(equalTo: greetingView.bottomAnchor, constant: 12),
-            segmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            segmentControl.topAnchor.constraint(equalTo: greetingView.bottomAnchor,
+                                                constant: 12),
+            segmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                    constant: 20),
+            segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                     constant: -20),
             segmentControl.heightAnchor.constraint(equalToConstant: 36)
         ])
-        segmentControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
+        segmentControl.addTarget(self,
+                                 action: #selector(segmentChanged(_:)),
+                                 for: .valueChanged)
     }
+    
 
     @objc func segmentChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {

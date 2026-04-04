@@ -28,7 +28,7 @@ final class SettingsViewModel {
 
     func updateDisplayName(_ name: String) {
         guard !name.trimmingCharacters(in: .whitespaces).isEmpty else {
-            onError?("Ad boş ola bilməz."); return
+            onError?("The name cannot be empty."); return
         }
         onLoadingChanged?(true)
         let request = Auth.auth().currentUser?.createProfileChangeRequest()
@@ -38,7 +38,7 @@ final class SettingsViewModel {
             if let error {
                 self?.onError?(error.localizedDescription)
             } else {
-                self?.onSuccess?("Ad yeniləndi.")
+                self?.onSuccess?("Name Changed.")
             }
         }
     }
@@ -48,15 +48,15 @@ final class SettingsViewModel {
     func changePassword(current: String,
                         new: String,
                         confirm: String) {
-        guard !current.isEmpty else { onError?("Cari şifrə daxil edin.");
+        guard !current.isEmpty else { onError?("Enter the current password.");
             return }
-        guard new.count >= 6 else { onError?("Yeni şifrə minimum 6 simvol olmalıdır.");
+        guard new.count >= 6 else { onError?("New password must be at least 6 characters long.");
             return }
-        guard new == confirm else { onError?("Şifrələr uyğun deyil.");
+        guard new == confirm else { onError?("The passwords do not match.");
             return }
 
         guard let user = Auth.auth().currentUser, let email = user.email else {
-            onError?("İstifadəçi tapılmadı."); return
+            onError?("User not found."); return
         }
 
         onLoadingChanged?(true)
@@ -73,7 +73,7 @@ final class SettingsViewModel {
                 if let error {
                     self?.onError?(error.localizedDescription)
                 } else {
-                    self?.onSuccess?("Şifrə uğurla dəyişdirildi.")
+                    self?.onSuccess?("Password changed successfully.")
                 }
             }
         }
@@ -88,7 +88,7 @@ final class SettingsViewModel {
             if let error {
                 self?.onError?(error.localizedDescription)
             } else {
-                self?.onSuccess?("Doğrulama emaili göndərildi.")
+                self?.onSuccess?("Verification email sent.")
             }
         }
     }

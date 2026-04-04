@@ -9,7 +9,7 @@ final class KidsTrendingCell: UICollectionViewCell {
 
     static let identifier = "KidsTrendingCell"
 
-    private let coverImage: UIImageView = {
+    private lazy var coverImage: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
@@ -19,7 +19,7 @@ final class KidsTrendingCell: UICollectionViewCell {
         return iv
     }()
 
-    private let badgeLabel: UILabel = {
+    private lazy var badgeLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "⭐ KIDS"
         lbl.font = .systemFont(ofSize: 9,
@@ -33,7 +33,7 @@ final class KidsTrendingCell: UICollectionViewCell {
         return lbl
     }()
 
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 13,
                                weight: .semibold)
@@ -43,7 +43,7 @@ final class KidsTrendingCell: UICollectionViewCell {
         return lbl
     }()
 
-    private let authorLabel: UILabel = {
+    private lazy var authorLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 11)
         lbl.textColor = UIColor(named: "RatingStarYellow")!.withAlphaComponent(0.8)

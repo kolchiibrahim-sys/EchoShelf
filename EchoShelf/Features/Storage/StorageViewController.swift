@@ -62,7 +62,7 @@ final class StorageCacheViewController: UIViewController {
         ])
 
         // Books header
-        let booksHeader = makeSectionHeader("YÜKLƏNMIŞ KİTABLAR")
+        let booksHeader = makeSectionHeader("DOWNLOADED BOOKS")
         contentView.addSubview(booksHeader)
         NSLayoutConstraint.activate([
             booksHeader.topAnchor.constraint(equalTo: storageCard.bottomAnchor,
@@ -131,7 +131,7 @@ final class StorageCacheViewController: UIViewController {
     private func makeStorageCard() -> UIView {
         let card = makeCard()
 
-        let sectionLabel = makeSectionHeader("CİHAZ YADDAŞI")
+        let sectionLabel = makeSectionHeader("DEVICE MEMORY")
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
 
         let totalLabel = UILabel()
@@ -142,14 +142,14 @@ final class StorageCacheViewController: UIViewController {
                 .foregroundColor: UIColor(named: "OnDarkTextPrimary")!]
         )
         totalAttr.append(NSAttributedString(
-            string: "Toplam",
+            string: "Total",
             attributes: [.font: UIFont.systemFont(ofSize: 14),
                 .foregroundColor: UIColor(named: "OnDarkTextTertiary")!]
         ))
         totalLabel.attributedText = totalAttr
 
         let freeLabel = UILabel()
-        freeLabel.text = "\(String(format: "%.1f", totalGB - usedGB)) GB Boş"
+        freeLabel.text = "\(String(format: "%.1f", totalGB - usedGB)) GB Free"
         freeLabel.font = .systemFont(ofSize: 15,
                                      weight: .semibold)
         freeLabel.textColor = UIColor(named: "PrimaryAccent")!
@@ -239,8 +239,8 @@ final class StorageCacheViewController: UIViewController {
 
         let items: [(color: UIColor, label: String)] = [
             (UIColor(named: "PrimaryAccent")!, "EchoShelf (\(Int(appGB)) GB)"),
-            (UIColor(named: "StorageChartOther")!, "Digər (\(String(format: "%.1f", usedGB - appGB)) GB)"),
-            (UIColor(named: "StorageChartEmpty")!, "Boş (\(String(format: "%.1f", totalGB - usedGB)) GB)")
+            (UIColor(named: "StorageChartOther")!, "Other (\(String(format: "%.1f", usedGB - appGB)) GB)"),
+            (UIColor(named: "StorageChartEmpty")!, "Free(\(String(format: "%.1f", totalGB - usedGB)) GB)")
         ]
         for item in items {
             let dot = UIView()
@@ -266,7 +266,8 @@ final class StorageCacheViewController: UIViewController {
 
     // MARK: - Book Row
 
-    private func makeBookRow(book: (title: String, size: String, quality: String), index: Int) -> UIView {
+    private func makeBookRow(book: (title: String, size: String, quality: String),
+                             index: Int) -> UIView {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
 
@@ -346,7 +347,7 @@ final class StorageCacheViewController: UIViewController {
         let cacheLabel = UILabel()
         cacheLabel.translatesAutoresizingMaskIntoConstraints = false
         let attr = NSMutableAttributedString(
-            string: "MÜVƏQQƏTİ KEŞ\n",
+            string: "TEMPORARY CACHE\n",
             attributes: [.font: UIFont.systemFont(ofSize: 10,
                                                   weight: .semibold),
                 .foregroundColor: UIColor(named: "OnDarkTextCaption")!]
@@ -361,7 +362,7 @@ final class StorageCacheViewController: UIViewController {
         cacheLabel.numberOfLines = 2
 
         let clearBtn = UIButton(type: .system)
-        clearBtn.setTitle("KEŞİ TƏMİZLƏ", for: .normal)
+        clearBtn.setTitle("Clean Cash", for: .normal)
         clearBtn.titleLabel?.font = .systemFont(ofSize: 13,
                                                 weight: .bold)
         clearBtn.backgroundColor = UIColor(named: "PrimaryAccent")!
@@ -416,12 +417,12 @@ final class StorageCacheViewController: UIViewController {
 
     @objc private func deleteBook(_ sender: UIButton) {
         let idx = sender.tag
-        let alert = UIAlertController(title: "Kitabı Sil",
-                                      message: "\"\(books[idx].title)\" silinsin?",
+        let alert = UIAlertController(title: "Delete Book",
+                                      message: "\"\(books[idx].title)\" Are You Sure?",
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ləğv et",
+        alert.addAction(UIAlertAction(title: "Cancellation",
                                       style: .cancel))
-        alert.addAction(UIAlertAction(title: "Sil",
+        alert.addAction(UIAlertAction(title: "Delete",
                                       style: .destructive) { [weak self] _ in
             self?.books.remove(at: idx)
             // TODO: LibraryManager.shared.delete(id:)
@@ -430,13 +431,14 @@ final class StorageCacheViewController: UIViewController {
     }
 
     @objc private func clearCacheTapped() {
-        let alert = UIAlertController(title: "Keşi Təmizlə",
-                                      message: "2.4 GB müvəqqəti fayl silinəcək.",
+        let alert = UIAlertController(title: "Clean Cach",
+                                      message: "2.4 GB of temporary files will be deleted.",
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ləğv et",
+        alert.addAction(UIAlertAction(title: "Cancellation",
                                       style: .cancel))
-        alert.addAction(UIAlertAction(title: "Təmizlə",
+        alert.addAction(UIAlertAction(title: "Clean",
                                       style: .destructive))
-        present(alert, animated: true)
+        present(alert,
+                animated: true)
     }
 }

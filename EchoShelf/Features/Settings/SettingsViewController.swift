@@ -18,7 +18,7 @@ final class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "SettingsBackground")!
-        title = "Tənzimləmələr"
+        title = "Settings"
         navigationController?.navigationBar.tintColor = UIColor(named: "PrimaryAccent")!
         setupScrollView()
         setupSections()
@@ -47,70 +47,70 @@ final class SettingsViewController: UIViewController {
         var lastBottom = contentView.topAnchor
 
         // ACCOUNT
-        lastBottom = addSection(title: "HESAB",
+        lastBottom = addSection(title: "Account",
                                 rows: [
             makeNavRow(icon: "person.fill",
                        iconBg: "IconBlue",
-                       title: "Şəxsi Məlumat") {},
+                       title: "Personal Information") {},
             makeNavRow(icon: "lock.fill",
                        iconBg: "IconPurple",
-                       title: "Şifrə və Təhlükəsizlik") {},
+                       title: "Password And Privacy") {},
             makeNavRow(icon: "creditcard.fill",
-                       iconBg: "IconGreen", title: "Abunəlik",
-                       detail: "Aktiv") {}
+                       iconBg: "IconGreen", title: "Subscribtion",
+                       detail: "Active") {}
         ], topAnchor: lastBottom, topSpacing: 20)
 
         // PLAYBACK
         let autoPlayToggle = makeToggleRow(icon: "play.circle.fill",
                                            iconBg: "IconOrange",
-                                           title: "Avtomatik oynat",
+                                           title: "Play automatically",
                                            isOn: autoPlayEnabled) { [weak self] val in
             self?.autoPlayEnabled = val
         }
         let audioQualityRow = makeNavRow(icon: "hifi.speaker.fill",
                                          iconBg: "IconOrangeSoft",
-                                         title: "Audio Keyfiyyəti",
-                                         detail: "Yüksək (Lossless)") { [weak self] in
+                                         title: "Audio Quality",
+                                         detail: "High (Lossless)") { [weak self] in
             self?.showAudioQualityPicker()
         }
-        lastBottom = addSection(title: "OXUTMA", rows: [autoPlayToggle,
+        lastBottom = addSection(title: "READING", rows: [autoPlayToggle,
                                                         audioQualityRow], topAnchor: lastBottom, topSpacing: 24)
 
         // STORAGE
         let autoDownloadToggle = makeToggleRow(icon: "arrow.down.circle.fill",
-                                               iconBg: "IconGreen", title: "Avtomatik yüklə", isOn: autoDownloadEnabled) { [weak self] val in
+                                               iconBg: "IconGreen", title: "İnstall Automatically", isOn: autoDownloadEnabled) { [weak self] val in
             self?.autoDownloadEnabled = val
         }
         let clearCacheRow = makeNavRow(icon: "trash.fill",
                                        iconBg: "IconDarkRed",
-                                       title: "Keşi təmizlə",
+                                       title: "Clean Cach",
                                        detail: "1.2 GB") { [weak self] in
             self?.confirmClearCache()
         }
-        lastBottom = addSection(title: "YADDAŞ",
+        lastBottom = addSection(title: "Memory",
                                 rows: [autoDownloadToggle,
                                        clearCacheRow],
                                 topAnchor: lastBottom,
                                 topSpacing: 24)
 
         // NOTIFICATIONS
-        lastBottom = addSection(title: "BİLDİRİŞLƏR",
+        lastBottom = addSection(title: "Notifications",
                                 rows: [
             makeNavRow(icon: "bell.fill",
                        iconBg: "IconRed",
-                       title: "Push Bildirişlər") {}
+                       title: "Push Notification") {}
         ], topAnchor: lastBottom, topSpacing: 24)
 
         // ABOUT
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
-        lastBottom = addSection(title: "HAQQINDA", rows: [
+        lastBottom = addSection(title: "ABOUT", rows: [
             makeInfoRow(title: "Versiya",
                         detail: "\(version) (\(build))"),
             makeNavRow(icon: "doc.text.fill",
-                       iconBg: "IconGray", title: "İstifadə Şərtləri") {},
+                       iconBg: "IconGray", title: "Terms of Use") {},
             makeNavRow(icon: "hand.raised.fill",
-                       iconBg: "IconGray", title: "Məxfilik Siyasəti") {}
+                       iconBg: "IconGray", title: "Privacy Policy") {}
         ], topAnchor: lastBottom, topSpacing: 24)
 
         NSLayoutConstraint.activate([
@@ -170,7 +170,7 @@ final class SettingsViewController: UIViewController {
     private func setupFooter() {
         let email = Auth.auth().currentUser?.email ?? ""
         let footerLbl = UILabel()
-        footerLbl.text = "Daxil olunub: \(email)"
+        footerLbl.text = "Included: \(email)"
         footerLbl.font = .systemFont(ofSize: 12)
         footerLbl.textColor = UIColor(named: "OnDarkTextFooter")!
         footerLbl.textAlignment = .center
@@ -359,23 +359,23 @@ final class SettingsViewController: UIViewController {
         { s.alpha = 1 } }
 
     private func showAudioQualityPicker() {
-        let alert = UIAlertController(title: "Audio Keyfiyyəti",
+        let alert = UIAlertController(title: "Audio Quality",
                                       message: nil,
                                       preferredStyle: .actionSheet)
-        ["Yüksək (Lossless)", "Orta", "Aşağı"].forEach { q in
+        ["High (Lossless)", "Medium", "Default"].forEach { q in
             alert.addAction(UIAlertAction(title: q, style: .default))
         }
-        alert.addAction(UIAlertAction(title: "Ləğv et", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(alert, animated: true)
     }
 
     private func confirmClearCache() {
-        let alert = UIAlertController(title: "Keşi Təmizlə",
-                                      message: "1.2 GB silinəcək. Əminsiniz?",
+        let alert = UIAlertController(title: "Clean Cach",
+                                      message: "1.2 GB will be deleted. Are you sure?",
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ləğv et",
+        alert.addAction(UIAlertAction(title: "Cancel",
                                       style: .cancel))
-        alert.addAction(UIAlertAction(title: "Təmizlə",
+        alert.addAction(UIAlertAction(title: "Clean",
                                       style: .destructive))
         present(alert, animated: true)
     }

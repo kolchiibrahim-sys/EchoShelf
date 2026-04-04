@@ -14,7 +14,7 @@ final class ProfileViewModel {
     // MARK: - User Info
 
     var displayName: String {
-        Auth.auth().currentUser?.displayName ?? "İstifadəçi"
+        Auth.auth().currentUser?.displayName ?? "User"
     }
 
     var email: String {

@@ -74,7 +74,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "SettingsBackground")!
-        title = "Profil"
+        title = "Profile"
         navigationController?.navigationBar.prefersLargeTitles = false
         setupScrollView()
         setupHeader()
@@ -150,17 +150,17 @@ final class ProfileViewController: UIViewController {
                                                detail: String?,
                                                action: () -> Void)])] = [
             ("ACCOUNT", [
-                ("person.fill", "IconBlue", "Şəxsi Məlumat", nil, { [weak self] in self?.showSettings() }),
-                ("lock.fill", "IconPurple", "Şifrə və Təhlükəsizlik", nil, { [weak self] in self?.showSettings() }),
-                ("creditcard.fill", "IconGreen", "Abunəlik", "Aktiv", { [weak self] in self?.showSettings() })
+                ("person.fill", "IconBlue", "Personal Informatin", nil, { [weak self] in self?.showSettings() }),
+                ("lock.fill", "IconPurple", "Password and Privasy", nil, { [weak self] in self?.showSettings() }),
+                ("creditcard.fill", "IconGreen", "Subscribtion", "Acctive", { [weak self] in self?.showSettings() })
             ]),
-            ("YADDAŞ", [
-                ("internaldrive.fill", "IconOrange", "Yaddaş və Keş", nil, { [weak self] in self?.showStorageCache() })
+            ("Memory", [
+                ("internaldrive.fill", "IconOrange", "Memory And Cach", nil, { [weak self] in self?.showStorageCache() })
             ]),
-            ("HAQQINDA", [
+            ("About", [
                 ("info.circle.fill", "IconGray", "Versiya", Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0", {}),
-                ("doc.text.fill", "IconGray", "İstifadə Şərtləri", nil, {}),
-                ("hand.raised.fill", "IconGray", "Məxfilik Siyasəti", nil, {})
+                ("doc.text.fill", "IconGray", "Terms of Use", nil, {}),
+                ("hand.raised.fill", "IconGray", "Terms Of Privacy", nil, {})
             ])
         ]
 
@@ -347,7 +347,7 @@ final class ProfileViewController: UIViewController {
 
     private func makeLogoutButton() -> UIButton {
         var config = UIButton.Configuration.filled()
-        config.title = "Çıxış"
+        config.title = "Log Out"
         config.image = UIImage(systemName: "rectangle.portrait.and.arrow.right")
         config.imagePadding = 8
         config.baseBackgroundColor = UIColor(named: "IconRed")!.withAlphaComponent(0.1)
@@ -394,11 +394,12 @@ final class ProfileViewController: UIViewController {
     // MARK: - Actions
 
     @objc private func logoutTapped() {
-        let alert = UIAlertController(title: "Çıxış",
-                                      message: "Hesabınızdan çıxmaq istədiyinizə əminsiniz?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ləğv et",
+        let alert = UIAlertController(title: "Log Out",
+                                      message: "Are you sure you want to log out of your account?",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel",
                                       style: .cancel))
-        alert.addAction(UIAlertAction(title: "Çıxış",
+        alert.addAction(UIAlertAction(title: "Log Out",
                                       style: .destructive) { [weak self] _ in
             self?.viewModel.logout()
         })
