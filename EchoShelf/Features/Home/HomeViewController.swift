@@ -81,6 +81,10 @@ final class HomeViewController: UIViewController {
         setupCollectionView()
         bindViewModel()
         viewModel.fetchBooks()
+        addRefreshController(to: collectionView) { [weak self] in
+            self?.viewModel.fetchBooks()
+        }
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -192,7 +196,10 @@ private extension HomeViewController {
     func bindViewModel() {
         viewModel.onStateChanged = { [weak self] state in
             guard let self else { return }
-            if case .success = state { self.collectionView.reloadData() }
+            if case .success = state {
+                self.collectionView.refreshControl?.endRefreshing()
+                self.collectionView.reloadData()
+            }
         }
     }
 

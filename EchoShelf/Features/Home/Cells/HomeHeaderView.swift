@@ -47,7 +47,7 @@ final class HomeHeaderView: UIView {
 
         let textStack = UIStackView(arrangedSubviews: [greetingLabel, nameLabel])
         textStack.axis = .vertical
-        textStack.spacing = 2
+        textStack.spacing = 8
 
         let hStack = UIStackView(arrangedSubviews: [textStack, UIView(), searchButton])
         hStack.alignment = .center

@@ -13,7 +13,8 @@ final class HomeHeaderCell: UICollectionViewCell {
     private let greetingLabel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = UIColor(named: "OnDarkTextSecondary")!
-        lbl.font = .systemFont(ofSize: 13, weight: .medium)
+        lbl.font = .systemFont(ofSize: 13,
+                               weight: .medium)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -21,7 +22,8 @@ final class HomeHeaderCell: UICollectionViewCell {
     private let nameLabel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = UIColor(named: "OnDarkTextPrimary")!
-        lbl.font = .systemFont(ofSize: 28, weight: .bold)
+        lbl.font = .systemFont(ofSize: 28,
+                               weight: .bold)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()

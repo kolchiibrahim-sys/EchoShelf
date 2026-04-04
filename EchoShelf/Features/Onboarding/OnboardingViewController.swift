@@ -112,7 +112,8 @@ final class OnboardingViewController: UIViewController {
     }
 
     private func setupActions() {
-        skipButton.addTarget(self, action: #selector(skipTapped), for: .touchUpInside)
+        skipButton.addTarget(self, action: #selector(skipTapped),
+                             for: .touchUpInside)
     }
 
     // MARK: - Navigation
