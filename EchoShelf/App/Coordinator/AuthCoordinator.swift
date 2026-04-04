@@ -15,9 +15,12 @@ final class AuthCoordinator: Coordinator {
 
     func start() {
         let vc = SignInViewController(viewModel: .init())
-        vc.onLoginSuccess = { [weak self] in self?.showMainApp() }
-        vc.onCreateAccount = { [weak self] in self?.showCreateAccount() }
-        vc.onForgotPassword = { [weak self] in self?.showForgotPassword() }
+        vc.onLoginSuccess = { [weak self]
+            in self?.showMainApp() }
+        vc.onCreateAccount = { [weak self]
+            in self?.showCreateAccount() }
+        vc.onForgotPassword = { [weak self]
+            in self?.showForgotPassword() }
         navigationController.setViewControllers([vc],
                                                 animated: false)
     }
@@ -38,7 +41,8 @@ final class AuthCoordinator: Coordinator {
     private func showForgotPassword() {
         let vc = ForgotPasswordViewController(viewModel: .init())
         vc.onBackToSignIn = { [weak self] in self?.navigationController.popViewController(animated: true) }
-        navigationController.pushViewController(vc, animated: true)
+        navigationController.pushViewController(vc,
+                                                animated: true)
     }
 }
 

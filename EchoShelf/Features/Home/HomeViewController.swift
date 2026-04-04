@@ -66,7 +66,8 @@ final class HomeViewController: UIViewController {
         switch selectedTab {
         case .audiobooks:
             return viewModel.recommendedAudiobooks.count
-        case .books, .genres:
+        case .books,
+                .genres:
             return viewModel.recommendedEbooks.count
         case .kids:
             return viewModel.recommendedKidsEbooks.count
