@@ -17,35 +17,38 @@ final class HomeCoordinator: Coordinator {
     func start() {
         let vc = HomeViewController()
         vc.coordinator = self
-        navigationController.setViewControllers([vc],
-                                                animated: false)
+        navigationController.setViewControllers([vc], animated: false)
     }
 
     func showAllBooks(type: AllBooksType) {
-        let viewModel = AllBooksViewModel(type: type)
-        let vc = AllBooksViewController(viewModel: viewModel)
+        let vc = AllBooksViewController(viewModel: AllBooksViewModel(type: type))
         vc.coordinator = self
-        navigationController.pushViewController(vc,
-                                                animated: true)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
     }
 
     func showGenreSearch(genre: String) {
-        let viewModel = GenreViewModel(genre: genre)
-        let vc = GenreViewController(viewModel: viewModel)
+        let vc = GenreViewController(viewModel: GenreViewModel(genre: genre))
         vc.coordinator = self
-        navigationController.pushViewController(vc,
-                                                animated: true)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
     }
 
     func showBookDetail(book: Audiobook) {
         let vc = BookDetailViewController(book: book)
-        navigationController.pushViewController(vc,
-                                                animated: true)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
     }
 
     func showEbookDetail(ebook: Ebook) {
         let vc = BookDetailViewController(ebook: ebook)
-        navigationController.pushViewController(vc,
-                                                animated: true)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
+
+    func showAuthorDetail(author: Author) {
+        let vc = AuthorDetailViewController(author: author)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
     }
 }

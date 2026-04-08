@@ -8,6 +8,7 @@ import Kingfisher
 final class AuthorDetailViewController: UIViewController {
 
     private let viewModel: AuthorDetailViewModel
+    private let favoritesViewModel = FavoritesViewModel()
 
     init(author: Author) {
         self.viewModel = AuthorDetailViewModel(author: author)
@@ -46,6 +47,14 @@ final class AuthorDetailViewController: UIViewController {
         config.image = UIImage(systemName: "chevron.left")
         config.baseForegroundColor = UIColor(named: "OnDarkTextPrimary")
         let btn = UIButton(configuration: config)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+
+    private lazy var favoriteButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setImage(UIImage(systemName: "heart"), for: .normal)
+        btn.tintColor = UIColor(named: "OnDarkTextPrimary")
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
@@ -111,6 +120,7 @@ final class AuthorDetailViewController: UIViewController {
         setupActions()
         bindViewModel()
         viewModel.fetchData()
+        updateFavoriteButton()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -127,6 +137,7 @@ final class AuthorDetailViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         view.addSubview(backButton)
+        view.addSubview(favoriteButton)
         view.addSubview(activityIndicator)
 
         contentView.addSubview(photoImageView)
@@ -154,6 +165,9 @@ final class AuthorDetailViewController: UIViewController {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
 
+            favoriteButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            favoriteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
@@ -180,6 +194,7 @@ final class AuthorDetailViewController: UIViewController {
 
     private func setupActions() {
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
+        favoriteButton.addTarget(self, action: #selector(favTapped), for: .touchUpInside)
     }
 
     private func bindViewModel() {
@@ -230,6 +245,12 @@ final class AuthorDetailViewController: UIViewController {
         view.layoutIfNeeded()
     }
 
+    private func updateFavoriteButton() {
+        let isFav = favoritesViewModel.isAuthorFavorited(viewModel.author)
+        favoriteButton.tintColor = isFav ? UIColor(named: "FavoriteActivePink") : UIColor(named: "OnDarkTextPrimary")
+        favoriteButton.setImage(UIImage(systemName: isFav ? "heart.fill" : "heart"), for: .normal)
+    }
+
     private func createLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { _, _ in
             let item = NSCollectionLayoutItem(
@@ -256,6 +277,12 @@ final class AuthorDetailViewController: UIViewController {
 
     @objc private func backTapped() {
         navigationController?.popViewController(animated: true)
+    }
+
+    @objc private func favTapped() {
+        favoritesViewModel.toggleAuthor(viewModel.author)
+        updateFavoriteButton()
+        NotificationCenter.default.post(name: .favoritesDidChange, object: nil)
     }
 }
 

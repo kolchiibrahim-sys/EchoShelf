@@ -440,7 +440,12 @@ private extension BookDetailViewController {
             guard let self else { return }
             if case .success = state { self.populateData() }
         }
+        viewModel.onAIUpdated = { [weak self] in
+            guard let self else { return }
+            self.buildAISummary(self.viewModel.aiSummary)
+        }
     }
+    
 
     func configureByBookType() {
         switch bookType {

@@ -15,7 +15,7 @@ final class MainTabBarController: UITabBarController {
 
     private lazy var miniPlayerContainer: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor(named: "AppBackground")
+        v.backgroundColor = .clear
         v.layer.shadowColor = UIColor.black.cgColor
         v.layer.shadowOpacity = 0.25
         v.layer.shadowRadius = 10
