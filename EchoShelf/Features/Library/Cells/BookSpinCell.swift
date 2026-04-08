@@ -48,6 +48,7 @@ final class BookSpineCell: UICollectionViewCell {
     private var progressFillHeight: NSLayoutConstraint!
 //Hamsi Assetsden
     private static let spineColors: [[(UIColor, UIColor)]] = [
+        //assets
         [(.init(hex: "#7B3F00"),
           .init(hex: "#5C2D00"))],   // dark brown
         [(.init(hex: "#1B3A5C"),
