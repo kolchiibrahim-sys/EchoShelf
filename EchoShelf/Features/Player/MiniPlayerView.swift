@@ -9,11 +9,18 @@ import Kingfisher
 
 final class MiniPlayerView: UIView {
 
+    private lazy var blurView: UIVisualEffectView = {
+        let blur = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        let v = UIVisualEffectView(effect: blur)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+
     private lazy var coverImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
-        iv.layer.cornerRadius = 8
+        iv.layer.cornerRadius = 10
         iv.backgroundColor = UIColor(named: "FillGlass")
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -37,7 +44,7 @@ final class MiniPlayerView: UIView {
 
     private lazy var playPauseButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        btn.setImage(UIImage(systemName: "play.fill"), for: .normal)
         btn.tintColor = UIColor(named: "OnDarkTextPrimary")
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -47,15 +54,9 @@ final class MiniPlayerView: UIView {
         let pv = UIProgressView(progressViewStyle: .bar)
         pv.progressTintColor = UIColor(named: "PrimaryGradientStart")
         pv.trackTintColor = UIColor(named: "FillGlass")
+        pv.layer.cornerRadius = 1
         pv.translatesAutoresizingMaskIntoConstraints = false
         return pv
-    }()
-
-    private lazy var divider: UIView = {
-        let v = UIView()
-        v.backgroundColor = UIColor(named: "Divider")
-        v.translatesAutoresizingMaskIntoConstraints = false
-        return v
     }()
 
     override init(frame: CGRect) {
@@ -75,8 +76,10 @@ final class MiniPlayerView: UIView {
 
     private func setupUI() {
         backgroundColor = .clear
+        layer.cornerRadius = 16
+        clipsToBounds = true
 
-        addSubview(divider)
+        addSubview(blurView)
         addSubview(coverImageView)
         addSubview(titleLabel)
         addSubview(authorLabel)
@@ -84,32 +87,32 @@ final class MiniPlayerView: UIView {
         addSubview(progressView)
 
         NSLayoutConstraint.activate([
-            divider.topAnchor.constraint(equalTo: topAnchor),
-            divider.leadingAnchor.constraint(equalTo: leadingAnchor),
-            divider.trailingAnchor.constraint(equalTo: trailingAnchor),
-            divider.heightAnchor.constraint(equalToConstant: 0.5),
+            blurView.topAnchor.constraint(equalTo: topAnchor),
+            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            blurView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             coverImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            coverImageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -4),
-            coverImageView.widthAnchor.constraint(equalToConstant: 44),
-            coverImageView.heightAnchor.constraint(equalToConstant: 44),
+            coverImageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -3),
+            coverImageView.widthAnchor.constraint(equalToConstant: 46),
+            coverImageView.heightAnchor.constraint(equalToConstant: 46),
 
-            titleLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: coverImageView.trailingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: playPauseButton.leadingAnchor, constant: -8),
-            titleLabel.topAnchor.constraint(equalTo: coverImageView.topAnchor, constant: 2),
+            titleLabel.topAnchor.constraint(equalTo: coverImageView.topAnchor, constant: 3),
 
             authorLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             authorLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3),
+            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
 
             playPauseButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             playPauseButton.centerYAnchor.constraint(equalTo: coverImageView.centerYAnchor),
-            playPauseButton.widthAnchor.constraint(equalToConstant: 36),
-            playPauseButton.heightAnchor.constraint(equalToConstant: 36),
+            playPauseButton.widthAnchor.constraint(equalToConstant: 38),
+            playPauseButton.heightAnchor.constraint(equalToConstant: 38),
 
-            progressView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            progressView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            progressView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            progressView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            progressView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            progressView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
             progressView.heightAnchor.constraint(equalToConstant: 2)
         ])
     }
@@ -130,6 +133,12 @@ final class MiniPlayerView: UIView {
             name: .playerProgressUpdated,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(playerStarted),
+            name: .playerStarted,
+            object: nil
+        )
     }
 
     private func updateWithCurrentBook() {
@@ -147,12 +156,15 @@ final class MiniPlayerView: UIView {
     }
 
     @objc private func progressUpdated() {
-        updateWithCurrentBook()
         let progress = PlayerManager.shared.duration > 0
             ? Float(PlayerManager.shared.currentTime / PlayerManager.shared.duration)
             : 0
         progressView.setProgress(progress, animated: true)
         updatePlayPauseButton()
+    }
+
+    @objc private func playerStarted() {
+        updateWithCurrentBook()
     }
 
     @objc private func playPauseTapped() {
@@ -164,3 +176,9 @@ final class MiniPlayerView: UIView {
         NotificationCenter.default.post(name: .openFullPlayer, object: nil)
     }
 }
+
+// MainTabBarController-de miniPlayerContainer constraints-i bele deyis:
+// miniPlayerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+// miniPlayerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+// miniPlayerContainer.bottomAnchor.constraint(equalTo: tabBar.topAnchor, constant: -8),
+// miniPlayerContainer.heightAnchor.constraint(equalToConstant: 70)

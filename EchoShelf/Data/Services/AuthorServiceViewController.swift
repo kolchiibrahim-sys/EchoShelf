@@ -191,7 +191,6 @@ final class AuthorsViewController: UIViewController {
         return UICollectionViewCompositionalLayout(section: section)
     }
 }
-
 extension AuthorsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         authors.count
@@ -212,8 +211,9 @@ extension AuthorsViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let author = authors[indexPath.item]
-        navigationController?.pushViewController(AuthorDetailViewController(author: author), animated: true)
+        let vc = AuthorDetailViewController(author: authors[indexPath.item])
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

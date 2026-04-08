@@ -82,10 +82,10 @@ final class MainTabBarController: UITabBarController {
             mini.translatesAutoresizingMaskIntoConstraints = false
             miniPlayerContainer.addSubview(mini)
             NSLayoutConstraint.activate([
-                mini.topAnchor.constraint(equalTo: miniPlayerContainer.topAnchor),
-                mini.bottomAnchor.constraint(equalTo: miniPlayerContainer.bottomAnchor),
-                mini.leadingAnchor.constraint(equalTo: miniPlayerContainer.leadingAnchor),
-                mini.trailingAnchor.constraint(equalTo: miniPlayerContainer.trailingAnchor)
+                miniPlayerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+                miniPlayerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+                miniPlayerContainer.bottomAnchor.constraint(equalTo: tabBar.topAnchor, constant: -8),
+                miniPlayerContainer.heightAnchor.constraint(equalToConstant: 70)
             ])
         }
         miniPlayerContainer.isHidden = false

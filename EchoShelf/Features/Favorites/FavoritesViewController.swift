@@ -240,19 +240,26 @@ extension FavoritesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch selectedSection {
         case .books:
-            navigationController?.pushViewController(
-                BookDetailViewController(ebook: viewModel.favoriteEbooks[indexPath.item]), animated: true)
+            let vc = BookDetailViewController(ebook: viewModel.favoriteEbooks[indexPath.item])
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
         case .audiobooks:
-            navigationController?.pushViewController(
-                BookDetailViewController(book: viewModel.favoriteBooks[indexPath.item]), animated: true)
+            let vc = BookDetailViewController(book: viewModel.favoriteBooks[indexPath.item])
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
         case .kids:
-            navigationController?.pushViewController(
-                BookDetailViewController(ebook: viewModel.favoriteKidsBooks[indexPath.item]), animated: true)
+            let vc = BookDetailViewController(ebook: viewModel.favoriteKidsBooks[indexPath.item])
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
         case .authors:
-            navigationController?.pushViewController(
-                AuthorDetailViewController(author: viewModel.favoriteAuthors[indexPath.item]), animated: true)
+            let vc = AuthorDetailViewController(author: viewModel.favoriteAuthors[indexPath.item])
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
         case .genres:
-            break
+            let vm = GenreViewModel(genre: viewModel.favoriteGenres[indexPath.item])
+            let vc = GenreViewController(viewModel: vm)
+            vc.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
 }

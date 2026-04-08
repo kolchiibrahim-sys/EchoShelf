@@ -90,10 +90,31 @@ final class RelatedAuthorCell: UICollectionViewCell {
         let lastInitial  = last.first?.uppercased() ?? ""
         let initials = firstInitial + lastInitial
         initialsLabel.text = initials.isEmpty ? "A" : initials
+        initialsLabel.isHidden = false
 
-        fetchAndSetPhoto(firstName: first, lastName: last)
+        let name = "\(first) \(last)"
+            .trimmingCharacters(in: .whitespaces)
+            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        
+        let urlString = "https://openlibrary.org/search/authors.json?q=\(name)"
+        guard let url = URL(string: urlString) else { return }
+
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let data,
+                  let json = try? JSONDecoder().decode(OpenLibrarySearchResponse.self, from: data),
+                  let doc = json.docs.first else { return }
+            let olid = doc.key.replacingOccurrences(of: "/authors/", with: "")
+            let photoURL = URL(string: "https://covers.openlibrary.org/a/olid/\(olid)-M.jpg")
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.imageView.kf.setImage(with: photoURL) { result in
+                    if case .success = result {
+                        self.initialsLabel.isHidden = true
+                    }
+                }
+            }
+        }.resume()
     }
-
     private func fetchAndSetPhoto(firstName: String, lastName: String) {
         let name = "\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces)
         guard !name.isEmpty else { return }

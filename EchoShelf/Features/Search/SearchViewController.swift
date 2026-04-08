@@ -414,17 +414,15 @@ private extension SearchViewController {
     }
 
     func openAudiobookDetail(_ book: Audiobook) {
-        navigationController?.pushViewController(
-            BookDetailViewController(book: book),
-            animated: true
-        )
+        let vc = BookDetailViewController(book: book)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func openEbookDetail(_ ebook: Ebook) {
-        navigationController?.pushViewController(
-            BookDetailViewController(ebook: ebook),
-            animated: true
-        )
+        let vc = BookDetailViewController(ebook: ebook)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     @objc func tabTapped(_ sender: UIButton) {

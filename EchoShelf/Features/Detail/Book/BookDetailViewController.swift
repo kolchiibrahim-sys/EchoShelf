@@ -295,7 +295,6 @@ private extension BookDetailViewController {
     func setupHeader() {
         view.addSubview(backButton)
         view.addSubview(moreButton)
-        view.addSubview(headerLabel)
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
