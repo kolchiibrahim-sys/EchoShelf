@@ -7,7 +7,7 @@
 import Foundation
 import Alamofire
 
-struct OpenLibraryAuthor: nonisolated Decodable {
+struct OpenLibraryAuthor: Decodable {
     let key: String
     let name: String
     let birthDate: String?
@@ -36,15 +36,13 @@ enum OpenLibraryBio: Decodable {
 
     var text: String {
         switch self {
-        case .string(let s):
-            return s
-        case .object(let s):
-            return s
+        case .string(let s): return s
+        case .object(let s): return s
         }
     }
 }
 
-struct OpenLibrarySearchResponse: nonisolated Decodable {
+struct OpenLibrarySearchResponse: Decodable {
     let docs: [OpenLibrarySearchDoc]
 }
 
@@ -66,7 +64,8 @@ struct AuthorDetail {
     }
 }
 
-final class AuthorService {
+final class AuthorService: @unchecked Sendable {
+
     static let shared = AuthorService()
     private init() {}
 
@@ -76,28 +75,25 @@ final class AuthorService {
     func fetchAuthorDetail(
         firstName: String?,
         lastName: String?,
-        completion: @escaping (AuthorDetail) -> Void
+        completion: @escaping @Sendable (AuthorDetail) -> Void
     ) {
         let name = "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespaces)
         guard !name.isEmpty else {
-            completion(AuthorDetail(firstName: firstName,
-                                    lastName: lastName,
-                                    photoURL: nil,
-                                    bio: nil,
-                                    olid: nil))
+            completion(AuthorDetail(firstName: firstName, lastName: lastName, photoURL: nil, bio: nil, olid: nil))
             return
         }
 
         let searchURL = "\(openLibraryBase)/search/authors.json"
         AF.request(searchURL, parameters: ["q": name])
             .validate()
-            .responseDecodable(of: OpenLibrarySearchResponse.self) { [weak self] response in
+            .responseData { [weak self] response in
                 guard let self else { return }
-                guard let doc = try? response.result.get().docs.first else {
-                    completion(AuthorDetail(firstName: firstName,
-                                            lastName: lastName,
-                                            photoURL: nil,
-                                            bio: nil, olid: nil))
+                guard
+                    let data = try? response.result.get(),
+                    let result = try? JSONDecoder().decode(OpenLibrarySearchResponse.self, from: data),
+                    let doc = result.docs.first
+                else {
+                    completion(AuthorDetail(firstName: firstName, lastName: lastName, photoURL: nil, bio: nil, olid: nil))
                     return
                 }
 
@@ -119,7 +115,7 @@ final class AuthorService {
     func fetchAuthorBooks(
         firstName: String?,
         lastName: String?,
-        completion: @escaping ([Audiobook]) -> Void
+        completion: @escaping @Sendable ([Audiobook]) -> Void
     ) {
         var params: [String: Any] = ["format": "json", "limit": 20]
         if let first = firstName { params["first_name"] = first }
@@ -127,19 +123,31 @@ final class AuthorService {
 
         AF.request("\(librivoxBase)/audiobooks", parameters: params)
             .validate()
-            .responseDecodable(of: AudiobooksResponse.self) { response in
-                let books = (try? response.result.get().books) ?? []
-                completion(books)
+            .responseData { response in
+                guard
+                    let data = try? response.result.get(),
+                    let result = try? JSONDecoder().decode(AudiobooksResponse.self, from: data)
+                else {
+                    completion([])
+                    return
+                }
+                completion(result.books)
             }
     }
 
-    private func fetchBio(olid: String, completion: @escaping (String?) -> Void) {
+    private func fetchBio(olid: String, completion: @escaping @Sendable (String?) -> Void) {
         let url = "\(openLibraryBase)/authors/\(olid).json"
         AF.request(url)
             .validate()
-            .responseDecodable(of: OpenLibraryAuthor.self) { response in
-                let bio = (try? response.result.get().bio)?.text
-                completion(bio)
+            .responseData { response in
+                guard
+                    let data = try? response.result.get(),
+                    let author = try? JSONDecoder().decode(OpenLibraryAuthor.self, from: data)
+                else {
+                    completion(nil)
+                    return
+                }
+                completion(author.bio?.text)
             }
     }
 }

@@ -13,14 +13,13 @@ final class MainTabBarController: UITabBarController {
     private var homeCoordinator: HomeCoordinator?
     private var libraryCoordinator: LibraryCoordinator?
 
-    private let miniPlayerContainer: UIView = {
+    private lazy var miniPlayerContainer: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor(named: "AppBackground")!
+        v.backgroundColor = UIColor(named: "AppBackground")
         v.layer.shadowColor = UIColor.black.cgColor
         v.layer.shadowOpacity = 0.25
         v.layer.shadowRadius = 10
-        v.layer.shadowOffset = CGSize(width: 0,
-                                      height: -3)
+        v.layer.shadowOffset = CGSize(width: 0, height: -3)
         v.translatesAutoresizingMaskIntoConstraints = false
         v.isHidden = true
         return v
@@ -35,38 +34,31 @@ final class MainTabBarController: UITabBarController {
 
     private func setupTabs() {
         let homeNav = UINavigationController()
-        homeNav.tabBarItem = UITabBarItem(title: "Home",
-                                          image: UIImage(systemName: "house.fill"),
-                                          tag: 0)
+        homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
         homeCoordinator = HomeCoordinator(navigationController: homeNav)
         homeCoordinator?.start()
 
         let search = UINavigationController(rootViewController: SearchViewController())
-        search.tabBarItem = UITabBarItem(title: "Search",
-                                         image: UIImage(systemName: "magnifyingglass"),
-                                         tag: 1)
+        search.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
 
         let libraryNav = UINavigationController()
-        libraryNav.tabBarItem = UITabBarItem(title: "Library",
-                                             image: UIImage(systemName: "books.vertical.fill"),
-                                             tag: 2)
+        libraryNav.tabBarItem = UITabBarItem(title: "Library", image: UIImage(systemName: "books.vertical.fill"), tag: 2)
         libraryCoordinator = LibraryCoordinator(navigationController: libraryNav)
         libraryCoordinator?.start()
 
         let favorites = UINavigationController(rootViewController: FavoritesViewController())
-        favorites.tabBarItem = UITabBarItem(title: "Favorites",
-                                            image: UIImage(systemName: "heart.fill"),
-                                            tag: 3)
+        favorites.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "heart.fill"), tag: 3)
+
+        let authors = UINavigationController(rootViewController: AuthorsViewController())
+        authors.tabBarItem = UITabBarItem(title: "Authors", image: UIImage(systemName: "person.2.fill"), tag: 4)
 
         let profileVM = ProfileViewModel()
         let profileVC = ProfileViewController(viewModel: profileVM)
         profileVC.onLogout = { [weak self] in self?.onLogout?() }
         let profile = UINavigationController(rootViewController: profileVC)
-        profile.tabBarItem = UITabBarItem(title: "Profile",
-                                          image: UIImage(systemName: "person.fill"),
-                                          tag: 4)
+        profile.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 5)
 
-        viewControllers = [homeNav, search, libraryNav, favorites, profile]
+        viewControllers = [homeNav, search, libraryNav, favorites, authors, profile]
     }
 
     private func setupMiniPlayerContainer() {
@@ -80,14 +72,8 @@ final class MainTabBarController: UITabBarController {
     }
 
     private func observePlayerEvents() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(showMiniPlayer),
-                                               name: .playerStarted,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(openFullPlayer),
-                                               name: .openFullPlayer,
-                                               object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showMiniPlayer), name: .playerStarted, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(openFullPlayer), name: .openFullPlayer, object: nil)
     }
 
     @objc private func showMiniPlayer() {
@@ -115,4 +101,3 @@ final class MainTabBarController: UITabBarController {
         NotificationCenter.default.removeObserver(self)
     }
 }
-
