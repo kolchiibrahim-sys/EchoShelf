@@ -300,8 +300,7 @@ private extension BookDetailViewController {
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             moreButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             moreButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            headerLabel.centerYAnchor.constraint(equalTo: backButton.centerYAnchor)
+           
         ])
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
     }

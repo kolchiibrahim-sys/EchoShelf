@@ -18,7 +18,8 @@ final class HomeViewController: UIViewController {
     weak var coordinator: HomeCoordinator?
 
     private let viewModel = HomeViewModel()
-
+    private let favoritesViewModel = FavoritesViewModel()
+    private let genres = Genre.all
     private var collectionView: UICollectionView!
 
     private var selectedTab: HomeTab = .audiobooks {
@@ -35,48 +36,35 @@ final class HomeViewController: UIViewController {
     }()
 
     private lazy var segmentControl: UISegmentedControl = {
-        let sc = UISegmentedControl(items: ["Audiobooks", "Books", "Kids", "Genres"])
+        let sc = UISegmentedControl(items: ["Audiobooks", "Books", "Kids"])
         sc.selectedSegmentIndex = 0
-        sc.selectedSegmentTintColor = UIColor(named: "PrimaryGradientStart")!
-        sc.setTitleTextAttributes([.foregroundColor: UIColor(named: "OnDarkTextPrimary")!],
-                                  for: .selected)
-        sc.setTitleTextAttributes([.foregroundColor: UIColor(named: "OnDarkTextSecondary")!],
-                                  for: .normal)
-        sc.backgroundColor = UIColor(named: "FillGlass")!
+        sc.selectedSegmentTintColor = UIColor(named: "PrimaryGradientStart")
+        sc.setTitleTextAttributes([.foregroundColor: UIColor(named: "OnDarkTextPrimary")!], for: .selected)
+        sc.setTitleTextAttributes([.foregroundColor: UIColor(named: "OnDarkTextSecondary")!], for: .normal)
+        sc.backgroundColor = UIColor(named: "FillGlass")
         sc.translatesAutoresizingMaskIntoConstraints = false
         return sc
     }()
-    private let genres = [
-        "Fantasy", "Drama", "Romance", "Mystery",
-        "Sci-Fi", "History", "Adventure", "Kids"
-    ]
 
     private var trendingItems: Int {
         switch selectedTab {
-        case .audiobooks:
-            return viewModel.trendingAudiobooks.count
-        case .books, .genres:
-            return viewModel.trendingEbooks.count
-        case .kids:
-            return viewModel.trendingKidsEbooks.count
+        case .audiobooks:      return viewModel.trendingAudiobooks.count
+        case .books, .genres:  return viewModel.trendingEbooks.count
+        case .kids:            return viewModel.trendingKidsEbooks.count
         }
     }
 
     private var recommendedItems: Int {
         switch selectedTab {
-        case .audiobooks:
-            return viewModel.recommendedAudiobooks.count
-        case .books,
-                .genres:
-            return viewModel.recommendedEbooks.count
-        case .kids:
-            return viewModel.recommendedKidsEbooks.count
+        case .audiobooks:      return viewModel.recommendedAudiobooks.count
+        case .books, .genres:  return viewModel.recommendedEbooks.count
+        case .kids:            return viewModel.recommendedKidsEbooks.count
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "AppBackground")!
+        view.backgroundColor = UIColor(named: "AppBackground")
         setupGreeting()
         setupSegmentControl()
         setupCollectionView()
@@ -85,14 +73,13 @@ final class HomeViewController: UIViewController {
         addRefreshController(to: collectionView) { [weak self] in
             self?.viewModel.fetchBooks()
         }
-        
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true,
-                                                     animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
         greetingView.configure()
+        collectionView.reloadSections(IndexSet(integer: HomeSection.genres.rawValue))
     }
 }
 
@@ -101,8 +88,7 @@ private extension HomeViewController {
     func setupGreeting() {
         view.addSubview(greetingView)
         NSLayoutConstraint.activate([
-            greetingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
-                                              constant: 12),
+            greetingView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
             greetingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             greetingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             greetingView.heightAnchor.constraint(equalToConstant: 60)
@@ -113,45 +99,29 @@ private extension HomeViewController {
     func setupSegmentControl() {
         view.addSubview(segmentControl)
         NSLayoutConstraint.activate([
-            segmentControl.topAnchor.constraint(equalTo: greetingView.bottomAnchor,
-                                                constant: 12),
-            segmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                    constant: 20),
-            segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                     constant: -20),
+            segmentControl.topAnchor.constraint(equalTo: greetingView.bottomAnchor, constant: 12),
+            segmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             segmentControl.heightAnchor.constraint(equalToConstant: 36)
         ])
-        segmentControl.addTarget(self,
-                                 action: #selector(segmentChanged(_:)),
-                                 for: .valueChanged)
+        segmentControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
     }
-    
 
     @objc func segmentChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
-        case 0:
-            selectedTab = .audiobooks
-        case 1:
-            selectedTab = .books
-        case 2:
-            selectedTab = .kids
-        case 3:
-            selectedTab = .genres
-        default:
-            selectedTab = .audiobooks
+        case 0: selectedTab = .audiobooks
+        case 1: selectedTab = .books
+        case 2: selectedTab = .kids
+        default: selectedTab = .audiobooks
         }
     }
 
     func updateSegment() {
         switch selectedTab {
-        case .audiobooks:
-            segmentControl.selectedSegmentIndex = 0
-        case .books:
-            segmentControl.selectedSegmentIndex = 1
-        case .kids:
-            segmentControl.selectedSegmentIndex = 2
-        case .genres:
-            segmentControl.selectedSegmentIndex = 3
+        case .audiobooks: segmentControl.selectedSegmentIndex = 0
+        case .books:      segmentControl.selectedSegmentIndex = 1
+        case .kids:       segmentControl.selectedSegmentIndex = 2
+        case .genres:     break
         }
     }
 
@@ -163,22 +133,15 @@ private extension HomeViewController {
         collectionView.delegate = self
         collectionView.showsVerticalScrollIndicator = false
         collectionView.alwaysBounceVertical = true
-        collectionView.register(ContinueListeningCell.self,
-                                forCellWithReuseIdentifier: ContinueListeningCell.identifier)
-        collectionView.register(TrendingBookCell.self,
-                                forCellWithReuseIdentifier: TrendingBookCell.identifier)
-        collectionView.register(EbookTrendingCell.self,
-                                forCellWithReuseIdentifier: EbookTrendingCell.identifier)
-        collectionView.register(GenreCell.self,
-                                forCellWithReuseIdentifier: GenreCell.identifier)
-        collectionView.register(RecommendedBookCell.self,
-                                forCellWithReuseIdentifier: RecommendedBookCell.identifier)
-        collectionView.register(EbookRecommendedCell.self,
-                                forCellWithReuseIdentifier: EbookRecommendedCell.identifier)
-        collectionView.register(KidsTrendingCell.self,
-                                forCellWithReuseIdentifier: KidsTrendingCell.identifier)
-        collectionView.register(KidsRecommendedCell.self,
-                                forCellWithReuseIdentifier: KidsRecommendedCell.identifier)
+
+        collectionView.register(ContinueListeningCell.self, forCellWithReuseIdentifier: ContinueListeningCell.identifier)
+        collectionView.register(TrendingBookCell.self, forCellWithReuseIdentifier: TrendingBookCell.identifier)
+        collectionView.register(EbookTrendingCell.self, forCellWithReuseIdentifier: EbookTrendingCell.identifier)
+        collectionView.register(GenreCell.self, forCellWithReuseIdentifier: GenreCell.identifier)
+        collectionView.register(RecommendedBookCell.self, forCellWithReuseIdentifier: RecommendedBookCell.identifier)
+        collectionView.register(EbookRecommendedCell.self, forCellWithReuseIdentifier: EbookRecommendedCell.identifier)
+        collectionView.register(KidsTrendingCell.self, forCellWithReuseIdentifier: KidsTrendingCell.identifier)
+        collectionView.register(KidsRecommendedCell.self, forCellWithReuseIdentifier: KidsRecommendedCell.identifier)
         collectionView.register(
             HomeSectionHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -206,14 +169,10 @@ private extension HomeViewController {
 
     func titleForSection(_ section: HomeSection) -> String {
         switch section {
-        case .continueListening: 
-            return selectedTab == .audiobooks ? "Continue Listening" : "Continue Reading"
-        case .genres:            
-            return "Genres"
-        case .trending:        
-            return selectedTab == .audiobooks ? "Trending Audiobooks" : "Trending Books"
-        case .recommended:     
-            return selectedTab == .audiobooks ? "Recommended For You" : "You Might Like"
+        case .continueListening: return selectedTab == .audiobooks ? "Continue Listening" : "Continue Reading"
+        case .genres:            return "Genres"
+        case .trending:          return selectedTab == .audiobooks ? "Trending Audiobooks" : "Trending Books"
+        case .recommended:       return selectedTab == .audiobooks ? "Recommended For You" : "You Might Like"
         }
     }
 }
@@ -226,14 +185,10 @@ extension HomeViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch HomeSection(rawValue: section)! {
-        case .continueListening:
-            return 1
-        case .trending:
-            return trendingItems
-        case .recommended:
-            return recommendedItems
-        case .genres:
-            return genres.count
+        case .continueListening: return 1
+        case .genres:            return genres.count
+        case .trending:          return trendingItems
+        case .recommended:       return recommendedItems
         }
     }
 
@@ -247,7 +202,15 @@ extension HomeViewController: UICollectionViewDataSource {
 
         case .genres:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCell.identifier, for: indexPath) as! GenreCell
-            cell.configure(genres[indexPath.item])
+            let genre = genres[indexPath.item]
+            let isFav = favoritesViewModel.isGenreFavorited(genre.name)
+            cell.configure(with: genre, isFavorited: isFav)
+            cell.onFavoriteTapped = { [weak self] in
+                guard let self else { return }
+                self.favoritesViewModel.toggleGenre(genre.name)
+                collectionView.reloadItems(at: [indexPath])
+                NotificationCenter.default.post(name: .favoritesDidChange, object: nil)
+            }
             return cell
 
         case .trending:
@@ -284,10 +247,8 @@ extension HomeViewController: UICollectionViewDataSource {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader
-        else { return UICollectionReusableView() }
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
         let section = HomeSection(rawValue: indexPath.section)!
         let header = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
@@ -295,12 +256,11 @@ extension HomeViewController: UICollectionViewDataSource {
             for: indexPath
         ) as! HomeSectionHeaderView
         let showViewAll = section == .trending || section == .recommended
-        header.configure(titleForSection(section),
-                         showViewAll: showViewAll)
+        header.configure(titleForSection(section), showViewAll: showViewAll)
         header.onViewAll = { [weak self] in
             guard let self else { return }
             switch section {
-            case .trending: self.coordinator?.showAllBooks(type: .trending)
+            case .trending:    self.coordinator?.showAllBooks(type: .trending)
             case .recommended: self.coordinator?.showAllBooks(type: .recommended)
             default: break
             }
@@ -311,28 +271,23 @@ extension HomeViewController: UICollectionViewDataSource {
 
 extension HomeViewController: UICollectionViewDelegate {
 
-    func collectionView(_ collectionView: UICollectionView,
-                        didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch HomeSection(rawValue: indexPath.section)! {
+        case .genres:
+            coordinator?.showGenreSearch(genre: genres[indexPath.item].name)
         case .trending:
             switch selectedTab {
-            case
-                    .audiobooks: coordinator?.showBookDetail(book: viewModel.trendingAudiobooks[indexPath.item])
-            case
-                    .books, .genres: coordinator?.showEbookDetail(ebook: viewModel.trendingEbooks[indexPath.item])
-            case
-                    .kids:       coordinator?.showEbookDetail(ebook: viewModel.trendingKidsEbooks[indexPath.item])
+            case .audiobooks:     coordinator?.showBookDetail(book: viewModel.trendingAudiobooks[indexPath.item])
+            case .books, .genres: coordinator?.showEbookDetail(ebook: viewModel.trendingEbooks[indexPath.item])
+            case .kids:           coordinator?.showEbookDetail(ebook: viewModel.trendingKidsEbooks[indexPath.item])
             }
         case .recommended:
             switch selectedTab {
-            case .audiobooks: coordinator?.showBookDetail(book: viewModel.recommendedAudiobooks[indexPath.item])
-            case .books,
-                    .genres: coordinator?.showEbookDetail(ebook: viewModel.recommendedEbooks[indexPath.item])
-            case .kids:       coordinator?.showEbookDetail(ebook: viewModel.recommendedKidsEbooks[indexPath.item])
+            case .audiobooks:     coordinator?.showBookDetail(book: viewModel.recommendedAudiobooks[indexPath.item])
+            case .books, .genres: coordinator?.showEbookDetail(ebook: viewModel.recommendedEbooks[indexPath.item])
+            case .kids:           coordinator?.showEbookDetail(ebook: viewModel.recommendedKidsEbooks[indexPath.item])
             }
-        case .genres:
-            coordinator?.showGenreSearch(genre: genres[indexPath.item])
-        default:
+        case .continueListening:
             break
         }
     }
@@ -343,22 +298,17 @@ private extension HomeViewController {
     func createLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { sectionIndex, _ in
             switch HomeSection(rawValue: sectionIndex)! {
-            case .continueListening:
-                return self.continueSection()
-            case .genres:
-                return self.genresSection()
-            case .trending:
-                return self.trendingSection()
-            case .recommended:
-                return self.recommendedSection()
+            case .continueListening: return self.continueSection()
+            case .genres:            return self.genresSection()
+            case .trending:          return self.trendingSection()
+            case .recommended:       return self.recommendedSection()
             }
         }
     }
 
     func makeHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: .init(widthDimension: .fractionalWidth(1),
-                              heightDimension: .absolute(40)),
+            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40)),
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
@@ -366,59 +316,46 @@ private extension HomeViewController {
 
     func continueSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120)))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize,
-                                                     subitems: [item])
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .init(top: 10,
-                                      leading: 20,
-                                      bottom: 0,
-                                      trailing: 20)
+        section.contentInsets = .init(top: 10, leading: 20, bottom: 0, trailing: 20)
         section.boundarySupplementaryItems = [makeHeader()]
         return section
     }
 
     func genresSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(100), heightDimension: .absolute(36)))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .estimated(100), heightDimension: .absolute(36)), subitems: [item])
+        let item = NSCollectionLayoutItem(
+            layoutSize: .init(widthDimension: .fractionalWidth(0.5), heightDimension: .absolute(110))
+        )
+        item.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 10)
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(110)),
+            subitems: [item, item]
+        )
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 20,
-                                      leading: 20,
-                                      bottom: 0,
-                                      trailing: 20)
+        section.interGroupSpacing = 10
+        section.contentInsets = .init(top: 8, leading: 20, bottom: 16, trailing: 10)
         section.boundarySupplementaryItems = [makeHeader()]
         return section
     }
 
     func trendingSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(150),
-                                                            heightDimension: .absolute(240)))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(150),
-                                                                         heightDimension: .absolute(240)),
-                                                       subitems: [item])
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .absolute(150), heightDimension: .absolute(240)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .absolute(150), heightDimension: .absolute(240)), subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
         section.interGroupSpacing = 16
-        section.contentInsets = .init(top: 12,
-                                      leading: 20,
-                                      bottom: 8,
-                                      trailing: 20)
+        section.contentInsets = .init(top: 12, leading: 20, bottom: 8, trailing: 20)
         section.boundarySupplementaryItems = [makeHeader()]
         return section
     }
 
     func recommendedSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                                            heightDimension: .absolute(116)))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize,
-                                                     subitems: [item])
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(116)))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: item.layoutSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 12
-        section.contentInsets = .init(top: 12,
-                                      leading: 20,
-                                      bottom: 40,
-                                      trailing: 20)
+        section.contentInsets = .init(top: 12, leading: 20, bottom: 40, trailing: 20)
         section.boundarySupplementaryItems = [makeHeader()]
         return section
     }

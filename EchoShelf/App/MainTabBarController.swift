@@ -16,10 +16,6 @@ final class MainTabBarController: UITabBarController {
     private lazy var miniPlayerContainer: UIView = {
         let v = UIView()
         v.backgroundColor = .clear
-        v.layer.shadowColor = UIColor.black.cgColor
-        v.layer.shadowOpacity = 0.25
-        v.layer.shadowRadius = 10
-        v.layer.shadowOffset = CGSize(width: 0, height: -3)
         v.translatesAutoresizingMaskIntoConstraints = false
         v.isHidden = true
         return v
@@ -64,9 +60,9 @@ final class MainTabBarController: UITabBarController {
     private func setupMiniPlayerContainer() {
         view.addSubview(miniPlayerContainer)
         NSLayoutConstraint.activate([
-            miniPlayerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            miniPlayerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            miniPlayerContainer.bottomAnchor.constraint(equalTo: tabBar.topAnchor),
+            miniPlayerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+            miniPlayerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+            miniPlayerContainer.bottomAnchor.constraint(equalTo: tabBar.topAnchor, constant: -8),
             miniPlayerContainer.heightAnchor.constraint(equalToConstant: 70)
         ])
     }
@@ -82,10 +78,10 @@ final class MainTabBarController: UITabBarController {
             mini.translatesAutoresizingMaskIntoConstraints = false
             miniPlayerContainer.addSubview(mini)
             NSLayoutConstraint.activate([
-                miniPlayerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
-                miniPlayerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
-                miniPlayerContainer.bottomAnchor.constraint(equalTo: tabBar.topAnchor, constant: -8),
-                miniPlayerContainer.heightAnchor.constraint(equalToConstant: 70)
+                mini.topAnchor.constraint(equalTo: miniPlayerContainer.topAnchor),
+                mini.bottomAnchor.constraint(equalTo: miniPlayerContainer.bottomAnchor),
+                mini.leadingAnchor.constraint(equalTo: miniPlayerContainer.leadingAnchor),
+                mini.trailingAnchor.constraint(equalTo: miniPlayerContainer.trailingAnchor)
             ])
         }
         miniPlayerContainer.isHidden = false
