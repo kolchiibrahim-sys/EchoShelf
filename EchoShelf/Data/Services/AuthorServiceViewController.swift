@@ -6,6 +6,7 @@ import UIKit
 
 final class AuthorsViewController: UIViewController {
 
+    private let service = AuthorService.shared
     private var authors: [Author] = []
     private var collectionView: UICollectionView!
 
@@ -18,13 +19,36 @@ final class AuthorsViewController: UIViewController {
         return lbl
     }()
 
+    private lazy var searchBar: UISearchBar = {
+        let sb = UISearchBar()
+        sb.placeholder = "Search authors..."
+        sb.searchBarStyle = .minimal
+        sb.tintColor = UIColor(named: "PrimaryGradientStart")
+        sb.barTintColor = .clear
+        sb.backgroundColor = .clear
+        if let tf = sb.value(forKey: "searchField") as? UITextField {
+            tf.textColor = UIColor(named: "OnDarkTextPrimary")
+            tf.backgroundColor = UIColor(named: "FillGlass")
+        }
+        sb.translatesAutoresizingMaskIntoConstraints = false
+        return sb
+    }()
+
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let ai = UIActivityIndicatorView(style: .medium)
+        ai.color = UIColor(named: "PrimaryGradientStart")
+        ai.hidesWhenStopped = true
+        ai.translatesAutoresizingMaskIntoConstraints = false
+        return ai
+    }()
+
     private lazy var emptyLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "No authors yet.\nExplore books to discover authors."
+        lbl.text = "No authors found."
         lbl.font = .systemFont(ofSize: 15)
         lbl.textColor = UIColor(named: "OnDarkTextSecondary")
         lbl.textAlignment = .center
-        lbl.numberOfLines = 0
+        lbl.isHidden = true
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
@@ -33,22 +57,16 @@ final class AuthorsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "AppBackground")
         setupHeader()
+        setupSearchBar()
         setupCollectionView()
         setupEmptyView()
+        setupActivityIndicator()
+        fetchAuthors()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-        loadAuthors()
-    }
-
-    private func loadAuthors() {
-        let favVM = FavoritesViewModel()
-        authors = favVM.favoriteAuthors
-        collectionView.reloadData()
-        emptyLabel.isHidden = !authors.isEmpty
-        collectionView.isHidden = authors.isEmpty
     }
 
     private func setupHeader() {
@@ -59,17 +77,28 @@ final class AuthorsViewController: UIViewController {
         ])
     }
 
+    private func setupSearchBar() {
+        view.addSubview(searchBar)
+        searchBar.delegate = self
+        NSLayoutConstraint.activate([
+            searchBar.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 8),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+            searchBar.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+
     private func setupCollectionView() {
-        let layout = createLayout()
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.keyboardDismissMode = .onDrag
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(RelatedAuthorCell.self, forCellWithReuseIdentifier: RelatedAuthorCell.identifier)
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 16),
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -82,6 +111,42 @@ final class AuthorsViewController: UIViewController {
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+    }
+
+    private func setupActivityIndicator() {
+        view.addSubview(activityIndicator)
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+
+    private func fetchAuthors() {
+        activityIndicator.startAnimating()
+        service.fetchPopularAuthors { [weak self] authors in
+            DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
+                self?.authors = authors
+                self?.collectionView.reloadData()
+                self?.emptyLabel.isHidden = !authors.isEmpty
+            }
+        }
+    }
+
+    private func searchAuthors(query: String) {
+        guard !query.trimmingCharacters(in: .whitespaces).isEmpty else {
+            fetchAuthors()
+            return
+        }
+        activityIndicator.startAnimating()
+        service.searchAuthors(query: query) { [weak self] authors in
+            DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
+                self?.authors = authors
+                self?.collectionView.reloadData()
+                self?.emptyLabel.isHidden = !authors.isEmpty
+            }
+        }
     }
 
     private func createLayout() -> UICollectionViewLayout {
@@ -115,7 +180,17 @@ extension AuthorsViewController: UICollectionViewDataSource {
 extension AuthorsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let author = authors[indexPath.item]
-        navigationController?.pushViewController(AuthorDetailViewController(author: author),
-                                                 animated: true)
+        navigationController?.pushViewController(AuthorDetailViewController(author: author), animated: true)
+    }
+}
+
+extension AuthorsViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchAuthors(query: searchBar.text ?? "")
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty { fetchAuthors() }
     }
 }

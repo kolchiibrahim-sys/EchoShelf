@@ -74,8 +74,7 @@ final class TrendingBookCell: UICollectionViewCell {
         titleLabel.text = book.title
         authorLabel.text = book.authorName
 
-        if let url = book.coverURL {
-            coverImageView.kf.setImage(with: url)
-        }
+        let url = book.coverURL ?? book.archiveCoverURL
+        coverImageView.kf.setImage(with: url)
     }
 }

@@ -51,6 +51,26 @@ struct OpenLibrarySearchDoc: Decodable {
     let name: String
 }
 
+struct LibriVoxAuthor: Decodable {
+    let id: String
+    let firstName: String
+    let lastName: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case firstName = "first_name"
+        case lastName  = "last_name"
+    }
+
+    var toAuthor: Author {
+        Author(firstName: firstName, lastName: lastName)
+    }
+}
+
+struct LibriVoxAuthorsResponse: Decodable {
+    let authors: [LibriVoxAuthor]
+}
+
 struct AuthorDetail {
     let firstName: String?
     let lastName: String?
@@ -71,6 +91,38 @@ final class AuthorService: @unchecked Sendable {
 
     private let openLibraryBase = "https://openlibrary.org"
     private let librivoxBase = "https://librivox.org/api/feed"
+
+    func fetchPopularAuthors(completion: @escaping @Sendable ([Author]) -> Void) {
+        let params: [String: Any] = ["format": "json", "limit": 30]
+        AF.request("\(librivoxBase)/authors", parameters: params)
+            .validate()
+            .responseData { response in
+                guard
+                    let data = try? response.result.get(),
+                    let result = try? JSONDecoder().decode(LibriVoxAuthorsResponse.self, from: data)
+                else {
+                    completion([])
+                    return
+                }
+                completion(result.authors.map { $0.toAuthor })
+            }
+    }
+
+    func searchAuthors(query: String, completion: @escaping @Sendable ([Author]) -> Void) {
+        let params: [String: Any] = ["format": "json", "last_name": query, "limit": 20]
+        AF.request("\(librivoxBase)/authors", parameters: params)
+            .validate()
+            .responseData { response in
+                guard
+                    let data = try? response.result.get(),
+                    let result = try? JSONDecoder().decode(LibriVoxAuthorsResponse.self, from: data)
+                else {
+                    completion([])
+                    return
+                }
+                completion(result.authors.map { $0.toAuthor })
+            }
+    }
 
     func fetchAuthorDetail(
         firstName: String?,

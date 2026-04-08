@@ -353,17 +353,31 @@ extension BookDetailViewController {
         contentView.addSubview(authorLabel)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: coverContainerView.bottomAnchor,
-                                            constant: 28),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                constant: 24),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                 constant: -24),
+            titleLabel.topAnchor.constraint(equalTo: coverContainerView.bottomAnchor, constant: 28),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
 
-            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                             constant: 8),
+            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             authorLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
+
+        authorLabel.isUserInteractionEnabled = true
+        let authorTap = UITapGestureRecognizer(target: self, action: #selector(authorTapped))
+        authorLabel.addGestureRecognizer(authorTap)
+    }
+
+    @objc func authorTapped() {
+        let author: Author?
+        switch bookType {
+        case .audiobook:
+            author = viewModel.book.authors?.first
+        case .ebook(let ebook):
+            author = Author(firstName: ebook.authorName, lastName: nil)
+        }
+        guard let author else { return }
+        navigationController?.pushViewController(
+            AuthorDetailViewController(author: author), animated: true
+        )
     }
 
     func setupStats() {
